@@ -17,7 +17,7 @@ public class TEOLoaderImpl {
 	public Object load(String filename) {
 		File file = new File(filename);
 		try {
-			iri = IRI.create(file.toURI().toURL());
+			iri = IRI.create(file.toURI().toURL()); // to get the IRI of the file
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
@@ -26,6 +26,11 @@ public class TEOLoaderImpl {
 		return load(iri);
 	}
 	
+	/**
+	 * We use OWL API to load the ontology
+	 * @param resource
+	 * @return
+	 */
 	public Object load(IRI resource) {
 		try {
 			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -38,12 +43,24 @@ public class TEOLoaderImpl {
 		return null;
 	}
 
+	/**
+	 * To load the ontology from the URL
+	 * @param url
+	 * @return
+	 */
 	public Object load(URL url) 
 	{
-		IRI iri = IRI.create(url.getPath());
+		try {
+			iri = IRI.create(url.toURI());
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 		return load(iri);
 	}
 
+	/**
+	 * To retrieve the IRI of the loaded ontology
+	 */
 	public IRI getResourceIRI() {
 		return this.iri;
 	}
