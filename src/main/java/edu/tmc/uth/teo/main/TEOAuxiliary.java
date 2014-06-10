@@ -16,32 +16,21 @@ import edu.tmc.uth.teo.impl.TEOLoaderImpl;
 
 public class TEOAuxiliary {
 	private OWLOntology ontology = null;
-	
-	private IRI iri = null;
-	private String uri = "src//test//resources//TEO//TEOAnnotation_1.owl"; // serve as the default uri
+	private String uri = "src//test//resources//TEO//TEOAnnotation_1.owl"; // served as the default uri
 	
 //	public CNTROParser parser_ = null;
 	
 	public TEOAuxiliary(String ontUri) 	{
 		this.uri = ontUri;
-		init();
 	}
 	
-	public TEOAuxiliary(IRI iri) {
-		this.iri = iri;
-		init();
-	}
-	
-	private void init() {
-	}
-
 	public void loadOntology() {
 		TEOLoaderImpl loader = new TEOLoaderImpl();
-
-		if (this.iri != null)
-			ontology = (OWLOntology) loader.load(this.iri);
-		else
-			ontology = (OWLOntology) loader.load(uri);
+		ontology = (OWLOntology) loader.load(uri);
+	}
+	
+	public String getURI() {
+		return this.uri;
 	}
 	
 	public OWLOntology getOntology() {
@@ -86,7 +75,6 @@ public class TEOAuxiliary {
 		aux.loadOntology();
 		OWLOntology ontology = aux.getOntology();
 			
-		
 		// load the ontology to the reasoner
 		PelletReasoner lreasoner = com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory.getInstance().createReasoner(ontology);
 		OWLOntologyManager manager = ontology.getOWLOntologyManager();

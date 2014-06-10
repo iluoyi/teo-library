@@ -1,93 +1,109 @@
 package edu.tmc.uth.teo.main;
 
-
-public class TEOConstants 
-{
-	public static final String TEO_TR_NS = "http://informatics.mayo.edu/TEOTemporalRelation#";
+public class TEOConstants {
+	
+	/**
+	 * Name Spaces
+	 */
 	public static final String TEO_NS = "http://informatics.mayo.edu/TEO.owl#";
-	//public static final String AELST_NS = "http://www.TEO.org/AE-lst.owl#";
 	
-	public static final String AELST_NS = TEO_NS;
 	
-	// Class Names
-	public static final String TEO_EVENT_CLS_NAME = "TEO_0000025"; //http://informatics.mayo.edu/TEO.owl#TEO_0000025
-	public static final String TEO_TIMEINSTANCE_CLS_NAME = "TimeInstant";
-	public static final String TEO_TIMEINTERVAL_CLS_NAME = "TimeInterval";
-	public static final String TEO_TIMEPERIOD_CLS_NAME = "TimePeriod";
-	public static final String TEO_TIMEPHASE_CLS_NAME = "TimePhase";
-	public static final String TEO_DURATION_CLS_NAME = "Duration";
+	/**
+	 * Class Names
+	 */
+	public static final String TEO_EVENT_CLS_NAME = "TEO_0000025"; // Event
+	public static final String TEO_HOLIDAY_CLS_NAME = "TEO_0000011"; // Holiday
+	public static final String TEO_TIMEGRANULARITY_CLS_NAME = "TEO_0000012"; // Time Granularity
+	public static final String TEO_FREQUENCY_CLS_NAME = "TEO_0000023"; // Frequency
+	public static final String TEO_TIMEPERIOD_CLS_NAME = "TEO_0000036"; // TimePeriod
+	public static final String TEO_TIMEPHASE_CLS_NAME = "TEO_0000024"; // TimePhase
+	public static final String TEO_DURATIONMEASUREMENT_CLS_NAME = "TEO_0000032"; // Duration Measurement
+	public static final String TEO_PERIODICTIMEINTERVAL_CLS_NAME = "TEO_0000034"; // Periodic Time Interval
+	public static final String TEO_TIMESEQUENCE_CLS_NAME = "TEO_0000044"; // TimeSequence
+	public static final String TEO_DAY_CLS_NAME = "TEO_0000095"; // Day
+	public static final String TEO_WEEK_CLS_NAME = "TEO_0000030"; // Week
+	public static final String TEO_MONTH_CLS_NAME = "TEO_0000050"; // Month
+	public static final String TEO_YEAR_CLS_NAME = "TEO_0000051"; // Year
+	
+	
+	/**
+	 * Object Property Names
+	 */	
+	// events
+	public static final String TEO_HASVALIDTIME_PRP_NAME = "TEO_0000007"; // hasValidTime [domain: Event (Yi: + TimeInstant?)]
+	// time interval
+	public static final String TEO_HASSTARTTIME_PRP_NAME = "TEO_0000028"; // hasStartTime [domain: TimeInterval + Periodic TimeInterval]
+	public static final String TEO_HASENDTIME_PRP_NAME = "TEO_0000006"; // hasEndTime [domain: TimeInterval + Periodic TimeInterval]
+	public static final String TEO_HASDURATION_PRP_NAME = "TEO_0000022"; // hasDuration [domain: TimeInterval + Periodic TimeInterval, range: Duration Measurement]
+	public static final String TEO_HASDURATIONUNIT_PRP_NAME = "TEO_0000040"; // domain: Duration Measurement
+	public static final String TEO_HASPHASE_PRP_NAME = "TEO_0000077"; // domain: Periodic TimeInterval, range: TimePhase
+	public static final String TEO_HASPERIOD_PRP_NAME = "TEO_0000078"; // domain: Periodic TimeInterval, range: TimePeriod
+	// frequency
+	public static final String TEO_DENOMINATOR_PRP_NAME = "TEO_0000076"; // domain: Frequency
+	public static final String TEO_HASFREQUENCY_PRP_NAME = "TEO_0000079"; // range: Frequency
+	// temporal relations
+	public static final String TEO_TEMPORALRELATION_PRP_NAME = "TEO_0000039";
+	public static final String TEO_TR_AFTER_PRP_NAME = "TEO_0000016";
+	public static final String TEO_TR_BEFORE_PRP_NAME = "TEO_0000002";
+	public static final String TEO_TR_MEET_PRP_NAME = "TEO_0000020";
+	public static final String TEO_TR_OVERLAP_PRP_NAME = "TEO_0000038";
+	public static final String TEO_TR_CONTAIN_PRP_NAME = "TEO_0000010";
+	public static final String TEO_TR_DURING_PRP_NAME = "TEO_0000003";
+	public static final String TEO_TR_EQUAL_PRP_NAME = "TEO_0000018";
+	public static final String TEO_TR_FINISH_PRP_NAME = "TEO_0000037";
+	public static final String TEO_TR_START_PRP_NAME = "TEO_0000014";
+	// occur
+	public static final String TEO_OCCUR_PRP_NAME = "TEO_0000085"; // domain: ConnectedTemporalRegion (Yi: + Event?)
+	public static final String TEO_OCCURYEAR_PRP_NAME = "TEO_0000132";
+	public static final String TEO_OCCURMONTH_PRP_NAME = "TEO_0000086";
+	public static final String TEO_OCCURWEEK_PRP_NAME = "TEO_0000090";
+	public static final String TEO_OCCURDAY_PRP_NAME = "TEO_0000087";
+	// time sequence
+	public static final String TEO_HASTIMESEQUENCE_PRP_NAME = "TEO_0000096";// domain: ConnectedTemporalRegion + ScatteredTemporalRegion
 
-	public static final String TEO_TR_TEMPORAL_RELATION_STMT_CLS_NAME = "TemporalRelationStatement";
 	
-	// Property Names
-	public static final String TEO_HASVALIDTIME_PRP_NAME = "hasValidTime";
-	public static final String TEO_HASNOTETIME_PRP_NAME = "hasNoteTime";
-	public static final String TEO_HASPERIOD_PRP_NAME = "hasPeriod";
-	public static final String TEO_TEMPORALRELATION_PRP_NAME = "temporalRelation";
-	public static final String TEO_HASORIGINALTIME_PRP_NAME = "hasOrigTime";
-	public static final String TEO_HASNORMALIZEDTIME_PRP_NAME = "hasNormalizedTime";
-	public static final String TEO_HASMODALITY_PRP_NAME = "hasModality";
-	public static final String TEO_HASSTARTTIME_PRP_NAME = "hasStartTime";
-	public static final String TEO_HASENDTIME_PRP_NAME = "hasEndTime";
-	public static final String TEO_HASDURATION_PRP_NAME = "hasDuration";
-	public static final String TEO_HASDURATIONVALUE_PRP_NAME = "hasDurationValue";
-	public static final String TEO_HASDURATIONUNIT_PRP_NAME = "hasDurationUnit";
-	public static final String TEO_HASOFFSET_PRP_NAME = "hasOffset";
-	public static final String TEO_HASTIMEOFFSET_PRP_NAME = "hasTimeOffset";
-	public static final String TEO_HASGRANULARITY_PRP_NAME = "hasGranularity";
-	
-	public static final String TEO_TR_AFTER_PRP_NAME = "after";
-	public static final String TEO_TR_BEFORE_PRP_NAME = "before";
-	public static final String TEO_TR_MEET_PRP_NAME = "meet";
-	public static final String TEO_TR_OVERLAP_PRP_NAME = "overlap";
-	public static final String TEO_TR_CONTAIN_PRP_NAME = "contain";
-	public static final String TEO_TR_DURING_PRP_NAME = "during";
-	public static final String TEO_TR_EQUAL_PRP_NAME = "equal";
-	public static final String TEO_TR_FINISH_PRP_NAME = "finish";
-	public static final String TEO_TR_START_PRP_NAME = "start";
-	
-	public static final String TEO_TR_CONTINUES_THROUGH_PRP_NAME = "continues_through";
-	public static final String TEO_TR_INCLUDE_PRP_NAME = "include";
-	public static final String TEO_TR_INITIATE_PRP_NAME = "initiate";
-	public static final String TEO_TR_IS_INCLUDED_PRP_NAME = "is_included";
-	
-	public static final String TEO_TR_OVERLAPPED_BY_PRP_NAME = "overlapped_by";
-	public static final String TEO_TR_SIMULTANEOUS_PRP_NAME = "simultaneous";
-	public static final String TEO_TR_TERMINATE_PRP_NAME = "terminate";
-	public static final String TEO_TR_SAMEAS_PRP_NAME = "sameas";
-	
-	
-	public static final String TEO_TR_TEMPORAL_SUBJECT_PRP_NAME = "temporalSubject";
-	public static final String TEO_TR_TEMPORAL_OBJECT_PRP_NAME = "temporalObject";
-	public static final String TEO_TR_TEMPORAL_PREDICATE_PRP_NAME = "temporalPredicate";
+	/**
+	 * Data Property Names
+	 */
+	public static final String TEO_HASMODALITY_PRP_NAME = "TEO_0000004";
+	public static final String TEO_HASNORMALIZEDTIME_PRP_NAME = "TEO_0000005";
+	public static final String TEO_HASORIGTIME_PRP_NAME = "TEO_0000015";
+	public static final String TEO_HASDURATIONVALUE_PRP_NAME = "TEO_0000032"; // hasDurationValue
+	public static final String TEO_HASCALENDARPATTERNFORM_PRP_NAME = "TEO_0000064"; // hasDurationValue
+	public static final String TEO_NUMERATOR_PRP_NAME = "TEO_0000076"; // domain: Frequency
 
 	
-	// Classes
+	/**
+	 *  Classes
+	 */
 	public static final String TEO_EVENT_CLS = getWithNS(TEO_EVENT_CLS_NAME);
-	public static final String TEO_TIMEINSTANCE_CLS = getWithNS(TEO_TIMEINSTANCE_CLS_NAME);
-	public static final String TEO_TIMEINTERVAL_CLS = getWithNS(TEO_TIMEINTERVAL_CLS_NAME);
+	public static final String TEO_HOLIDAY_CLS = getWithNS(TEO_HOLIDAY_CLS_NAME);
+	public static final String TEO_TIMEGRANULARITY_CLS = getWithNS(TEO_TIMEGRANULARITY_CLS_NAME);
+	public static final String TEO_FREQUENCY_CLS = getWithNS(TEO_FREQUENCY_CLS_NAME);
 	public static final String TEO_TIMEPERIOD_CLS = getWithNS(TEO_TIMEPERIOD_CLS_NAME);
 	public static final String TEO_TIMEPHASE_CLS = getWithNS(TEO_TIMEPHASE_CLS_NAME);
-	public static final String TEO_DURATION_CLS = getWithNS(TEO_DURATION_CLS_NAME);
+	public static final String TEO_DURATIONMEASUREMENT_CLS = getWithNS(TEO_DURATIONMEASUREMENT_CLS_NAME);
+	public static final String TEO_PERIODICTIMEINTERVAL_CLS = getWithNS(TEO_PERIODICTIMEINTERVAL_CLS_NAME);
+	public static final String TEO_TIMESEQUENCE_CLS = getWithNS(TEO_TIMESEQUENCE_CLS_NAME);
+	public static final String TEO_DAY_CLS = getWithNS(TEO_DAY_CLS_NAME);
+	public static final String TEO_WEEK_CLS = getWithNS(TEO_WEEK_CLS_NAME);
+	public static final String TEO_MONTH_CLS = getWithNS(TEO_MONTH_CLS_NAME);
+	public static final String TEO_YEAR_CLS = getWithNS(TEO_YEAR_CLS_NAME);
 	
-	public static final String TEO_TR_TEMPORAL_RELATION_STMT_CLS = getWithNS(TEO_TR_TEMPORAL_RELATION_STMT_CLS_NAME);
 	
-	// Properties
-	public static final String TEO_HASVALIDTIME_PRP = getWithNS(TEO_HASVALIDTIME_PRP_NAME, AELST_NS);
-	public static final String TEO_HASNOTETIME_PRP = getWithNS(TEO_HASNOTETIME_PRP_NAME, AELST_NS);
-	public static final String TEO_HASPERIOD_PRP = getWithNS(TEO_HASPERIOD_PRP_NAME, AELST_NS);
-	public static final String TEO_TEMPORALRELATION_PRP = getWithNS(TEO_TEMPORALRELATION_PRP_NAME, TEO_TR_NS);
-	public static final String TEO_HASORIGINALTIME_PRP = getWithNS(TEO_HASORIGINALTIME_PRP_NAME, AELST_NS);
-	public static final String TEO_HASNORMALIZEDTIME_PRP = getWithNS(TEO_HASNORMALIZEDTIME_PRP_NAME, AELST_NS);
-	public static final String TEO_HASMODALITY_PRP = getWithNS(TEO_HASMODALITY_PRP_NAME, AELST_NS);
-	public static final String TEO_HASSTARTTIME_PRP = getWithNS(TEO_HASSTARTTIME_PRP_NAME, AELST_NS);
-	public static final String TEO_HASENDTIME_PRP = getWithNS(TEO_HASENDTIME_PRP_NAME, AELST_NS);
+	/**
+	 *  Object Properties
+	 */
+	public static final String TEO_HASVALIDTIME_PRP = getWithNS(TEO_HASVALIDTIME_PRP_NAME);
+	public static final String TEO_HASSTARTTIME_PRP = getWithNS(TEO_HASSTARTTIME_PRP_NAME);
+	public static final String TEO_HASENDTIME_PRP = getWithNS(TEO_HASENDTIME_PRP_NAME);
 	public static final String TEO_HASDURATION_PRP = getWithNS(TEO_HASDURATION_PRP_NAME);
-	public static final String TEO_HASDURATIONVALUE_PRP = getWithNS(TEO_HASDURATIONVALUE_PRP_NAME);
 	public static final String TEO_HASDURATIONUNIT_PRP = getWithNS(TEO_HASDURATIONUNIT_PRP_NAME);
-	public static final String TEO_HASOFFSET_PRP = getWithNS(TEO_HASOFFSET_PRP_NAME, AELST_NS);
-	public static final String TEO_HASTIMEOFFSET_PRP = getWithNS(TEO_HASTIMEOFFSET_PRP_NAME, AELST_NS);
-	
+	public static final String TEO_HASPHASE_PRP = getWithNS(TEO_HASPHASE_PRP_NAME);
+	public static final String TEO_HASPERIOD_PRP = getWithNS(TEO_HASPERIOD_PRP_NAME);
+	public static final String TEO_DENOMINATOR_PRP = getWithNS(TEO_DENOMINATOR_PRP_NAME);
+	public static final String TEO_HASFREQUENCY_PRP = getWithNS(TEO_HASFREQUENCY_PRP_NAME);
+	public static final String TEO_TEMPORALRELATION_PRP = getWithNS(TEO_TEMPORALRELATION_PRP_NAME);
 	public static final String TEO_TR_AFTER_PRP = getWithNS(TEO_TR_AFTER_PRP_NAME);
 	public static final String TEO_TR_BEFORE_PRP = getWithNS(TEO_TR_BEFORE_PRP_NAME);
 	public static final String TEO_TR_MEET_PRP = getWithNS(TEO_TR_MEET_PRP_NAME);
@@ -97,27 +113,24 @@ public class TEOConstants
 	public static final String TEO_TR_EQUAL_PRP = getWithNS(TEO_TR_EQUAL_PRP_NAME);
 	public static final String TEO_TR_FINISH_PRP = getWithNS(TEO_TR_FINISH_PRP_NAME);
 	public static final String TEO_TR_START_PRP = getWithNS(TEO_TR_START_PRP_NAME);
+	public static final String TEO_OCCUR_PRP = getWithNS(TEO_OCCUR_PRP_NAME);
+	public static final String TEO_OCCURYEAR_PRP = getWithNS(TEO_OCCURYEAR_PRP_NAME);
+	public static final String TEO_OCCURMONTH_PRP = getWithNS(TEO_OCCURMONTH_PRP_NAME);
+	public static final String TEO_OCCURWEEK_PRP = getWithNS(TEO_OCCURWEEK_PRP_NAME);
+	public static final String TEO_HASTIMESEQUENCE_PRP = getWithNS(TEO_HASTIMESEQUENCE_PRP_NAME);
+	public static final String TEO_HASMODALITY_PRP = getWithNS(TEO_HASMODALITY_PRP_NAME);
+	public static final String TEO_HASNORMALIZEDTIME_PRP = getWithNS(TEO_HASNORMALIZEDTIME_PRP_NAME);
+	public static final String TEO_HASORIGTIME_PRP = getWithNS(TEO_HASORIGTIME_PRP_NAME);
+	public static final String TEO_HASDURATIONVALUE_PRP = getWithNS(TEO_HASDURATIONVALUE_PRP_NAME);
+	public static final String TEO_HASCALENDARPATTERNFORM_PRP = getWithNS(TEO_HASCALENDARPATTERNFORM_PRP_NAME);
+	public static final String TEO_NUMERATOR_PRP = getWithNS(TEO_NUMERATOR_PRP_NAME);
 	
-	public static final String TEO_TR_CONTINUES_THROUGH_PRP = getWithNS(TEO_TR_CONTINUES_THROUGH_PRP_NAME);
-	public static final String TEO_TR_INCLUDE_PRP = getWithNS(TEO_TR_INCLUDE_PRP_NAME);
-	public static final String TEO_TR_INITIATE_PRP = getWithNS(TEO_TR_INITIATE_PRP_NAME);
-	public static final String TEO_TR_IS_INCLUDED_PRP = getWithNS(TEO_TR_IS_INCLUDED_PRP_NAME);
-	public static final String TEO_TR_OVERLAPPED_BY_PRP = getWithNS(TEO_TR_OVERLAPPED_BY_PRP_NAME);
-	public static final String TEO_TR_SIMULTANEOUS_PRP = getWithNS(TEO_TR_SIMULTANEOUS_PRP_NAME);
-	public static final String TEO_TR_TERMINATE_PRP = getWithNS(TEO_TR_TERMINATE_PRP_NAME);
-	public static final String TEO_TR_SAMEAS_PRP = getWithNS(TEO_TR_SAMEAS_PRP_NAME);
-
-	public static final String TEO_TR_TEMPORAL_SUBJECT_PRP = getWithNS(TEO_TR_TEMPORAL_SUBJECT_PRP_NAME, AELST_NS);
-	public static final String TEO_TR_TEMPORAL_OBJECT_PRP = getWithNS(TEO_TR_TEMPORAL_OBJECT_PRP_NAME, AELST_NS);
-	public static final String TEO_TR_TEMPORAL_PREDICATE_PRP = getWithNS(TEO_TR_TEMPORAL_PREDICATE_PRP_NAME, AELST_NS);
-
-	public static String getWithNS(String name)
-	{
+	
+	/**
+	 *  Data Properties
+	 */
+	public static String getWithNS(String name) {
 		return TEO_NS + name;
 	}
-	
-	public static String getWithNS(String name, String namespace)
-	{
-		return namespace + name;
-	}
+
 }
