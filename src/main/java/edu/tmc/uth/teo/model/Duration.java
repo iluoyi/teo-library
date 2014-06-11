@@ -1,43 +1,92 @@
 package edu.tmc.uth.teo.model;
 
 import edu.tmc.uth.teo.queryIF.Granularity;
+import edu.tmc.uth.teo.queryIF.Unit;
 
+/**
+ * 1. We put constraints on the Constructor so that we can only have valid instances of Duration.
+ * 
+ * @author yluo
+ *
+ */
 public class Duration extends TEOClass implements Comparable<Duration> {
-	private Granularity durationUnit;
-	private String durationValue; // should be unified for comparison?
+	private Unit durUnit; // display unit - a must field
+	private String durStr; // display string - a must field
 	
-	public Duration() {
-		this.durationValue = null;
-		this.durationUnit = Granularity.UNKNOWN;
+	private long durValue; // in milliseconds, can only be computed.
+	
+	/**
+	 * To initialize a Duration object, the display duration string and its unit must be provided.
+	 * 
+	 * @param val
+	 * @param unit
+	 */
+	public Duration(String durStr, Unit durUnit) {
+		this.durStr = durStr;
+		this.durUnit = durUnit;
+		this.durValue = getDurValueFromStr(durStr, durUnit);
 	}
 	
-	public Duration(String val, Granularity gran) {
-		this.durationValue = val;
-		this.durationUnit = gran;
+	public void resetDurStr(String durStr, Unit durUnit) {
+		this.durStr = durStr;
+		this.durUnit = durUnit;
+		this.durValue = getDurValueFromStr(durStr, durUnit);
+	}
+	
+	public Unit getUnit() {
+		return this.durUnit;
+	}
+	
+	public String getDurString() {
+		return this.durStr;
+	}
+	
+	/**
+	 * To get a Duration in a different Unit and keep the durValue the same.
+	 * @param newGran
+	 * @return
+	 */
+	public Duration toUnit(Unit newUnit) {
+		String newDurStr = getTransferedDurStr(this.getDurString(), this.durUnit, newUnit);
+		
+		Duration newDuration = new Duration(newDurStr, newUnit);
+		
+		return newDuration;
+	}
+	
+	// TODO
+	public static String getTransferedDurStr(String oldDurStr, Unit oldUnit, Unit newUnit) {
+		return null;
+	}
+
+	// TODO
+	public static long getDurValueFromStr(String durStr, Unit durUnit) {
+		
+		return 0;
 	}
 	
 	public String toString() {
-		return ""  + ((this.durationUnit != null)? ("{Dur. unit:" + this.durationUnit + "}"):"") +
-				"{Dur. value:" + this.durationValue + "}" ;
+		return ""  + ((this.durUnit != null)? ("{Dur. unit:" + this.durUnit + "}"):"") +
+				"{Dur. value:" + this.durStr + "}" ;
 	}
 	
-	public boolean equals() {
-		return false;
-	}
-	
-	// TODO
-	public static Duration getDurationFromStartEndTime(TimeInstant startTime, TimeInstant endTime) {
-		Duration duration = new Duration();
-		
-		return duration;
+	public int compareTo(long otherDurValue) {
+		if (this.durValue > otherDurValue) {
+			return 1;
+		} else if (this.durValue < otherDurValue) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 
-	// TODO
 	public int compareTo(Duration other) {
-		// 1. unify the granularity to the finer one
-		
-		// 2. transfer the duration value and compare
-		
-		return 0;
+		if (this.durValue > other.durValue) {
+			return 1;
+		} else if (this.durValue < other.durValue) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 }
