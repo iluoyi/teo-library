@@ -1,7 +1,7 @@
 package edu.tmc.uth.teo.model;
 
-import edu.tmc.uth.teo.queryIF.Granularity;
 import edu.tmc.uth.teo.queryIF.Unit;
+import edu.tmc.uth.teo.utils.DurationParser;
 
 /**
  * 1. We put constraints on the Constructor so that we can only have valid instances of Duration.
@@ -10,16 +10,23 @@ import edu.tmc.uth.teo.queryIF.Unit;
  *
  */
 public class Duration extends TEOClass implements Comparable<Duration> {
-	private Unit durUnit; // display unit - a must field
-	private String durStr; // display string - a must field
+	private Unit durUnit; // display unit
+	private String durStr; // display string
 	
-	private long durValue; // in milliseconds, can only be computed.
+	private DurationValue durValue; // in milliseconds, should be computed.
+	
 	
 	/**
-	 * To initialize a Duration object, the display duration string and its unit must be provided.
-	 * 
-	 * @param val
-	 * @param unit
+	 * Constructor 1
+	 */
+	public Duration() {
+		this.durStr = null;
+		this.durUnit = Unit.UNKNOWN;
+		this.durValue = null;
+	}
+	
+	/**
+	 * Constructor 2, durValue is computed from durStr and durUnit
 	 */
 	public Duration(String durStr, Unit durUnit) {
 		this.durStr = durStr;
@@ -27,7 +34,17 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 		this.durValue = getDurValueFromStr(durStr, durUnit);
 	}
 	
-	public void resetDurStr(String durStr, Unit durUnit) {
+	/**
+	 * Constructor 3
+	 */
+	public Duration(DurationValue durValue) {
+		this.durStr = null;
+		this.durUnit = Unit.UNKNOWN;
+		this.durValue = durValue;
+	}
+	
+	
+	public void reset(String durStr, Unit durUnit) {
 		this.durStr = durStr;
 		this.durUnit = durUnit;
 		this.durValue = getDurValueFromStr(durStr, durUnit);
@@ -41,52 +58,27 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 		return this.durStr;
 	}
 	
-	/**
-	 * To get a Duration in a different Unit and keep the durValue the same.
-	 * @param newGran
-	 * @return
-	 */
-	public Duration toUnit(Unit newUnit) {
-		String newDurStr = getTransferedDurStr(this.getDurString(), this.durUnit, newUnit);
-		
-		Duration newDuration = new Duration(newDurStr, newUnit);
-		
-		return newDuration;
-	}
-	
-	// TODO
-	public static String getTransferedDurStr(String oldDurStr, Unit oldUnit, Unit newUnit) {
-		return null;
-	}
-
-	// TODO
-	public static long getDurValueFromStr(String durStr, Unit durUnit) {
-		
-		return 0;
-	}
 	
 	public String toString() {
 		return ""  + ((this.durUnit != null)? ("{Dur. unit:" + this.durUnit + "}"):"") +
 				"{Dur. value:" + this.durStr + "}" ;
 	}
 	
-	public int compareTo(long otherDurValue) {
-		if (this.durValue > otherDurValue) {
-			return 1;
-		} else if (this.durValue < otherDurValue) {
-			return -1;
-		} else {
-			return 0;
-		}
+	public int compareTo(Duration other) {
+		return this.durValue.compareTo(other.durValue);
 	}
 
-	public int compareTo(Duration other) {
-		if (this.durValue > other.durValue) {
-			return 1;
-		} else if (this.durValue < other.durValue) {
-			return -1;
-		} else {
-			return 0;
+	/**
+	 * 
+	 * @param durStr
+	 * @param durUnit
+	 * @return
+	 */
+	public static DurationValue getDurValueFromStr(String durStr, Unit durUnit) {
+		DurationValue durValue = DurationParser.parseDuration(durStr);
+		if (durValue != null) {
+			durValue.changeGranularity(durUnit);
 		}
+		return durValue; // might be null
 	}
 }

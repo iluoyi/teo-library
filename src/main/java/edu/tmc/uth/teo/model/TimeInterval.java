@@ -1,5 +1,7 @@
 package edu.tmc.uth.teo.model;
 
+import edu.tmc.uth.teo.queryIF.Granularity;
+
 
 /**
  * Note: startTime, endTime and duration should be unified to the same granularity when initializing the TimeInterval.
@@ -36,9 +38,9 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	 */
 	public TimeInterval(TimeInstant startTime, TimeInstant endTime) {
 		if (startTime != null && endTime != null) {
-			this.startTime = startTime.toGranularity(this.getGranularity()); // transfer startTime to the current granularity
-			this.endTime = endTime.toGranularity(this.getGranularity()); // transfer endTime to the current granularity
-			this.duration = getDurationFrom(startTime, endTime);
+			this.startTime = startTime; // transfer startTime to the current granularity
+			this.endTime = endTime; // transfer endTime to the current granularity
+			this.duration = getDurationFrom(startTime, endTime, this.getGranularity());
 		}
 	}
 	
@@ -49,9 +51,9 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	 */
 	public TimeInterval(TimeInstant startTime, Duration duration) {
 		if (startTime != null && duration != null) {
-			this.startTime = startTime.toGranularity(this.getGranularity());
-			this.duration = duration.toUnit(this.getGranularity().getUnit());
-			this.endTime = getEndTimeInstantFrom(startTime, duration);
+			this.startTime = startTime;
+			this.duration = duration;
+			this.endTime = getEndTimeInstantFrom(startTime, duration, this.getGranularity());
 		}
 	}
 	
@@ -62,9 +64,9 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	 */
 	public TimeInterval(Duration duration, TimeInstant endTime) {
 		if (startTime != null && duration != null) {
-			this.endTime = endTime.toGranularity(this.getGranularity());
-			this.duration = duration.toUnit(this.getGranularity().getUnit());
-			this.startTime = getStartTimeInstantFrom(duration, endTime);
+			this.endTime = endTime;
+			this.duration = duration;
+			this.startTime = getStartTimeInstantFrom(duration, endTime, this.getGranularity());
 		}
 	}
 	
@@ -85,17 +87,17 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	}
 	
 	// TODO
-	public static Duration getDurationFrom(TimeInstant startTimeInstant, TimeInstant endTimeInstant) {
+	public static Duration getDurationFrom(TimeInstant startTimeInstant, TimeInstant endTimeInstant, Granularity gran) {
 		return null;
 	}
 		
 	// TODO
-	public static TimeInstant getEndTimeInstantFrom(TimeInstant startTimeInstant, Duration duration) {
+	public static TimeInstant getEndTimeInstantFrom(TimeInstant startTimeInstant, Duration duration, Granularity gran) {
 		return null;
 	}
 	
 	// TODO
-	public static TimeInstant getStartTimeInstantFrom(Duration duration, TimeInstant endTimeInstant) {
+	public static TimeInstant getStartTimeInstantFrom(Duration duration, TimeInstant endTimeInstant, Granularity gran) {
 		return null;
 	}
 }

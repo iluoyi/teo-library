@@ -1,27 +1,35 @@
 package edu.tmc.uth.teo.model;
 
 import java.sql.Time;
+import java.util.Date;
 
 import edu.tmc.uth.teo.queryIF.Granularity;
+import edu.tmc.uth.teo.utils.DateParserUtil;
 
 /**
- * 
- * 1. We put constraints on the Constructor so that we can only have valid instances of TimeInstant.
  * 
  * @author yluo
  *
  */
 public class TimeInstant extends ConnectedTemporalRegion implements Comparable<TimeInstant>{
-	private String origTime; // display value - a must field
-	private long normalizedTime; // in milliseconds since January 1, 1970, 00:00:00 GMT, can only be computed.
+	private TimeAssemblyMethod assemblyMethod = TimeAssemblyMethod.UNKNOWN; // TODO
+	
+	private String origTime; // display value
+	private long normalizedTime; // in milliseconds since January 1, 1970, 00:00:00 GMT.
 	
 	// hidden super class filed: Granularity timeGranularity;
 
 	/**
-	 * To initialize a Duration object, the original time string and its granularity must be provided.
-	 * 
-	 * @param val
-	 * @param unit
+	 * Constructor 1
+	 */
+	public TimeInstant() {
+		this.origTime = null;
+		this.setGranularity(new Granularity());
+		this.normalizedTime = -1;
+	}
+	
+	/**
+	 * Constructor 2, to compute normalizedTime automatically
 	 */
 	public TimeInstant(String origTime, Granularity gran) {
 		this.origTime = origTime;
@@ -29,7 +37,16 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 		this.normalizedTime = getNormalizedTimeFromOrigTime(origTime, gran);
 	}
 	
-	public void resetOriginalTime(String origTime, Granularity gran) {
+	/**
+	 * Constructor 3
+	 */
+	public TimeInstant(long normalizedTime) {
+		this.origTime = null;
+		this.setGranularity(new Granularity());
+		this.normalizedTime = normalizedTime;
+	}
+	
+	public void reset(String origTime, Granularity gran) {
 		this.origTime = origTime;
 		this.setGranularity(gran);
 		this.normalizedTime = getNormalizedTimeFromOrigTime(origTime, gran);
@@ -43,55 +60,36 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 		return new Time(normalizedTime);
 	}
 	
-	/**
-	 * To get a TimeInstant in a different granularity and keep the normalizedTime the same.
-	 * @param newGran
-	 * @return
-	 */
-	public TimeInstant toGranularity(Granularity newGran) {
-		String newTimeStr = getTransferedTime(this.getOriginalTime(), this.getGranularity(), newGran);
 		
-		TimeInstant newTimeInstant = new TimeInstant(newTimeStr, newGran);
-		
-		return newTimeInstant;
-	}
-	
-	// TODO
-	public static String getTransferedTime(String oldTimeStr, Granularity oldGran, Granularity newGran) {
-		return null;
-	}
-	
-	// TODO
-	public static long getNormalizedTimeFromOrigTime(String origTime, Granularity gran) {
-
-		return 0;
-	}
-	
 	public String toString() {
 		return "{" + super.toString() + 
 				((this.origTime != null)? ("{Orig:" + this.origTime + "}"):"")  +
 				((this.normalizedTime != -1)? ("{Norm:" + this.normalizedTime + "}"):"")  + "}";
 	}
 	
-	
-	public int compareTo(long otherTime) {
-		if (this.normalizedTime > normalizedTime) {
+		
+	public int compareTo(TimeInstant otherTimeInstant) {
+		if (this.normalizedTime > otherTimeInstant.normalizedTime) {
 			return 1;
-		} else if (this.normalizedTime < normalizedTime) {
+		} else if (this.normalizedTime < otherTimeInstant.normalizedTime) {
 			return -1;
 		} else {
 			return 0;
 		}
 	}
+
 	
-	public int compareTo(TimeInstant other) {
-		if (this.normalizedTime > other.normalizedTime) {
-			return 1;
-		} else if (this.normalizedTime < other.normalizedTime) {
-			return -1;
+	/**
+	 * Get normalized time value from the string and granularity.
+	 */
+	public static long getNormalizedTimeFromOrigTime(String origTimeStr, Granularity gran) {
+		Date parsedDate = DateParserUtil.parse(origTimeStr);
+		
+		if (parsedDate != null) {
+			Date trasferedDate = DateParserUtil.setGranularity(parsedDate, gran.getUnit()); // might truncate finer granularities
+			return trasferedDate.getTime();
 		} else {
-			return 0;
+			return -1;
 		}
 	}
-	
 }

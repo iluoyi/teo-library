@@ -49,5 +49,19 @@
 			<artifactId>swrl-bridge-temporal</artifactId>
 			<version>unknown</version>
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.ocpsoft.prettytime</groupId>
+			<artifactId>prettytime</artifactId>
+			<version>3.2.5.Final</version>
+		</dependency>
+		
+		<dependency>
+		   <groupId>org.ocpsoft.prettytime</groupId>
+		   <artifactId>prettytime-nlp</artifactId>
+		   <version>3.2.5.Final</version>
+		</dependency>
+		
   </dependencies>
 </project>
