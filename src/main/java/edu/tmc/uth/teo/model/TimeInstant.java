@@ -3,7 +3,7 @@ package edu.tmc.uth.teo.model;
 import java.util.Date;
 
 import edu.tmc.uth.teo.queryIF.Granularity;
-import edu.tmc.uth.teo.utils.DateParserUtil;
+import edu.tmc.uth.teo.utils.DateUtils;
 
 /**
  * 
@@ -92,10 +92,10 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 	 * Get normalized time value from the string and granularity.
 	 */
 	public static long getNormalizedTimeFromOrigTime(String origTimeStr, Granularity gran) {
-		Date parsedDate = DateParserUtil.parse(origTimeStr);
+		Date parsedDate = DateUtils.parse(origTimeStr);
 		
 		if (parsedDate != null) {
-			Date trasferedDate = DateParserUtil.setGranularity(parsedDate, gran.getUnit()); // might truncate finer granularities
+			Date trasferedDate = DateUtils.setGranularity(parsedDate, gran.getUnit()); // might truncate finer granularities
 			return trasferedDate.getTime();
 		} else {
 			return -1;

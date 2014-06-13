@@ -17,4 +17,8 @@ public abstract class TemporalRegion extends TEOClass{
 	public void setGranularity(Granularity gran) {
 		this.timeGranularity = gran;
 	}
+	
+	public void setUnit(Unit unit) {
+		this.timeGranularity.setUnit(unit);
+	}
 }

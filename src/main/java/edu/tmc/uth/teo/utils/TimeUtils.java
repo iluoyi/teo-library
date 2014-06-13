@@ -35,6 +35,8 @@ public class TimeUtils {
 	/**
 	 * Given start time, end time and the desired granularity, this method calculates the duration.
 	 * 
+	 * Note: duration in a single unit, which means the result ought to be "14 months" rather than "1 year 2 months"
+	 * 
 	 * @param startTimeInstant
 	 * @param endTimeInstant
 	 * @param gran
@@ -129,7 +131,7 @@ public class TimeUtils {
 			endCal.add(Calendar.MINUTE, durValue.getMinute());
 			endCal.add(Calendar.SECOND, durValue.getSecond());
 			
-			Date endDate = DateParserUtil.setGranularity(endCal.getTime(), gran.getUnit());
+			Date endDate = DateUtils.setGranularity(endCal.getTime(), gran.getUnit());
 		
 			TimeInstant endTimeInstant = new TimeInstant(endDate.getTime()); // an inferred time instant (no source string)
 			
@@ -176,7 +178,7 @@ public class TimeUtils {
 			startCal.add(Calendar.MINUTE, - durValue.getMinute());
 			startCal.add(Calendar.SECOND, - durValue.getSecond());
 			
-			Date endDate = DateParserUtil.setGranularity(startCal.getTime(), gran.getUnit());
+			Date endDate = DateUtils.setGranularity(startCal.getTime(), gran.getUnit());
 		
 			TimeInstant startTimeInstant = new TimeInstant(endDate.getTime()); // an inferred time instant (no source string)
 			

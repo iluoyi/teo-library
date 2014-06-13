@@ -84,7 +84,7 @@ public class DurationValue implements Comparable<DurationValue> {
 	/**
 	 * @param unit
 	 */
-	public void changeGranularity(Unit unit) {
+	public void supressUnitsLowerthan(Unit unit) {
 		if (unit.compareTo(Unit.MINUTE) > 0) {
 			this.second = 0;
 		}
@@ -104,7 +104,7 @@ public class DurationValue implements Comparable<DurationValue> {
 			this.month = 0;
 		}
 	}
-
+	
 	/**
 	 * Note: we have simple assumptions here.
 	 *       1 year = 365 days, 1 month = 30 days, 1 week = 7 days.

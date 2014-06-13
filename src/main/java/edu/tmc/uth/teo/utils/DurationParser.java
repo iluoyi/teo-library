@@ -11,7 +11,7 @@ import edu.tmc.uth.teo.model.DurationValue;
 public class DurationParser {
 
 	/**
-	 * Should be in the form of "4Y1M0W1D2H3m6s"
+	 * Should be in the form of "4Y1M0W1D2H3m6s" (each attribute value must be an Integer)
 	 * @param duration
 	 * @return
 	 */

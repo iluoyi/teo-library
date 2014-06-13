@@ -88,7 +88,7 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 	public static DurationValue getDurValueFromStr(String durStr, Unit durUnit) {
 		DurationValue durValue = DurationParser.parseDuration(durStr);
 		if (durValue != null) {
-			durValue.changeGranularity(durUnit);
+			durValue.supressUnitsLowerthan(durUnit);
 		}
 		return durValue; // might be null
 	}

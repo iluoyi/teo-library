@@ -1,5 +1,8 @@
 package edu.tmc.uth.teo.model;
 
+import edu.tmc.uth.teo.queryIF.Granularity;
+import edu.tmc.uth.teo.queryIF.Unit;
+import edu.tmc.uth.teo.utils.DurationUtils;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
 
@@ -54,6 +57,7 @@ public class TimeInterval extends ConnectedTemporalRegion {
 		if (startTime != null && duration != null) {
 			this.startTime = startTime;
 			this.duration = duration;
+			this.setUnit(TimeUtils.getFinerUnit(startTime, duration));
 			this.endTime = TimeUtils.getEndTimeInstantFrom(startTime, duration, this.getGranularity());
 		}
 	}
@@ -67,10 +71,10 @@ public class TimeInterval extends ConnectedTemporalRegion {
 		if (startTime != null && duration != null) {
 			this.endTime = endTime;
 			this.duration = duration;
+			this.setUnit(TimeUtils.getFinerUnit(startTime, duration));
 			this.startTime = TimeUtils.getStartTimeInstantFrom(duration, endTime, this.getGranularity());
 		}
 	}
-	
 	
 	/**
 	 * This method checks if three given conditions (startTime, endTime, and duration) could lead to
@@ -84,6 +88,19 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	 * @return
 	 */
 	public static boolean isValidTimeInterval(TimeInstant startTime, TimeInstant endTime, Duration duration) {
+		if (startTime != null && endTime != null && duration != null) {
+			if (startTime.compareTo(endTime) <= 0) { // 1. start <= end
+				Granularity corserGran = TimeUtils.getCoarserGranularity(startTime, endTime);
+				Unit maxUnit = corserGran.getUnit().compareTo(duration.getUnit()) > 0 ? corserGran.getUnit() : duration.getUnit();
+				
+				Duration computedDur = TimeUtils.getDurationFrom(startTime, endTime, new Granularity(maxUnit));
+				DurationValue givenDurValue = DurationUtils.changeToUnit(duration.getDurationValue(), maxUnit);
+				
+				if (computedDur.getDurationValue().compareTo(givenDurValue) == 0) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 }
