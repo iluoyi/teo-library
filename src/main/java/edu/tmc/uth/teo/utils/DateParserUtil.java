@@ -47,7 +47,7 @@ public class DateParserUtil {
 		// call the rule-based parser
 		if (retDate == null) {
 					
-			if (!TEOUtils.isNull(text)) 
+			if (!StringUtils.isNull(text)) 
 				retDate = new DateParser().parse(text, new ParsePosition(0));
 		}
 		

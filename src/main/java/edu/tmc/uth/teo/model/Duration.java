@@ -10,6 +10,8 @@ import edu.tmc.uth.teo.utils.DurationParser;
  *
  */
 public class Duration extends TEOClass implements Comparable<Duration> {
+	private AssemblyMethod assemblyMethod;
+	
 	private Unit durUnit; // display unit
 	private String durStr; // display string
 	
@@ -23,6 +25,7 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 		this.durStr = null;
 		this.durUnit = Unit.UNKNOWN;
 		this.durValue = null;
+		this.assemblyMethod = AssemblyMethod.UNKNOWN;
 	}
 	
 	/**
@@ -32,6 +35,7 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 		this.durStr = durStr;
 		this.durUnit = durUnit;
 		this.durValue = getDurValueFromStr(durStr, durUnit);
+		this.assemblyMethod = AssemblyMethod.ASSERTED;
 	}
 	
 	/**
@@ -41,8 +45,8 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 		this.durStr = null;
 		this.durUnit = Unit.UNKNOWN;
 		this.durValue = durValue;
+		this.assemblyMethod = AssemblyMethod.INFERRED;
 	}
-	
 	
 	public void reset(String durStr, Unit durUnit) {
 		this.durStr = durStr;
@@ -58,6 +62,13 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 		return this.durStr;
 	}
 	
+	public DurationValue getDurationValue() {
+		return this.durValue;
+	}
+	
+	public AssemblyMethod getAssemblyMethod() {
+		return this.assemblyMethod;
+	}
 	
 	public String toString() {
 		return ""  + ((this.durUnit != null)? ("{Dur. unit:" + this.durUnit + "}"):"") +

@@ -1,6 +1,6 @@
 package edu.tmc.uth.teo.queryIF;
 
-public class Granularity {
+public class Granularity implements Comparable<Granularity> {
 	private Unit unit;
 	
 	public Granularity() {
@@ -17,5 +17,9 @@ public class Granularity {
 	
 	public Unit getUnit() {
 		return this.unit;
+	}
+
+	public int compareTo(Granularity o) {
+		return getUnit().compareTo(o.getUnit());
 	}
 }

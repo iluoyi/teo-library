@@ -1,6 +1,6 @@
 package edu.tmc.uth.teo.model;
 
-import edu.tmc.uth.teo.queryIF.Granularity;
+import edu.tmc.uth.teo.utils.TimeUtils;
 
 
 /**
@@ -13,9 +13,9 @@ import edu.tmc.uth.teo.queryIF.Granularity;
  *
  */
 public class TimeInterval extends ConnectedTemporalRegion {
-	private TimeInstant startTime; // Yi: startTime has its own granularity
-	private TimeInstant endTime; // Yi: endTime has its own granularity
-	private Duration duration; // Yi: duration has its own duration unit (similar to granularity)
+	private TimeInstant startTime; // startTime has its own granularity
+	private TimeInstant endTime; // endTime has its own granularity
+	private Duration duration; // duration has its own duration unit (similar to granularity)
 	
 	// hidden super class filed: Granularity timeGranularity;
 	
@@ -38,9 +38,10 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	 */
 	public TimeInterval(TimeInstant startTime, TimeInstant endTime) {
 		if (startTime != null && endTime != null) {
-			this.startTime = startTime; // transfer startTime to the current granularity
-			this.endTime = endTime; // transfer endTime to the current granularity
-			this.duration = getDurationFrom(startTime, endTime, this.getGranularity());
+			this.startTime = startTime;
+			this.endTime = endTime;
+			this.setGranularity(TimeUtils.getCoarserGranularity(startTime, endTime));
+			this.duration = TimeUtils.getDurationFrom(startTime, endTime, this.getGranularity()); // get the duration according to the current granularity
 		}
 	}
 	
@@ -53,7 +54,7 @@ public class TimeInterval extends ConnectedTemporalRegion {
 		if (startTime != null && duration != null) {
 			this.startTime = startTime;
 			this.duration = duration;
-			this.endTime = getEndTimeInstantFrom(startTime, duration, this.getGranularity());
+			this.endTime = TimeUtils.getEndTimeInstantFrom(startTime, duration, this.getGranularity());
 		}
 	}
 	
@@ -66,14 +67,14 @@ public class TimeInterval extends ConnectedTemporalRegion {
 		if (startTime != null && duration != null) {
 			this.endTime = endTime;
 			this.duration = duration;
-			this.startTime = getStartTimeInstantFrom(duration, endTime, this.getGranularity());
+			this.startTime = TimeUtils.getStartTimeInstantFrom(duration, endTime, this.getGranularity());
 		}
 	}
 	
 	
 	/**
 	 * This method checks if three given conditions (startTime, endTime, and duration) could lead to
-	 * valid time interval or not.
+	 * a valid time interval or not.
 	 * 
 	 * 1. start <= end; 2. duration = end - start.
 	 * 
@@ -84,20 +85,5 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	 */
 	public static boolean isValidTimeInterval(TimeInstant startTime, TimeInstant endTime, Duration duration) {
 		return false;
-	}
-	
-	// TODO
-	public static Duration getDurationFrom(TimeInstant startTimeInstant, TimeInstant endTimeInstant, Granularity gran) {
-		return null;
-	}
-		
-	// TODO
-	public static TimeInstant getEndTimeInstantFrom(TimeInstant startTimeInstant, Duration duration, Granularity gran) {
-		return null;
-	}
-	
-	// TODO
-	public static TimeInstant getStartTimeInstantFrom(Duration duration, TimeInstant endTimeInstant, Granularity gran) {
-		return null;
 	}
 }

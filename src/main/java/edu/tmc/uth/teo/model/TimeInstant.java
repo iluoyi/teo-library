@@ -1,6 +1,5 @@
 package edu.tmc.uth.teo.model;
 
-import java.sql.Time;
 import java.util.Date;
 
 import edu.tmc.uth.teo.queryIF.Granularity;
@@ -12,7 +11,7 @@ import edu.tmc.uth.teo.utils.DateParserUtil;
  *
  */
 public class TimeInstant extends ConnectedTemporalRegion implements Comparable<TimeInstant>{
-	private TimeAssemblyMethod assemblyMethod = TimeAssemblyMethod.UNKNOWN; // TODO
+	private AssemblyMethod assemblyMethod;
 	
 	private String origTime; // display value
 	private long normalizedTime; // in milliseconds since January 1, 1970, 00:00:00 GMT.
@@ -26,6 +25,7 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 		this.origTime = null;
 		this.setGranularity(new Granularity());
 		this.normalizedTime = -1;
+		this.assemblyMethod = AssemblyMethod.UNKNOWN;
 	}
 	
 	/**
@@ -35,6 +35,7 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 		this.origTime = origTime;
 		this.setGranularity(gran);
 		this.normalizedTime = getNormalizedTimeFromOrigTime(origTime, gran);
+		this.assemblyMethod = AssemblyMethod.ASSERTED;
 	}
 	
 	/**
@@ -44,6 +45,7 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 		this.origTime = null;
 		this.setGranularity(new Granularity());
 		this.normalizedTime = normalizedTime;
+		this.assemblyMethod = AssemblyMethod.INFERRED;
 	}
 	
 	public void reset(String origTime, Granularity gran) {
@@ -56,10 +58,17 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 		return origTime;
 	}
 
-	public Time getNormalizedTime() {
-		return new Time(normalizedTime);
+	public Date getNormalizedDate() {
+		return new Date(normalizedTime);
 	}
 	
+	public long getNormalizedTime() {
+		return normalizedTime;
+	}
+	
+	public AssemblyMethod getAssemblyMethod() {
+		return this.assemblyMethod;
+	}
 		
 	public String toString() {
 		return "{" + super.toString() + 
