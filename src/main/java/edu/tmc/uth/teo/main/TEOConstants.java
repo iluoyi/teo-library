@@ -7,7 +7,6 @@ public class TEOConstants {
 	 */
 	public static final String TEO_NS = "http://informatics.mayo.edu/TEO.owl#";
 	
-	
 	/**
 	 * Class Names
 	 */
@@ -76,6 +75,10 @@ public class TEOConstants {
 	/**
 	 *  Classes
 	 */
+	public static final String TEMPORAL_INSTANT_CLS = "http://www.ifomis.org/bfo/1.1/span#TemporalInstant";
+	public static final String TEMPORAL_INTERVAL_CLS = "http://www.ifomis.org/bfo/1.1/span#TemporalInterval";
+	public static final String PERIODIC_TIME_INTERVAL_CLS = getWithNS(TEO_PERIODICTIMEINTERVAL_CLS_NAME);
+	
 	public static final String TEO_EVENT_CLS = getWithNS(TEO_EVENT_CLS_NAME);
 	public static final String TEO_HOLIDAY_CLS = getWithNS(TEO_HOLIDAY_CLS_NAME);
 	public static final String TEO_TIMEGRANULARITY_CLS = getWithNS(TEO_TIMEGRANULARITY_CLS_NAME);
@@ -83,7 +86,6 @@ public class TEOConstants {
 	public static final String TEO_TIMEPERIOD_CLS = getWithNS(TEO_TIMEPERIOD_CLS_NAME);
 	public static final String TEO_TIMEPHASE_CLS = getWithNS(TEO_TIMEPHASE_CLS_NAME);
 	public static final String TEO_DURATIONMEASUREMENT_CLS = getWithNS(TEO_DURATIONMEASUREMENT_CLS_NAME);
-	public static final String TEO_PERIODICTIMEINTERVAL_CLS = getWithNS(TEO_PERIODICTIMEINTERVAL_CLS_NAME);
 	public static final String TEO_TIMESEQUENCE_CLS = getWithNS(TEO_TIMESEQUENCE_CLS_NAME);
 	public static final String TEO_DAY_CLS = getWithNS(TEO_DAY_CLS_NAME);
 	public static final String TEO_WEEK_CLS = getWithNS(TEO_WEEK_CLS_NAME);

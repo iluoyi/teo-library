@@ -7,4 +7,18 @@ public class StringUtils {
 		return false;
 	}
 	
+	public static String getStringValueWithinQuotes(String str) {
+		String value = str;
+		
+		if (value.startsWith("\""))
+		{
+			value = value.substring(1);
+			if (!isNull(value))
+			{
+				if (value.indexOf("\"") != -1)
+					value = value.substring(0, value.lastIndexOf("\""));
+			}
+		}
+		return value;
+	}
 }

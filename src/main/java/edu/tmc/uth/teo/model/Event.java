@@ -11,24 +11,28 @@ package edu.tmc.uth.teo.model;
  *
  */
 public class Event extends TEOClass {
-	private TemporalRegion validTime; // can be TimeInstant, TimeInterval or PeriodicTimeInterval
-	private int eventType; // TimeInstant = 0, TimeInterval = 1 or PeriodicTimeInterval = 2
+	protected TemporalType eventType; 
+	private TemporalRegion validTime; // might be TimeInsant, TimeInterval, PeriodicTimeInterval
 	
 	// hasTemporalRelations
 	
 	public Event() {
-		validTime = null;
-		eventType = -1;
+		eventType = TemporalType.UNKNOWN;
 	}
 	
-	public String getEventType() {
-		switch (this.eventType) {
-		case 0: return "TIMEINSTANT";
-		case 1: return "TIMEINTERVAL";
-		case 2: return "PERIODICTIMEINTERVAL";
-		default: return "UNKNOWN";
-		}
+	public Event(TemporalType type) {
+		this.eventType = type;
 	}
 	
+	public TemporalType getEventType() {
+		return this.eventType;
+	}
+		
+	public TemporalRegion getTimeInstant() {
+		return this.validTime;
+	}
 	
+	public void setValidTime(TemporalRegion validTime) {
+		this.validTime = validTime;
+	}
 }

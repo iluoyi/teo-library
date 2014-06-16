@@ -96,7 +96,7 @@ public class TimeInterval extends ConnectedTemporalRegion {
 				Duration computedDur = TimeUtils.getDurationFrom(startTime, endTime, new Granularity(maxUnit));
 				DurationValue givenDurValue = DurationUtils.changeToUnit(duration.getDurationValue(), maxUnit);
 				
-				if (computedDur.getDurationValue().compareTo(givenDurValue) == 0) {
+				if (computedDur.getDurationValue().compareTo(givenDurValue) == 0) { // 2. duration = end - start.
 					return true;
 				}
 			}
