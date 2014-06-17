@@ -15,25 +15,23 @@ import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 
-import edu.tmc.uth.teo.main.TEOConstants;
+import edu.tmc.uth.teo.interfaces.TEOParser;
+import edu.tmc.uth.teo.utils.TEOConstants;
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
+import edu.tmc.uth.teo.model.Granularity;
 import edu.tmc.uth.teo.model.TemporalType;
 import edu.tmc.uth.teo.model.TimeInstant;
 import edu.tmc.uth.teo.model.TimeInterval;
-import edu.tmc.uth.teo.queryIF.Granularity;
-import edu.tmc.uth.teo.queryIF.Unit;
-import edu.tmc.uth.teo.serviceIF.TEOParser;
+import edu.tmc.uth.teo.model.Unit;
 import edu.tmc.uth.teo.utils.StringUtils;
 
-public class TEOParserImpl implements TEOParser {
+public class TEOOWLAPIParser implements TEOParser {
 
 	public OWLOntology ontology = null;
-	public OWLOntologyManager manager = null;
 	public OWLDataFactory df = null;
 	public PelletReasoner reasoner = null;
 	
@@ -61,16 +59,15 @@ public class TEOParserImpl implements TEOParser {
 	 * Constructor
 	 * @param ont
 	 */
-	public TEOParserImpl(OWLOntology ont) {
+	public TEOOWLAPIParser(Object ont) {
 		if (ont == null) {
 			System.out.println("!!!!!!!!!! Initialization Error!! ontology is null. Nothing will work !!!!!!!!!!!!!");
 			return;
 		}
 		
-		ontology = ont;
-		df = ontology.getOWLOntologyManager().getOWLDataFactory();
-		manager = ontology.getOWLOntologyManager();
-		reasoner = com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory.getInstance().createReasoner(ontology);
+		this.ontology = (OWLOntology) ont;
+		this.df = this.ontology.getOWLOntologyManager().getOWLDataFactory();
+		this.reasoner = com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory.getInstance().createReasoner(this.ontology);
 
 		if ((df == null) || (reasoner == null)) {
 			System.out.println("!!!!!!!!!! Initialization Error!! df/reasoner is null. Nothing will work !!!!!!!!!!!!!");
@@ -104,14 +101,12 @@ public class TEOParserImpl implements TEOParser {
 		
 		for (OWLNamedIndividual eventIndividual : individuals) {
 			if (eventIndividual != null) {
-				System.out.println("\n[####################################]\nProcessing Events....--> " + eventIndividual.getIRI().toString());
+				System.out.println("[####################################]Processing Events....--> " + eventIndividual.getIRI().toString());
 				
 				Event event = parseEvent(eventIndividual);
 				eventMap.put(eventIndividual.getIRI().toString(), event);
 			}
 		}
-		
-		
 		return noError;
 	}
 	

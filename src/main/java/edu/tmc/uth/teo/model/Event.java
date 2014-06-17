@@ -35,4 +35,8 @@ public class Event extends TEOClass {
 	public void setValidTime(TemporalRegion validTime) {
 		this.validTime = validTime;
 	}
+	
+	public String toString() {
+		return "EventType: " + getEventType() + "\nhasValidTime: " + getValidTime();
+	}
 }

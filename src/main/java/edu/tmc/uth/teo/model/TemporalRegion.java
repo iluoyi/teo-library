@@ -1,7 +1,5 @@
 package edu.tmc.uth.teo.model;
 
-import edu.tmc.uth.teo.queryIF.Granularity;
-import edu.tmc.uth.teo.queryIF.Unit;
 
 public abstract class TemporalRegion extends TEOClass{
 	protected Granularity timeGranularity;

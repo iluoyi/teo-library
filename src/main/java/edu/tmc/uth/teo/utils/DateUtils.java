@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
 
-import edu.tmc.uth.teo.queryIF.Unit;
+import edu.tmc.uth.teo.model.Unit;
 
 /**
  * This is a parser which combines the Rule-based method and NLP-based method.

@@ -1,6 +1,5 @@
 package edu.tmc.uth.teo.model;
 
-import edu.tmc.uth.teo.queryIF.Unit;
 
 /**
  * JavaBean for DurationValue

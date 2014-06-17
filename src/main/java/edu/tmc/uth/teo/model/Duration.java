@@ -1,7 +1,7 @@
 package edu.tmc.uth.teo.model;
 
-import edu.tmc.uth.teo.queryIF.Unit;
 import edu.tmc.uth.teo.utils.DurationParser;
+import edu.tmc.uth.teo.utils.DurationUtils;
 
 /**
  * 1. We put constraints on the Constructor so that we can only have valid instances of Duration.
@@ -71,12 +71,23 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 	}
 	
 	public String toString() {
-		return ""  + ((this.durUnit != null)? ("{Dur. unit:" + this.durUnit + "}"):"") +
-				"{Dur. string:" + this.durStr + "}" + "{Dur. value:" + this.durValue + "}";
+//		return "{[durUnit:" + this.durUnit + "]" + "[durStr:" + this.durStr + "]" + 
+//				"[durValue:" + this.durValue + "]" + "[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
+		return "{[durStr:" + this.durStr + "]" + 
+				"[durValue:" + this.durValue + "]" + "[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
 	}
+	
+//	public String toString(Unit unit) {
+//		return ""  + ((this.durUnit != null)? ("{durUnit:" + this.durUnit + "}"):"") +
+//				"{durStr:" + this.durStr + "}" + "{durValue:" + getDurValueInDifferentUnit(unit) + "}";
+//	}
 	
 	public int compareTo(Duration other) {
 		return this.durValue.compareTo(other.durValue);
+	}
+	
+	public DurationValue getDurValueInDifferentUnit(Unit unit) {
+		return DurationUtils.changeToUnit(this.getDurationValue(), unit);
 	}
 
 	/**

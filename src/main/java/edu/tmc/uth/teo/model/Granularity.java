@@ -1,4 +1,5 @@
-package edu.tmc.uth.teo.queryIF;
+package edu.tmc.uth.teo.model;
+
 
 public class Granularity implements Comparable<Granularity> {
 	private Unit unit;

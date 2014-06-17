@@ -1,4 +1,4 @@
-package edu.tmc.uth.teo.main;
+package edu.tmc.uth.teo.utils;
 
 public class TEOConstants {
 	

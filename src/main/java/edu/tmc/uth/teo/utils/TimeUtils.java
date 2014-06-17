@@ -6,9 +6,9 @@ import com.ibm.icu.util.Calendar;
 
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.DurationValue;
+import edu.tmc.uth.teo.model.Granularity;
 import edu.tmc.uth.teo.model.TimeInstant;
-import edu.tmc.uth.teo.queryIF.Granularity;
-import edu.tmc.uth.teo.queryIF.Unit;
+import edu.tmc.uth.teo.model.Unit;
 
 public class TimeUtils {
 	

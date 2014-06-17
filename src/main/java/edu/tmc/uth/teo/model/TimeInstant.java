@@ -2,7 +2,6 @@ package edu.tmc.uth.teo.model;
 
 import java.util.Date;
 
-import edu.tmc.uth.teo.queryIF.Granularity;
 import edu.tmc.uth.teo.utils.DateUtils;
 
 /**
@@ -71,9 +70,10 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 	}
 		
 	public String toString() {
-		return "{" + super.toString() + 
-				((this.origTime != null)? ("{Orig:" + this.origTime + "}"):"")  +
-				((this.normalizedTime != -1)? ("{Norm:" + this.normalizedTime + "}"):"")  + "}";
+//		return "{[granularity:" + this.getGranularity().getUnit() + "]" + "[Orig:" + this.origTime + "]"  + "[Norm:" + this.getNormalizedDate() + "]" + 
+//				"[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
+		return "{[Orig:" + this.origTime + "]"  + "[Norm:" + this.getNormalizedDate() + "]" + 
+				"[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
 	}
 	
 		

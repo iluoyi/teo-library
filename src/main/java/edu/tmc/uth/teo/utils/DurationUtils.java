@@ -1,7 +1,7 @@
 package edu.tmc.uth.teo.utils;
 
 import edu.tmc.uth.teo.model.DurationValue;
-import edu.tmc.uth.teo.queryIF.Unit;
+import edu.tmc.uth.teo.model.Unit;
 
 public class DurationUtils {
 	/**

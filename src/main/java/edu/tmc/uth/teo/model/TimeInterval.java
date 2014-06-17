@@ -1,7 +1,5 @@
 package edu.tmc.uth.teo.model;
 
-import edu.tmc.uth.teo.queryIF.Granularity;
-import edu.tmc.uth.teo.queryIF.Unit;
 import edu.tmc.uth.teo.utils.DurationUtils;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
@@ -74,6 +72,11 @@ public class TimeInterval extends ConnectedTemporalRegion {
 			this.setUnit(TimeUtils.getFinerUnit(startTime, duration));
 			this.startTime = TimeUtils.getStartTimeInstantFrom(duration, endTime, this.getGranularity());
 		}
+	}
+	
+	
+	public String toString() {
+		return "{startTime:" + this.startTime + "\n"  + "EndTime:" + this.endTime + "\n" + "Duration:" + this.duration + "}";
 	}
 	
 	/**
