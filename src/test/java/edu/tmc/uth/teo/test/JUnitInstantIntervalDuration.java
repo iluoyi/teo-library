@@ -10,6 +10,8 @@ import edu.tmc.uth.teo.interfaces.TEOLoader;
 import edu.tmc.uth.teo.interfaces.TEOParser;
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
 import edu.tmc.uth.teo.model.Event;
+import edu.tmc.uth.teo.model.Granularity;
+import edu.tmc.uth.teo.model.Unit;
 
 public class JUnitInstantIntervalDuration {
 
@@ -49,5 +51,36 @@ public class JUnitInstantIntervalDuration {
 		System.out.println("\nEvent3:\n" + event3);
 		System.out.println("\nEvent4:\n" + event4);
 		System.out.println("\nEvent4:\n" + event5);
+	}
+	
+	@Test
+	public void testGetEventDuration() {
+		System.out.println("######################## Testing GetEventDuration #####################################");
+		Event event1 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event1");
+		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event2");
+		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event3");
+		Event event4 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event4");
+		Event event5 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event5");
+		
+		System.out.println("Event1 duration:" + querier.getDuration(event1) + "\n");
+		System.out.println("Event2 duration:" + querier.getDuration(event2) + "\n");
+		System.out.println("Event3 duration:" + querier.getDuration(event3) + "\n");
+		System.out.println("Event4 duration:" + querier.getDuration(event4) + "\n");
+		System.out.println("Event5 duration:" + querier.getDuration(event5) + "\n");
+	}
+	
+	@Test
+	public void testGetDurationBetweenEvents() {
+		System.out.println("######################## Testing GetDurationBetweenEvents #####################################");
+		Event event1 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event1");
+		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event2");
+		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event3");
+		Event event4 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event4");
+		Event event5 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event5");
+		
+		System.out.println("Duration between event1 and event4:" + querier.getDurationBetweenEvents(event1, event4, new Granularity(Unit.MONTH)) + "\n");
+		System.out.println("Duration between event4 and event2:" + querier.getDurationBetweenEvents(event4, event2, new Granularity(Unit.YEAR)) + "\n");
+		System.out.println("Duration between event2 and event3:" + querier.getDurationBetweenEvents(event2, event3, new Granularity(Unit.SECOND)) + "\n");
+		System.out.println("Duration between event1 and event2:" + querier.getDurationBetweenEvents(event1, event2, new Granularity(Unit.DAY)) + "\n");
 	}
 }
