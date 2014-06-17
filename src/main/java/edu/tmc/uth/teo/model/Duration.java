@@ -72,7 +72,7 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 	
 	public String toString() {
 		return ""  + ((this.durUnit != null)? ("{Dur. unit:" + this.durUnit + "}"):"") +
-				"{Dur. value:" + this.durStr + "}" ;
+				"{Dur. string:" + this.durStr + "}" + "{Dur. value:" + this.durValue + "}";
 	}
 	
 	public int compareTo(Duration other) {

@@ -112,8 +112,8 @@ public class DurationValue implements Comparable<DurationValue> {
 	public int compareTo(DurationValue otherDur) {
 		long second1 = this.year * 365 * 24 * 60 * 60 + this.month * 30 * 24 * 60 * 60 + this.week * 7 * 24 * 60 * 60 +
 						this.day * 24 * 60 * 60 + this.hour * 60 * 60 + this.minute * 60 + this.second;
-		long second2 = this.year * 365 * 24 * 60 * 60 + this.month * 30 * 24 * 60 * 60 + this.week * 7 * 24 * 60 * 60 +
-						this.day * 24 * 60 * 60 + this.hour * 60 * 60 + this.minute * 60 + this.second;
+		long second2 = otherDur.year * 365 * 24 * 60 * 60 + otherDur.month * 30 * 24 * 60 * 60 + otherDur.week * 7 * 24 * 60 * 60 +
+						otherDur.day * 24 * 60 * 60 + otherDur.hour * 60 * 60 + otherDur.minute * 60 + otherDur.second;
 		if (second1 > second2) {
 			return 1;
 		} else if (second1 < second2) {

@@ -28,7 +28,7 @@ public class Event extends TEOClass {
 		return this.eventType;
 	}
 		
-	public TemporalRegion getTimeInstant() {
+	public TemporalRegion getValidTime() {
 		return this.validTime;
 	}
 	
