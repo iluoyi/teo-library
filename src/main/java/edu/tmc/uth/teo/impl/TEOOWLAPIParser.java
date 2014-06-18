@@ -45,7 +45,7 @@ public class TEOOWLAPIParser implements TEOParser {
 	public OWLObjectProperty hasEndTime = null;
 	public OWLObjectProperty hasDuration = null;
 	
-	public OWLDataProperty hasDurationValue = null;
+	public OWLDataProperty hasDurationPattern= null;
 
 	public int getEventCount() {
 		return eventMap.size();
@@ -82,7 +82,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		hasEndTime = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_HASENDTIME_PRP));
 		hasDuration = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_HASDURATION_PRP));
 		
-		hasDurationValue = df.getOWLDataProperty(IRI.create(TEOConstants.TEO_HASDURATIONVALUE_PRP));
+		hasDurationPattern = df.getOWLDataProperty(IRI.create(TEOConstants.TEO_HASDURATIONPATTERN_PRP));
 	}
 	
 	/**
@@ -230,12 +230,12 @@ public class TEOOWLAPIParser implements TEOParser {
 	}
 	
 	/**
-	 * Duration parser
+	 * Duration parser from durationPattern "0Y0M0W0D0H0m0s"
 	 */
 	public Duration parseDuration(OWLNamedIndividual durIndividual) {
 		Duration duration = null;
 		
-		Set<OWLLiteral> valueList = getDataPropertyValue(durIndividual, hasDurationValue);
+		Set<OWLLiteral> valueList = getDataPropertyValue(durIndividual, hasDurationPattern);
 		for (OWLLiteral durValue : valueList) {
 			if (durValue != null) {
 				String durValueStr = durValue.getLiteral();

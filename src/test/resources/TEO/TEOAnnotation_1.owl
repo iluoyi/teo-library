@@ -8,7 +8,7 @@
 
 <http://www.cse.lehigh.edu/~yil712/TEO/annotation_1.owl> rdf:type owl:Ontology ;
                                                          
-                                                         owl:imports <http://www.cse.lehigh.edu/~yil712/TEO/TEO.owl> .
+                                                         owl:imports <http://www.cse.lehigh.edu/~yil712/TEO/TEO_10.0.8.owl> .
 
 
 #################################################################

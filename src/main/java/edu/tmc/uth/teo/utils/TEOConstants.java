@@ -67,8 +67,9 @@ public class TEOConstants {
 	public static final String TEO_HASMODALITY_PRP_NAME = "TEO_0000004";
 	public static final String TEO_HASNORMALIZEDTIME_PRP_NAME = "TEO_0000005";
 	public static final String TEO_HASORIGTIME_PRP_NAME = "TEO_0000015";
-	public static final String TEO_HASDURATIONVALUE_PRP_NAME = "TEO_0000041"; // hasDurationValue
-	public static final String TEO_HASCALENDARPATTERNFORM_PRP_NAME = "TEO_0000064"; // hasDurationValue
+	public static final String TEO_HASDURATIONVALUE_PRP_NAME = "TEO_0000041"; // hasDurationValue (should go with hasUnit)
+	public static final String TEO_HASDURATIONPATTERN_PRP_NAME = "TEO_0000144"; // hasDurationValue
+	public static final String TEO_HASCALENDARPATTERNFORM_PRP_NAME = "TEO_0000064"; // hasCalendarPatternForm
 	public static final String TEO_NUMERATOR_PRP_NAME = "TEO_0000076"; // domain: Frequency
 
 	
@@ -94,7 +95,7 @@ public class TEOConstants {
 	
 	
 	/**
-	 *  Object Properties
+	 *  Properties
 	 */
 	public static final String TEO_HASVALIDTIME_PRP = getWithNS(TEO_HASVALIDTIME_PRP_NAME);
 	public static final String TEO_HASSTARTTIME_PRP = getWithNS(TEO_HASSTARTTIME_PRP_NAME);
@@ -126,6 +127,7 @@ public class TEOConstants {
 	public static final String TEO_HASDURATIONVALUE_PRP = getWithNS(TEO_HASDURATIONVALUE_PRP_NAME);
 	public static final String TEO_HASCALENDARPATTERNFORM_PRP = getWithNS(TEO_HASCALENDARPATTERNFORM_PRP_NAME);
 	public static final String TEO_NUMERATOR_PRP = getWithNS(TEO_NUMERATOR_PRP_NAME);
+	public static final String TEO_HASDURATIONPATTERN_PRP = getWithNS(TEO_HASDURATIONPATTERN_PRP_NAME);
 	
 	
 	/**
