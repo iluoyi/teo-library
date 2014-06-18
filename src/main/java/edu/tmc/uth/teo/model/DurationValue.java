@@ -105,6 +105,8 @@ public class DurationValue implements Comparable<DurationValue> {
 	}
 	
 	/**
+	 * Exact comparison
+	 * 
 	 * Note: we have simple assumptions here.
 	 *       1 year = 365 days, 1 month = 30 days, 1 week = 7 days.
 	 */
@@ -120,5 +122,48 @@ public class DurationValue implements Comparable<DurationValue> {
 		} else {
 			return 0;
 		}	
+	}
+	
+	/**
+	 * Approximate comparison
+	 * 
+	 * Note: we can specify the granularity when comparing two duration values.
+	 */
+	public int compareTo(DurationValue otherDur, Unit unit) {
+		long result1 = this.year * 365 * 24 * 60 * 60 + this.month * 30 * 24 * 60 * 60 + this.week * 7 * 24 * 60 * 60 +
+				this.day * 24 * 60 * 60 + this.hour * 60 * 60 + this.minute * 60 + this.second;
+		long result2 = otherDur.year * 365 * 24 * 60 * 60 + otherDur.month * 30 * 24 * 60 * 60 + otherDur.week * 7 * 24 * 60 * 60 +
+						otherDur.day * 24 * 60 * 60 + otherDur.hour * 60 * 60 + otherDur.minute * 60 + otherDur.second;
+		if (unit.compareTo(Unit.MINUTE) == 0) {
+			result1 /= 60;
+			result2 /= 60;
+		}
+		if (unit.compareTo(Unit.HOUR) == 0) {
+			result1 /= 3600;
+			result2 /= 3600;
+		}
+		if (unit.compareTo(Unit.DAY) == 0) {
+			result1 /= (3600 * 24);
+			result2 /= (3600 * 24);
+		}
+		if (unit.compareTo(Unit.WEEK) == 0) {
+			result1 /= (3600 * 24 * 7);
+			result2 /= (3600 * 24 * 7);
+		}
+		if (unit.compareTo(Unit.MONTH) == 0) {
+			result1 /= (3600 * 24 * 30);
+			result2 /= (3600 * 24 * 30);
+		}
+		if (unit.compareTo(Unit.YEAR) == 0) {
+			result1 /= (3600 * 24 * 365);
+			result2 /= (3600 * 24 * 365);
+		}
+		if (result1 > result2) {
+			return 1;
+		} else if (result1 < result2) {
+			return -1;
+		} else {
+			return 0;
+}	
 	}
 }

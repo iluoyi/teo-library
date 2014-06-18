@@ -32,7 +32,7 @@
 :Duration2 rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000032> ,
                     owl:NamedIndividual ;
            
-           <http://informatics.mayo.edu/TEO.owl#TEO_0000144> "4Y" .
+           <http://informatics.mayo.edu/TEO.owl#TEO_0000144> "3Y" .
 
 
 

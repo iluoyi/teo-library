@@ -83,7 +83,13 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	 * This method checks if three given conditions (startTime, endTime, and duration) could lead to
 	 * a valid time interval or not.
 	 * 
-	 * 1. start <= end; 2. duration = end - start.
+	 * 1. start <= end; 
+	 * 2. duration = end - start.
+	 * 
+	 * 3. always trust the two w/ finer granularities.
+	 *     e.g.
+	 *         startTime = Sept 2nd 2008, endTime = July 2012, duration = 4Y;
+     *         we select startTime and endTime to calculate new duration.
 	 * 
 	 * @param startTime
 	 * @param endTime
@@ -92,14 +98,15 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	 */
 	public static boolean isValidTimeInterval(TimeInstant startTime, TimeInstant endTime, Duration duration) {
 		if (startTime != null && endTime != null && duration != null) {
-			if (startTime.compareTo(endTime) <= 0) { // 1. start <= end
+			if (startTime.compareTo(endTime) <= 0) { // start <= end??
 				Granularity corserGran = TimeUtils.getCoarserGranularity(startTime, endTime);
 				Unit maxUnit = corserGran.getUnit().compareTo(duration.getUnit()) > 0 ? corserGran.getUnit() : duration.getUnit();
 				
-				Duration computedDur = TimeUtils.getDurationFrom(startTime, endTime, new Granularity(maxUnit));
+				Duration computedDur = TimeUtils.getDurationFrom(startTime, endTime, new Granularity(maxUnit));// would be as accurate as possible
 				DurationValue givenDurValue = DurationUtils.changeToUnit(duration.getDurationValue(), maxUnit);
 				
-				if (computedDur.getDurationValue().compareTo(givenDurValue) == 0) { // 2. duration = end - start.
+				if (computedDur.getDurationValue().compareTo(givenDurValue, Unit.YEAR) == 0) { // duration = end - start.?? 
+																							   // TODO: Simply choose Unit.Year here, to be updated.
 					return true;
 				}
 			}
