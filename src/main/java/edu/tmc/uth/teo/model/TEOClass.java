@@ -1,26 +1,23 @@
 package edu.tmc.uth.teo.model;
 
 public abstract class TEOClass {
-	private String uri = null;
+	private String iriStr = null;
 	private String label = null; // as unique id
 	
-	public String getClassURI() {
-		return this.uri;
+	public String getIRIStr() {
+		return this.iriStr;
 	}
 
-	public void setClassURI(String uri) {
-		this.uri = uri;
+	public void setIRIStr(String iriStr) {
+		this.iriStr = iriStr;
 	}
 	
-	public String getClassLabel() {
+	public String getLabel() {
 		return this.label;
 	}
 
-	public void setClassLabel(String label) {
+	public void setLabel(String label) {
 		this.label = label;
 	}
 	
-	public String toString() {
-		return getClassLabel();
-	}
 }

@@ -14,7 +14,7 @@ public interface TEOQuerier {
 	
 	public Duration getDuration(Event intervalEvent); // for instantEvent we print out error messages
 
-	public Duration getDurationBetweenEvents(Event startEvent, Event endEvent, Granularity granularity);
+	public Duration getDurationBetweenEvents(Event event1, Event event2, Granularity granularity);
 
 //	public Vector<TemporalRelationType> getTemporalRelationType(Event oneEvent,
 //			Event twoEvent) throws CNTROException;

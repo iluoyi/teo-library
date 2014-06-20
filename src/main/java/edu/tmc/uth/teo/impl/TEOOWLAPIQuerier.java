@@ -8,7 +8,6 @@ import edu.tmc.uth.teo.model.Granularity;
 import edu.tmc.uth.teo.model.TemporalType;
 import edu.tmc.uth.teo.model.TimeInstant;
 import edu.tmc.uth.teo.model.TimeInterval;
-import edu.tmc.uth.teo.model.Unit;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
 public class TEOOWLAPIQuerier implements TEOQuerier {
