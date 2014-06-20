@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Vector;
 
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
@@ -13,7 +14,6 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
-import org.semanticweb.owlapi.model.OWLIndividualAxiom;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
@@ -42,7 +42,7 @@ public class TEOOWLAPIParser implements TEOParser {
 	private PelletReasoner reasoner = null;
 	
 	private HashMap<String, Event> eventMap = null;
-	private HashMap<TemporalRelationType, OWLObjectProperty> relationMap = null;
+	private HashMap<OWLObjectProperty, TemporalRelationType> relationMap = null;
 	
 	// Properties
 	private OWLAnnotationProperty rdfLabel = null;
@@ -88,7 +88,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		}
 		
 		this.eventMap = new HashMap<String, Event>();
-		this.relationMap = new HashMap<TemporalRelationType, OWLObjectProperty>();
+		this.relationMap = new HashMap<OWLObjectProperty, TemporalRelationType>();
 		this.ontology = (OWLOntology) ont;
 		this.df = this.ontology.getOWLOntologyManager().getOWLDataFactory();
 		this.reasoner = com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory.getInstance().createReasoner(this.ontology);
@@ -121,19 +121,19 @@ public class TEOOWLAPIParser implements TEOParser {
 		during = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_DURING_PRP));
 		equal = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EQUAL_PRP));
 		
-		relationMap.put(TemporalRelationType.BEFORE, before);
-		relationMap.put(TemporalRelationType.AFTER, after);
-		relationMap.put(TemporalRelationType.START, start);
-		relationMap.put(TemporalRelationType.STARTEDBY, startedBy);
-		relationMap.put(TemporalRelationType.FINISH, finish);
-		relationMap.put(TemporalRelationType.FINISHEDBY, finishedBy);
-		relationMap.put(TemporalRelationType.MEET, meet);
-		relationMap.put(TemporalRelationType.METBY, metBy);
-		relationMap.put(TemporalRelationType.OVERLAP, overlap);
-		relationMap.put(TemporalRelationType.OVERLAPPEDBY, overlappedBy);
-		relationMap.put(TemporalRelationType.CONTAIN, contain);
-		relationMap.put(TemporalRelationType.DURING, during);
-		relationMap.put(TemporalRelationType.EQUAL, equal);
+		if (before != null) relationMap.put(before, TemporalRelationType.BEFORE);
+		if (after != null) relationMap.put(after, TemporalRelationType.AFTER);
+		if (start != null) relationMap.put(start, TemporalRelationType.START);
+		if (startedBy != null) relationMap.put(startedBy, TemporalRelationType.STARTEDBY);
+		if (finish != null) relationMap.put(finish, TemporalRelationType.FINISH);
+		if (finishedBy != null) relationMap.put(finishedBy, TemporalRelationType.FINISHEDBY);
+		if (meet != null) relationMap.put(meet, TemporalRelationType.MEET);
+		if (metBy != null) relationMap.put(metBy, TemporalRelationType.METBY);
+		if (overlap != null) relationMap.put(overlap, TemporalRelationType.OVERLAP);
+		if (overlappedBy != null) relationMap.put(overlappedBy, TemporalRelationType.OVERLAPPEDBY);
+		if (contain != null) relationMap.put(contain, TemporalRelationType.CONTAIN);
+		if (during != null) relationMap.put(during, TemporalRelationType.DURING);
+		if (equal != null) relationMap.put(equal, TemporalRelationType.EQUAL);
 		
 		hasDurationPattern = df.getOWLDataProperty(IRI.create(TEOConstants.TEO_HASDURATIONPATTERN_PRP));
 	}
@@ -172,21 +172,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		Event event = new Event();
 		event.setIRIStr(eventIndividual.getIRI().toString());
 		
-		Set<OWLNamedIndividual> valueList = null;
-			
-//		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
-//		System.out.println(axiomSet.size());
-//		
-//		for (OWLObjectPropertyAssertionAxiom axiom : axiomSet) {
-//			System.out.println(axiom.getAxiomType());
-//			
-//			System.out.println(axiom.getSubject());
-//			System.out.println(axiom.getProperty().asOWLObjectProperty().equals(hasValidTime));
-//			System.out.println(axiom.getObject());
-//		}
-		
-		
-		
+		Set<OWLNamedIndividual> valueList = null;		
 		// parse the valid time
 		valueList = getObjectPropertyValue(eventIndividual, hasValidTime); // hasValidTime
 		for (OWLNamedIndividual validTime : valueList) {
@@ -203,26 +189,55 @@ public class TEOOWLAPIParser implements TEOParser {
 			}
 		}
 		
+		// We prepare the timeOffsetMap for "before/after", this can only recored axioms before Pellet's reasoning!
+		// Note: we use "TemporalRelationType + targetIRIStr" as the key, "timeOffset Duration's OWLNamedIndividual" as the value. 
+		HashMap<String, OWLNamedIndividual> timeOffsetMap = new HashMap<String, OWLNamedIndividual>();
+		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
+		for (OWLObjectPropertyAssertionAxiom axiom : axiomSet) {
+			TemporalRelationType relationType = relationMap.get(axiom.getProperty());
+			if (relationType != null && (relationType.equals(TemporalRelationType.BEFORE) || relationType.equals(TemporalRelationType.AFTER))) {
+				String keyStr = relationMap.get(axiom.getProperty()) + "-" + axiom.getObject().asOWLNamedIndividual().getIRI().toString();
+				if (timeOffsetMap.containsKey(keyStr)) {
+					System.err.println("Error: detected duplicate temporal relation (" + relationMap.get(axiom.getProperty()) + ") to the same target individual for source: " + eventIndividual);
+				} else {
+					Set<OWLAnnotation> annotSet = axiom.getAnnotations(hasTimeOffset);
+					for (OWLAnnotation annot : annotSet) {
+						OWLNamedIndividual valueStr = df.getOWLNamedIndividual(IRI.create(annot.getValue().toString()));
+						timeOffsetMap.put(keyStr, valueStr);
+					}
+				}
+			}
+		}
+		
+		
 		// parse each temporal relation
 		// because we don't have reification triples, every relation must be attached to an event
-		Iterator<Entry<TemporalRelationType, OWLObjectProperty>> it = relationMap.entrySet().iterator();
+		Iterator<Entry<OWLObjectProperty, TemporalRelationType>> it = relationMap.entrySet().iterator();
 		OWLObjectProperty relationPro = null;
 		TemporalRelationType relationType = null;
 		String targetIRI = null;
 		String sourceIRI = eventIndividual.getIRI().toString();
 		TemporalRelation relation = null;
-		//TODO: timeOffset, assemblyMethod, granularity?		
+		//TODO: assemblyMethod, granularity?		
 		while (it.hasNext()) {
-			Entry<TemporalRelationType, OWLObjectProperty> pair = it.next();
-			relationType = pair.getKey();
-			relationPro = pair.getValue();
+			Entry<OWLObjectProperty, TemporalRelationType> pair = it.next();
+			relationType = pair.getValue();
+			relationPro = pair.getKey();
 			if (relationPro != null) {
-				valueList = getObjectPropertyValue(eventIndividual, relationPro); // before, after, and so on...
+				valueList = getObjectPropertyValue(eventIndividual, relationPro); // Inferred results of: before, after, and so on...
 				
 				for (OWLNamedIndividual target : valueList) {
 					targetIRI = target.getIRI().toString();
 					relation = new TemporalRelation(sourceIRI, targetIRI, relationType);
-					// handle timeOffset for before and after
+					// handle timeOffset for before or after
+					if (relationType.equals(TemporalRelationType.BEFORE) || relationType.equals(TemporalRelationType.AFTER)) {
+						String keyStr = relationType + "-" + targetIRI;
+						OWLNamedIndividual offsetValue = timeOffsetMap.get(keyStr);
+						if (offsetValue != null) {
+							Duration timeOffset = parseDuration(offsetValue);
+							relation.setTimeOffset(timeOffset);
+						}
+					}
 					event.addTemporalRelation(relation);			
 				}
 			}
@@ -402,7 +417,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		return null;
 	}
 
-	public HashMap<TemporalRelationType, OWLObjectProperty> getTemporalRelationMap() {
+	public HashMap<OWLObjectProperty, TemporalRelationType> getTemporalRelationMap() {
 		return this.relationMap;
 	}
 

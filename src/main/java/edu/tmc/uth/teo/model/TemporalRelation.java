@@ -67,4 +67,13 @@ public class TemporalRelation {
 		this.timeOffset = timeOffset;
 	}
 
+	public String printTarget() {
+		return "[" + getRelationType() + "->" + getTargetIRI() + 
+				(timeOffset != null? ("(timeOffset: "+ timeOffset + ")"):"") + "]";
+	}
+	
+	public String toString() {
+		return "[" + getSourceIRI() + "->" + getRelationType() + "->" + getTargetIRI() + 
+				(timeOffset != null? ("(timeOffset: "+ timeOffset + ")"):"") + "]";
+	}
 }

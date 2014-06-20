@@ -32,7 +32,7 @@ public class JUnitInstantIntervalDuration {
 		System.out.println("Parser: parsing completes.\n");
 		
 		System.out.println("Querier: preparing the querier.");
-		querier = new TEOOWLAPIQuerier(parser.getEventMap(), parser.getTemporalRelationMap());
+		querier = new TEOOWLAPIQuerier(parser.getEventMap());
 		System.out.println("Querier: preparing the querier completes.\n");
 
 	}

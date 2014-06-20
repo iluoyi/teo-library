@@ -61,11 +61,7 @@ public class Event extends TEOClass {
 			StringBuffer buf = null;
 			buf = new StringBuffer("{\n");
 			for (TemporalRelation oneRelation : relations) {
-				buf.append("[");
-				buf.append(oneRelation.getRelationType());
-				buf.append("->");
-				buf.append(oneRelation.getTargetIRI());
-				buf.append("]\n");
+				buf.append(oneRelation.printTarget() + "\n");
 			}
 			buf.append("}");
 			return buf.toString();
