@@ -72,6 +72,10 @@ public class TEOConstants {
 	public static final String TEO_HASCALENDARPATTERNFORM_PRP_NAME = "TEO_0000064"; // hasCalendarPatternForm
 	public static final String TEO_NUMERATOR_PRP_NAME = "TEO_0000076"; // domain: Frequency
 
+	/**
+	 * Annotation Property Names
+	 */
+	public static final String TEO_HASTIMEOFFSET_PRP_NAME = "hasTimeOffset";
 	
 	/**
 	 *  Classes
@@ -128,6 +132,8 @@ public class TEOConstants {
 	public static final String TEO_HASCALENDARPATTERNFORM_PRP = getWithNS(TEO_HASCALENDARPATTERNFORM_PRP_NAME);
 	public static final String TEO_NUMERATOR_PRP = getWithNS(TEO_NUMERATOR_PRP_NAME);
 	public static final String TEO_HASDURATIONPATTERN_PRP = getWithNS(TEO_HASDURATIONPATTERN_PRP_NAME);
+	
+	public static final String TEO_HASTIMEOFFSET_PRP = getWithNS(TEO_HASTIMEOFFSET_PRP_NAME);
 	
 	
 	/**

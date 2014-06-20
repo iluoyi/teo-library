@@ -13,9 +13,11 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
+import org.semanticweb.owlapi.model.OWLIndividualAxiom;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
@@ -35,36 +37,37 @@ import edu.tmc.uth.teo.utils.TEOConstants;
 
 public class TEOOWLAPIParser implements TEOParser {
 
-	public OWLOntology ontology = null;
-	public OWLDataFactory df = null;
-	public PelletReasoner reasoner = null;
+	private OWLOntology ontology = null;
+	private OWLDataFactory df = null;
+	private PelletReasoner reasoner = null;
 	
-	public HashMap<String, Event> eventMap = null;
-	public HashMap<TemporalRelationType, OWLObjectProperty> relationMap = null;
+	private HashMap<String, Event> eventMap = null;
+	private HashMap<TemporalRelationType, OWLObjectProperty> relationMap = null;
 	
 	// Properties
-	public OWLAnnotationProperty rdfLabel = null;
+	private OWLAnnotationProperty rdfLabel = null;
+	private OWLAnnotationProperty hasTimeOffset = null;
 
-	public OWLObjectProperty hasValidTime = null;
-	public OWLObjectProperty hasStartTime = null;
-	public OWLObjectProperty hasEndTime = null;
-	public OWLObjectProperty hasDuration = null;
+	private OWLObjectProperty hasValidTime = null;
+	private OWLObjectProperty hasStartTime = null;
+	private OWLObjectProperty hasEndTime = null;
+	private OWLObjectProperty hasDuration = null;
 	
-	public OWLObjectProperty before = null;
-	public OWLObjectProperty after = null;
-	public OWLObjectProperty start = null;
-	public OWLObjectProperty startedBy = null;
-	public OWLObjectProperty finish = null;
-	public OWLObjectProperty finishedBy = null;
-	public OWLObjectProperty meet = null;
-	public OWLObjectProperty metBy = null;
-	public OWLObjectProperty overlap = null;
-	public OWLObjectProperty overlappedBy = null;
-	public OWLObjectProperty contain = null;
-	public OWLObjectProperty during = null;
-	public OWLObjectProperty equal = null;
+	private OWLObjectProperty before = null;
+	private OWLObjectProperty after = null;
+	private OWLObjectProperty start = null;
+	private OWLObjectProperty startedBy = null;
+	private OWLObjectProperty finish = null;
+	private OWLObjectProperty finishedBy = null;
+	private OWLObjectProperty meet = null;
+	private OWLObjectProperty metBy = null;
+	private OWLObjectProperty overlap = null;
+	private OWLObjectProperty overlappedBy = null;
+	private OWLObjectProperty contain = null;
+	private OWLObjectProperty during = null;
+	private OWLObjectProperty equal = null;
 	
-	public OWLDataProperty hasDurationPattern= null;
+	private OWLDataProperty hasDurationPattern= null;
 
 	public int getEventCount() {
 		return eventMap.size();
@@ -97,6 +100,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		
 		// Properties
 		rdfLabel = df.getRDFSLabel();
+		hasTimeOffset = df.getOWLAnnotationProperty(IRI.create(TEOConstants.TEO_HASTIMEOFFSET_PRP));
 		
 		hasValidTime = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_HASVALIDTIME_PRP));
 		hasStartTime = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_HASSTARTTIME_PRP));
@@ -169,6 +173,19 @@ public class TEOOWLAPIParser implements TEOParser {
 		event.setIRIStr(eventIndividual.getIRI().toString());
 		
 		Set<OWLNamedIndividual> valueList = null;
+			
+//		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
+//		System.out.println(axiomSet.size());
+//		
+//		for (OWLObjectPropertyAssertionAxiom axiom : axiomSet) {
+//			System.out.println(axiom.getAxiomType());
+//			
+//			System.out.println(axiom.getSubject());
+//			System.out.println(axiom.getProperty().asOWLObjectProperty().equals(hasValidTime));
+//			System.out.println(axiom.getObject());
+//		}
+		
+		
 		
 		// parse the valid time
 		valueList = getObjectPropertyValue(eventIndividual, hasValidTime); // hasValidTime
@@ -194,18 +211,19 @@ public class TEOOWLAPIParser implements TEOParser {
 		String targetIRI = null;
 		String sourceIRI = eventIndividual.getIRI().toString();
 		TemporalRelation relation = null;
-		//TODO: timeOffset, assemblyMethod, granularity?
+		//TODO: timeOffset, assemblyMethod, granularity?		
 		while (it.hasNext()) {
 			Entry<TemporalRelationType, OWLObjectProperty> pair = it.next();
 			relationType = pair.getKey();
 			relationPro = pair.getValue();
 			if (relationPro != null) {
 				valueList = getObjectPropertyValue(eventIndividual, relationPro); // before, after, and so on...
+				
 				for (OWLNamedIndividual target : valueList) {
 					targetIRI = target.getIRI().toString();
 					relation = new TemporalRelation(sourceIRI, targetIRI, relationType);
 					// handle timeOffset for before and after
-					event.addTemporalRelation(relation);
+					event.addTemporalRelation(relation);			
 				}
 			}
 		}
@@ -382,6 +400,10 @@ public class TEOOWLAPIParser implements TEOParser {
 		}
 
 		return null;
+	}
+
+	public HashMap<TemporalRelationType, OWLObjectProperty> getTemporalRelationMap() {
+		return this.relationMap;
 	}
 
 }

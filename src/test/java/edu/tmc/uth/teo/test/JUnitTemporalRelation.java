@@ -25,11 +25,11 @@ public class JUnitTemporalRelation {
 		
 		System.out.println("Parser: parsing begins.");
 		parser = new TEOOWLAPIParser(loader.getOntology());
-		parser.parse();
+		System.out.println("Status: " + parser.parse());
 		System.out.println("Parser: parsing completes.\n");
 		
 		System.out.println("Querier: preparing the querier.");
-		querier = new TEOOWLAPIQuerier(parser);
+		querier = new TEOOWLAPIQuerier(parser.getEventMap(), parser.getTemporalRelationMap());
 		System.out.println("Querier: preparing the querier completes.\n");
 
 	}

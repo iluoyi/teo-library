@@ -1,25 +1,31 @@
 package edu.tmc.uth.teo.impl;
 
-import edu.tmc.uth.teo.interfaces.TEOParser;
+import java.util.HashMap;
+
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
+import edu.tmc.uth.teo.model.TemporalRelationType;
 import edu.tmc.uth.teo.model.TemporalType;
 import edu.tmc.uth.teo.model.TimeInstant;
 import edu.tmc.uth.teo.model.TimeInterval;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
 public class TEOOWLAPIQuerier implements TEOQuerier {
-	TEOParser parser = null;
+	public HashMap<String, Event> eventMap = null;
+	public HashMap<TemporalRelationType, OWLObjectProperty> relationMap = null;
 	
-	public TEOOWLAPIQuerier(TEOParser parser) {
-		this.parser = parser;
+	public TEOOWLAPIQuerier(HashMap<String, Event> eventMap, HashMap<TemporalRelationType, OWLObjectProperty> relationMap) {
+		this.eventMap = eventMap;
+		this.relationMap = relationMap;
 	}
 	
 	public Event getEventByIRIStr(String IRIStr) {
-		if (IRIStr != null && this.parser != null) {
-			return this.parser.getEventMap().get(IRIStr);
+		if (IRIStr != null && this.eventMap != null) {
+			return this.eventMap.get(IRIStr);
 		}
 		return null;
 	}

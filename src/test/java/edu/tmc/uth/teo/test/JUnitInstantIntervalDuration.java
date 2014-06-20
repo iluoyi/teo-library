@@ -22,17 +22,17 @@ public class JUnitInstantIntervalDuration {
 	@Before
 	public void setUp() throws Exception {
 		System.out.println("Loader: loading begins.");
-		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_2.owl");
+		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_3.owl");
 		System.out.println("Status: " + loader.load());
 		System.out.println("Loader: loading completes.\n");
 		
 		System.out.println("Parser: parsing begins.");
 		parser = new TEOOWLAPIParser(loader.getOntology());
-		parser.parse();
+		System.out.println("Status: " + parser.parse());
 		System.out.println("Parser: parsing completes.\n");
 		
 		System.out.println("Querier: preparing the querier.");
-		querier = new TEOOWLAPIQuerier(parser);
+		querier = new TEOOWLAPIQuerier(parser.getEventMap(), parser.getTemporalRelationMap());
 		System.out.println("Querier: preparing the querier completes.\n");
 
 	}
@@ -76,8 +76,7 @@ public class JUnitInstantIntervalDuration {
 		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_2.owl#Event2");
 		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_2.owl#Event3");
 		Event event4 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_2.owl#Event4");
-		Event event5 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_2.owl#Event5");
-		
+
 		System.out.println("Duration between event1 and event4:" + querier.getDurationBetweenEvents(event1, event4, new Granularity(Unit.MONTH)) + "\n");
 		System.out.println("Duration between event4 and event2:" + querier.getDurationBetweenEvents(event4, event2, new Granularity(Unit.YEAR)) + "\n");
 		System.out.println("Duration between event2 and event3:" + querier.getDurationBetweenEvents(event2, event3, new Granularity(Unit.SECOND)) + "\n");
