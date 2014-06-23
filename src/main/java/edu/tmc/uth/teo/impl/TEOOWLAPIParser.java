@@ -465,8 +465,4 @@ public class TEOOWLAPIParser implements TEOParser {
 			return index;
 		}
 	}
-	
-	private String getEventIRIString(int index) {
-		return this.iriList.get(index);
-	}
 }

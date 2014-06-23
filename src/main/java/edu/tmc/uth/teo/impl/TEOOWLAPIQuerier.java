@@ -56,7 +56,7 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 				end = ((TimeInterval) event2.getValidTime()).getStartTime();
 			}
 			
-			if (begin.compareTo(end) > 0) {
+			if (begin != null && end != null && begin.compareTo(end) > 0) {
 				TimeInstant temp = begin;
 				begin = end;
 				end = temp;
