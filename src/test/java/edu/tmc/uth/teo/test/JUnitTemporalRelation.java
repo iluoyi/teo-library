@@ -24,7 +24,7 @@ public class JUnitTemporalRelation {
 	@Before
 	public void setUp() throws Exception {
 		System.out.println("Loader: loading begins.");
-		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_3.owl");
+		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_4.owl");
 		System.out.println("Status: " + loader.load());
 		System.out.println("Loader: loading completes.\n");
 		
@@ -51,14 +51,20 @@ public class JUnitTemporalRelation {
 	@Test
 	public void testGetEventByIRIStr() {
 		System.out.println("######################## Testing GetEventByIRIStr #####################################");
-		Event event1 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event1");
-		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event2");
-		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_3.owl#Event3");
+		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");
+		Event event1 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event1");
+		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event2");
+		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event3");
+		Event event4 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event4");
+		Event event5 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event5");
+		Event event6 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event6");
 
-		System.out.println("Event1:\n" + event1);
+		System.out.println("Event0:\n" + event0);
+		System.out.println("\nEvent1:\n" + event1);
 		System.out.println("\nEvent2:\n" + event2);
 		System.out.println("\nEvent3:\n" + event3);
-		
-		System.out.println(querier.getDurationBetweenEvents(event1, event3, new Granularity(Unit.MONTH)));
+		System.out.println("\nEvent4:\n" + event4);
+		System.out.println("\nEvent5:\n" + event5);
+		System.out.println("\nEvent6:\n" + event6);
 	}
 }

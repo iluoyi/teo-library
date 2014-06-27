@@ -118,6 +118,24 @@
 
 
 
+###  http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event7
+
+<http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event7> rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
+                                                                         owl:NamedIndividual ;
+                                                                
+                                                                rdfs:label "event 7" .
+
+
+
+###  http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event8
+
+<http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event8> rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
+                                                                         owl:NamedIndividual ;
+                                                                
+                                                                rdfs:label "event 8" .
+
+
+
 ###  http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#TimeInstant1
 
 <http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#TimeInstant1> rdf:type <http://www.ifomis.org/bfo/1.1/span#TemporalInstant> ,

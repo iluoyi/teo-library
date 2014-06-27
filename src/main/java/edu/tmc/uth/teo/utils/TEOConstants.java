@@ -42,15 +42,29 @@ public class TEOConstants {
 	public static final String TEO_HASFREQUENCY_PRP_NAME = "TEO_0000079"; // range: Frequency
 	// temporal relations
 	public static final String TEO_TEMPORALRELATION_PRP_NAME = "TEO_0000039";
-	public static final String TEO_TR_AFTER_PRP_NAME = "TEO_0000016";
-	public static final String TEO_TR_BEFORE_PRP_NAME = "TEO_0000002";
-	public static final String TEO_TR_MEET_PRP_NAME = "TEO_0000020";
-	public static final String TEO_TR_OVERLAP_PRP_NAME = "TEO_0000038";
-	public static final String TEO_TR_CONTAIN_PRP_NAME = "TEO_0000010";
-	public static final String TEO_TR_DURING_PRP_NAME = "TEO_0000003";
-	public static final String TEO_TR_EQUAL_PRP_NAME = "TEO_0000018";
-	public static final String TEO_TR_FINISH_PRP_NAME = "TEO_0000037";
-	public static final String TEO_TR_START_PRP_NAME = "TEO_0000014";
+	public static final String TEO_TR_AFTER_PRP_NAME = "TEO_0000016"; // after
+	public static final String TEO_TR_BEFORE_PRP_NAME = "TEO_0000002"; // before
+	public static final String TEO_TR_MEET_PRP_NAME = "TEO_0000020"; // meet
+	public static final String TEO_TR_OVERLAP_PRP_NAME = "TEO_0000038"; // overlap
+	public static final String TEO_TR_CONTAIN_PRP_NAME = "TEO_0000010"; // contain
+	public static final String TEO_TR_DURING_PRP_NAME = "TEO_0000003"; // during
+	public static final String TEO_TR_EQUAL_PRP_NAME = "TEO_0000018"; // equal
+	public static final String TEO_TR_FINISH_PRP_NAME = "TEO_0000037"; // finish
+	public static final String TEO_TR_START_PRP_NAME = "TEO_0000014"; // start
+	public static final String TEO_TR_METBY_PRP_NAME = "TEO_0000146"; // met by
+	public static final String TEO_TR_OVERLAPPEDBY_PRP_NAME = "TEO_0000145"; // overlapped by
+	public static final String TEO_TR_FINISHEDBY_PRP_NAME = "TEO_0000148"; // finished by
+	public static final String TEO_TR_STARTEDBY_PRP_NAME = "TEO_0000147"; // started by
+	
+	public static final String TEO_TR_SBS_PRP_NAME = "TEO_0000150"; // startBeforeStart
+	public static final String TEO_TR_SBE_PRP_NAME = "TEO_0000151"; // startBeforeEnd
+	public static final String TEO_TR_EBS_PRP_NAME = "TEO_0000154"; // endBeforeStart
+	public static final String TEO_TR_EBE_PRP_NAME = "TEO_0000155"; // endBeforeEnd
+	public static final String TEO_TR_SAS_PRP_NAME = "TEO_0000152"; // startAfterStart
+	public static final String TEO_TR_SAE_PRP_NAME = "TEO_0000153"; // startAfterEnd
+	public static final String TEO_TR_EAS_PRP_NAME = "TEO_0000156"; // endAfterStart
+	public static final String TEO_TR_EAE_PRP_NAME = "TEO_0000157"; // endAfterEnd
+	
 	// occur
 	public static final String TEO_OCCUR_PRP_NAME = "TEO_0000085"; // domain: ConnectedTemporalRegion (Yi: + Event?)
 	public static final String TEO_OCCURYEAR_PRP_NAME = "TEO_0000132";
@@ -120,6 +134,21 @@ public class TEOConstants {
 	public static final String TEO_TR_EQUAL_PRP = getWithNS(TEO_TR_EQUAL_PRP_NAME);
 	public static final String TEO_TR_FINISH_PRP = getWithNS(TEO_TR_FINISH_PRP_NAME);
 	public static final String TEO_TR_START_PRP = getWithNS(TEO_TR_START_PRP_NAME);
+		
+	public static final String TEO_TR_METBY_PRP = getWithNS(TEO_TR_METBY_PRP_NAME);
+	public static final String TEO_TR_OVERLAPPEDBY_PRP = getWithNS(TEO_TR_OVERLAPPEDBY_PRP_NAME);
+	public static final String TEO_TR_FINISHEDBY_PRP = getWithNS(TEO_TR_FINISHEDBY_PRP_NAME);
+	public static final String TEO_TR_STARTEDBY_PRP = getWithNS(TEO_TR_STARTEDBY_PRP_NAME);
+	
+	public static final String TEO_TR_SBS_PRP = getWithNS(TEO_TR_SBS_PRP_NAME);
+	public static final String TEO_TR_SBE_PRP = getWithNS(TEO_TR_SBE_PRP_NAME);
+	public static final String TEO_TR_EBS_PRP = getWithNS(TEO_TR_EBS_PRP_NAME);
+	public static final String TEO_TR_EBE_PRP = getWithNS(TEO_TR_EBE_PRP_NAME);
+	public static final String TEO_TR_SAS_PRP = getWithNS(TEO_TR_SAS_PRP_NAME);
+	public static final String TEO_TR_SAE_PRP = getWithNS(TEO_TR_SAE_PRP_NAME);
+	public static final String TEO_TR_EAS_PRP = getWithNS(TEO_TR_EAS_PRP_NAME);
+	public static final String TEO_TR_EAE_PRP = getWithNS(TEO_TR_EAE_PRP_NAME);	
+	
 	public static final String TEO_OCCUR_PRP = getWithNS(TEO_OCCUR_PRP_NAME);
 	public static final String TEO_OCCURYEAR_PRP = getWithNS(TEO_OCCURYEAR_PRP_NAME);
 	public static final String TEO_OCCURMONTH_PRP = getWithNS(TEO_OCCURMONTH_PRP_NAME);

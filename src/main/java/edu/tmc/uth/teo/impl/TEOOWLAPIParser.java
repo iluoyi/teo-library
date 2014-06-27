@@ -72,6 +72,15 @@ public class TEOOWLAPIParser implements TEOParser {
 	private OWLObjectProperty during = null;
 	private OWLObjectProperty equal = null;
 	
+	private OWLObjectProperty SBS = null; // start before start
+	private OWLObjectProperty SBE = null; // start before end
+	private OWLObjectProperty EBS = null; // end before start
+	private OWLObjectProperty EBE = null; // end before end
+	private OWLObjectProperty SAS = null; // start after start
+	private OWLObjectProperty SAE = null; // start after end
+	private OWLObjectProperty EAS = null; // end after start
+	private OWLObjectProperty EAE = null; // end after end
+	
 	private OWLDataProperty hasDurationPattern= null;
 
 	public int getEventCount() {
@@ -113,20 +122,31 @@ public class TEOOWLAPIParser implements TEOParser {
 		hasEndTime = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_HASENDTIME_PRP));
 		hasDuration = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_HASDURATION_PRP));
 		
+		// allen's interval algebra
 		before = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_BEFORE_PRP));
 		after = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_AFTER_PRP));
 		start = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_START_PRP));
-		startedBy = null;
+		startedBy = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_STARTEDBY_PRP));
 		finish = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_FINISH_PRP));
-		finishedBy = null;
+		finishedBy = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_FINISHEDBY_PRP));
 		meet = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_MEET_PRP));
-		metBy = null;
+		metBy = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_METBY_PRP));
 		overlap = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_OVERLAP_PRP));
-		overlappedBy = null;
+		overlappedBy = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_OVERLAPPEDBY_PRP));
 		contain = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_CONTAIN_PRP));
 		during = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_DURING_PRP));
 		equal = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EQUAL_PRP));
 		
+		// temporal relation for timeOffset
+		SBS = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_SBS_PRP));
+		SBE = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_SBE_PRP));
+		EBS = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EBS_PRP));
+		EBE = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EBE_PRP));
+		SAS = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_SAS_PRP));
+		SAE = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_SAE_PRP));
+		EAS = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EAS_PRP));
+		EAE = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EAE_PRP));
+				
 		if (before != null) relationRoaster.put(before, TemporalRelationType.BEFORE);
 		if (after != null) relationRoaster.put(after, TemporalRelationType.AFTER);
 		if (start != null) relationRoaster.put(start, TemporalRelationType.START);
@@ -140,6 +160,14 @@ public class TEOOWLAPIParser implements TEOParser {
 		if (contain != null) relationRoaster.put(contain, TemporalRelationType.CONTAIN);
 		if (during != null) relationRoaster.put(during, TemporalRelationType.DURING);
 		if (equal != null) relationRoaster.put(equal, TemporalRelationType.EQUAL);
+		if (SBS != null) relationRoaster.put(SBS, TemporalRelationType.START_BEFORE_START);
+		if (SBE != null) relationRoaster.put(SBE, TemporalRelationType.START_BEFORE_END);
+		if (EBS != null) relationRoaster.put(EBS, TemporalRelationType.END_BEFORE_START);
+		if (EBE != null) relationRoaster.put(EBE, TemporalRelationType.END_BEFORE_END);
+		if (SAS != null) relationRoaster.put(SAS, TemporalRelationType.START_AFTER_START);
+		if (SAE != null) relationRoaster.put(SAE, TemporalRelationType.STAR_AFTER_END);
+		if (EAS != null) relationRoaster.put(EAS, TemporalRelationType.END_AFTER_START);
+		if (EAE != null) relationRoaster.put(EAE, TemporalRelationType.END_AFTER_END);
 		
 		hasDurationPattern = df.getOWLDataProperty(IRI.create(TEOConstants.TEO_HASDURATIONPATTERN_PRP));
 	}
