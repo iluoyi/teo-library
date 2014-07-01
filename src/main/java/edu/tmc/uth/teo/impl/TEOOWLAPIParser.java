@@ -44,7 +44,8 @@ public class TEOOWLAPIParser implements TEOParser {
 	// inner helper data structures
 	private HashMap<String, Event> eventMap = null;
 	private HashMap<String, TemporalRelation> relationMap = null;
-	private HashMap<OWLObjectProperty, TemporalRelationType> relationRoaster = null;
+	private HashMap<OWLObjectProperty, TemporalRelationType> relationIntervalRoaster = null;
+	private HashMap<OWLObjectProperty, TemporalRelationType> relationPointRoaster = null;
 	
 	private Vector<String> iriList = null;
 	private HashMap<String, OWLNamedIndividual> timeOffsetMap = null;
@@ -103,7 +104,8 @@ public class TEOOWLAPIParser implements TEOParser {
 		
 		this.eventMap = new HashMap<String, Event>();
 		this.relationMap = new HashMap<String, TemporalRelation>();
-		this.relationRoaster = new HashMap<OWLObjectProperty, TemporalRelationType>();
+		this.relationIntervalRoaster = new HashMap<OWLObjectProperty, TemporalRelationType>();
+		this.relationPointRoaster = new HashMap<OWLObjectProperty, TemporalRelationType>();
 		this.ontology = (OWLOntology) ont;
 		this.df = this.ontology.getOWLOntologyManager().getOWLDataFactory();
 		this.reasoner = com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory.getInstance().createReasoner(this.ontology);
@@ -147,27 +149,28 @@ public class TEOOWLAPIParser implements TEOParser {
 		EAS = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EAS_PRP));
 		EAE = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EAE_PRP));
 				
-		if (before != null) relationRoaster.put(before, TemporalRelationType.BEFORE);
-		if (after != null) relationRoaster.put(after, TemporalRelationType.AFTER);
-		if (start != null) relationRoaster.put(start, TemporalRelationType.START);
-		if (startedBy != null) relationRoaster.put(startedBy, TemporalRelationType.STARTEDBY);
-		if (finish != null) relationRoaster.put(finish, TemporalRelationType.FINISH);
-		if (finishedBy != null) relationRoaster.put(finishedBy, TemporalRelationType.FINISHEDBY);
-		if (meet != null) relationRoaster.put(meet, TemporalRelationType.MEET);
-		if (metBy != null) relationRoaster.put(metBy, TemporalRelationType.METBY);
-		if (overlap != null) relationRoaster.put(overlap, TemporalRelationType.OVERLAP);
-		if (overlappedBy != null) relationRoaster.put(overlappedBy, TemporalRelationType.OVERLAPPEDBY);
-		if (contain != null) relationRoaster.put(contain, TemporalRelationType.CONTAIN);
-		if (during != null) relationRoaster.put(during, TemporalRelationType.DURING);
-		if (equal != null) relationRoaster.put(equal, TemporalRelationType.EQUAL);
-		if (SBS != null) relationRoaster.put(SBS, TemporalRelationType.START_BEFORE_START);
-		if (SBE != null) relationRoaster.put(SBE, TemporalRelationType.START_BEFORE_END);
-		if (EBS != null) relationRoaster.put(EBS, TemporalRelationType.END_BEFORE_START);
-		if (EBE != null) relationRoaster.put(EBE, TemporalRelationType.END_BEFORE_END);
-		if (SAS != null) relationRoaster.put(SAS, TemporalRelationType.START_AFTER_START);
-		if (SAE != null) relationRoaster.put(SAE, TemporalRelationType.STAR_AFTER_END);
-		if (EAS != null) relationRoaster.put(EAS, TemporalRelationType.END_AFTER_START);
-		if (EAE != null) relationRoaster.put(EAE, TemporalRelationType.END_AFTER_END);
+		if (before != null) relationIntervalRoaster.put(before, TemporalRelationType.BEFORE);
+		if (after != null) relationIntervalRoaster.put(after, TemporalRelationType.AFTER);
+		if (start != null) relationIntervalRoaster.put(start, TemporalRelationType.START);
+		if (startedBy != null) relationIntervalRoaster.put(startedBy, TemporalRelationType.STARTEDBY);
+		if (finish != null) relationIntervalRoaster.put(finish, TemporalRelationType.FINISH);
+		if (finishedBy != null) relationIntervalRoaster.put(finishedBy, TemporalRelationType.FINISHEDBY);
+		if (meet != null) relationIntervalRoaster.put(meet, TemporalRelationType.MEET);
+		if (metBy != null) relationIntervalRoaster.put(metBy, TemporalRelationType.METBY);
+		if (overlap != null) relationIntervalRoaster.put(overlap, TemporalRelationType.OVERLAP);
+		if (overlappedBy != null) relationIntervalRoaster.put(overlappedBy, TemporalRelationType.OVERLAPPEDBY);
+		if (contain != null) relationIntervalRoaster.put(contain, TemporalRelationType.CONTAIN);
+		if (during != null) relationIntervalRoaster.put(during, TemporalRelationType.DURING);
+		if (equal != null) relationIntervalRoaster.put(equal, TemporalRelationType.EQUAL);
+		
+		if (SBS != null) relationPointRoaster.put(SBS, TemporalRelationType.START_BEFORE_START);
+		if (SBE != null) relationPointRoaster.put(SBE, TemporalRelationType.START_BEFORE_END);
+		if (EBS != null) relationPointRoaster.put(EBS, TemporalRelationType.END_BEFORE_START);
+		if (EBE != null) relationPointRoaster.put(EBE, TemporalRelationType.END_BEFORE_END);
+		if (SAS != null) relationPointRoaster.put(SAS, TemporalRelationType.START_AFTER_START);
+		if (SAE != null) relationPointRoaster.put(SAE, TemporalRelationType.STAR_AFTER_END);
+		if (EAS != null) relationPointRoaster.put(EAS, TemporalRelationType.END_AFTER_START);
+		if (EAE != null) relationPointRoaster.put(EAE, TemporalRelationType.END_AFTER_END);
 		
 		hasDurationPattern = df.getOWLDataProperty(IRI.create(TEOConstants.TEO_HASDURATIONPATTERN_PRP));
 	}
@@ -198,20 +201,20 @@ public class TEOOWLAPIParser implements TEOParser {
 		}
 		
 		// handle timeOffset for before or after
-		if (timeOffsetMap != null && !timeOffsetMap.isEmpty()) {
-			Iterator<Entry<String, OWLNamedIndividual>> it = timeOffsetMap.entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<String, OWLNamedIndividual> pair = it.next();
-				String[] parts = pair.getKey().split("-");
-				int sourceIRIIndex = Integer.parseInt(parts[0]);
-				int targetIRIIndex = Integer.parseInt(parts[1]);
-				
-				TemporalRelation relation1 = relationMap.get(sourceIRIIndex + "-" + TemporalRelationType.BEFORE + "-" + targetIRIIndex);
-				relation1.setTimeOffset(this.parseDuration(pair.getValue()));
-				TemporalRelation relation2 = relationMap.get(targetIRIIndex + "-" + TemporalRelationType.AFTER + "-" + sourceIRIIndex);
-				relation2.setTimeOffset(this.parseDuration(pair.getValue()));
-			}
-		}
+//		if (timeOffsetMap != null && !timeOffsetMap.isEmpty()) {
+//			Iterator<Entry<String, OWLNamedIndividual>> it = timeOffsetMap.entrySet().iterator();
+//			while (it.hasNext()) {
+//				Entry<String, OWLNamedIndividual> pair = it.next();
+//				String[] parts = pair.getKey().split("-");
+//				int sourceIRIIndex = Integer.parseInt(parts[0]);
+//				int targetIRIIndex = Integer.parseInt(parts[1]);
+//				
+//				TemporalRelation relation1 = relationMap.get(sourceIRIIndex + "-" + TemporalRelationType.BEFORE + "-" + targetIRIIndex);
+//				relation1.setTimeOffset(this.parseDuration(pair.getValue()));
+//				TemporalRelation relation2 = relationMap.get(targetIRIIndex + "-" + TemporalRelationType.AFTER + "-" + sourceIRIIndex);
+//				relation2.setTimeOffset(this.parseDuration(pair.getValue()));
+//			}
+//		}
 		
 		return noError;
 	}
@@ -244,33 +247,34 @@ public class TEOOWLAPIParser implements TEOParser {
 			}
 		}
 		
+		// TODO
 		// We prepare the timeOffsetMap for "before/after", this can only recored axioms before Pellet's reasoning!
 		// Note: we use "getIRIIndex(sourceIRIStr)-getIRIIndex(targetIRIStr)" as the key, "timeOffset Duration's OWLNamedIndividual" as the value. 
-		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
-		for (OWLObjectPropertyAssertionAxiom axiom : axiomSet) {
-			TemporalRelationType relationType = relationRoaster.get(axiom.getProperty());
-			if (relationType != null && (relationType.equals(TemporalRelationType.BEFORE) || relationType.equals(TemporalRelationType.AFTER))) {
-				String keyStr = null;
-				if (relationType.equals(TemporalRelationType.BEFORE)) { // before
-					keyStr = sourceIRIIndex + "-" + this.getEventIRIIndex(axiom.getObject().asOWLNamedIndividual().getIRI().toString());
-				} else { // after, normalized to before
-					keyStr = this.getEventIRIIndex(axiom.getObject().asOWLNamedIndividual().getIRI().toString()) + "-" + sourceIRIIndex;
-				}
-				if (timeOffsetMap.containsKey(keyStr)) {
-					System.err.println("Error: detected duplicate timeOffset for [" + sourceIRIStr + "->" + relationType + "->" + axiom.getObject().asOWLNamedIndividual().getIRI().toString() + "]");
-				} else {
-					Set<OWLAnnotation> annotSet = axiom.getAnnotations(hasTimeOffset);
-					for (OWLAnnotation annot : annotSet) {
-						OWLNamedIndividual valueStr = df.getOWLNamedIndividual(IRI.create(annot.getValue().toString()));
-						timeOffsetMap.put(keyStr, valueStr);
-					}
-				}
-			}
-		}
+//		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
+//		for (OWLObjectPropertyAssertionAxiom axiom : axiomSet) {
+//			TemporalRelationType relationType = relationRoaster.get(axiom.getProperty());
+//			if (relationType != null && (relationType.equals(TemporalRelationType.BEFORE) || relationType.equals(TemporalRelationType.AFTER))) {
+//				String keyStr = null;
+//				if (relationType.equals(TemporalRelationType.BEFORE)) { // before
+//					keyStr = sourceIRIIndex + "-" + this.getEventIRIIndex(axiom.getObject().asOWLNamedIndividual().getIRI().toString());
+//				} else { // after, normalized to before
+//					keyStr = this.getEventIRIIndex(axiom.getObject().asOWLNamedIndividual().getIRI().toString()) + "-" + sourceIRIIndex;
+//				}
+//				if (timeOffsetMap.containsKey(keyStr)) {
+//					System.err.println("Error: detected duplicate timeOffset for [" + sourceIRIStr + "->" + relationType + "->" + axiom.getObject().asOWLNamedIndividual().getIRI().toString() + "]");
+//				} else {
+//					Set<OWLAnnotation> annotSet = axiom.getAnnotations(hasTimeOffset);
+//					for (OWLAnnotation annot : annotSet) {
+//						OWLNamedIndividual valueStr = df.getOWLNamedIndividual(IRI.create(annot.getValue().toString()));
+//						timeOffsetMap.put(keyStr, valueStr);
+//					}
+//				}
+//			}
+//		}
 		
 		// parse each temporal relation
 		// because we don't have reification triples, every relation must be attached to an event
-		Iterator<Entry<OWLObjectProperty, TemporalRelationType>> it = relationRoaster.entrySet().iterator();
+		Iterator<Entry<OWLObjectProperty, TemporalRelationType>> it = relationIntervalRoaster.entrySet().iterator();
 		OWLObjectProperty relationPro = null;
 		TemporalRelationType relationType = null;
 		String targetIRIStr = null;
@@ -293,6 +297,11 @@ public class TEOOWLAPIParser implements TEOParser {
 				}
 			}
 		}
+		// if there is no interval relation, we need to check point relations
+//		if (event.getTemporalRelations() == null || event.getTemporalRelations().isEmpty()) {
+//			it = relationPointRoaster.entrySet().iterator();
+//		}
+		
 		
 		return event;
 	}
@@ -468,9 +477,9 @@ public class TEOOWLAPIParser implements TEOParser {
 		return null;
 	}
 
-	public HashMap<OWLObjectProperty, TemporalRelationType> getTemporalRelationMap() {
-		return this.relationRoaster;
-	}
+//	public HashMap<OWLObjectProperty, TemporalRelationType> getTemporalRelationMap() {
+//		return this.relationRoaster;
+//	}
 
 	private void addEventIRI(String iriStr) {
 		if (this.iriList == null) {

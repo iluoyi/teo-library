@@ -76,4 +76,15 @@ public class TemporalRelation {
 		return "[" + getSourceIRI() + "->" + getRelationType() + "->" + getTargetIRI() + 
 				(timeOffset != null? ("(timeOffset: "+ timeOffset + ")"):"") + "]";
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof TemporalRelation) {
+			if (this.sourceIRI.equals(((TemporalRelation) o).sourceIRI) && this.targetIRI.equals(((TemporalRelation) o).targetIRI) 
+					&& this.relationType.equals(((TemporalRelation) o).relationType)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
