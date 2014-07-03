@@ -1,8 +1,11 @@
 package edu.tmc.uth.teo.interfaces;
 
+import java.util.Vector;
+
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
+import edu.tmc.uth.teo.model.TemporalRelationType;
 
 public interface TEOQuerier {
 	 // this API can be further optimized with Lucene upon fields: localname, comments, and label
@@ -16,9 +19,8 @@ public interface TEOQuerier {
 
 	public Duration getDurationBetweenEvents(Event event1, Event event2, Granularity granularity);
 
-//	public Vector<TemporalRelationType> getTemporalRelationType(Event oneEvent,
-//			Event twoEvent) throws CNTROException;
-//
+	public Vector<TemporalRelationType> getTemporalRelationType(Event event1, Event event2, Granularity granularity);
+
 //	public TemporalRelationType getTemporalRelationType(Event oneEvent,
 //			Time time) throws CNTROException;
 //

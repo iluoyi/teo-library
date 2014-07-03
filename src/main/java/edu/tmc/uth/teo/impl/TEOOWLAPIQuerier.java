@@ -1,11 +1,14 @@
 package edu.tmc.uth.teo.impl;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
+import edu.tmc.uth.teo.model.TemporalRelation;
+import edu.tmc.uth.teo.model.TemporalRelationType;
 import edu.tmc.uth.teo.model.TemporalType;
 import edu.tmc.uth.teo.model.TimeInstant;
 import edu.tmc.uth.teo.model.TimeInterval;
@@ -67,4 +70,21 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		return null;
 	}
 
+	
+	public Vector<TemporalRelationType> getTemporalRelationType(Event event1,
+			Event event2, Granularity granularity) {
+		Vector<TemporalRelationType> relationList = new Vector<TemporalRelationType>();
+		if (event1 != null && event2 != null) {
+			String targetIRIStr = event2.getIRIStr();
+			Vector<TemporalRelation> relations = event1.getTemporalRelations();
+			for (TemporalRelation relation : relations) {
+				if (relation.getTargetIRI().equals(targetIRIStr)) {
+					relationList.add(relation.getRelationType());
+				}
+			}
+		}
+		return relationList;
+	}
+
+	
 }
