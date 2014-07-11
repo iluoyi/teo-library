@@ -1,5 +1,6 @@
 package edu.tmc.uth.teo.interfaces;
 
+import java.util.List;
 import java.util.Vector;
 
 import edu.tmc.uth.teo.model.Duration;
@@ -24,8 +25,6 @@ public interface TEOQuerier {
 //	public TemporalRelationType getTemporalRelationType(Event oneEvent,
 //			Time time) throws CNTROException;
 //
-//	public Hashtable<String, List<Event>> getEventsTimeline(
-//			boolean reverseChronological, boolean filterUnclassified,
-//			boolean groupSameEvents, boolean useNormalizedEventsIfAvailable,
-//			Date assignThisTSIfNoneFound);
+	public List<Event> getEventsTimeline();
+	
 }

@@ -1,6 +1,7 @@
 package edu.tmc.uth.teo.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
@@ -86,5 +87,9 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		return relationList;
 	}
 
-	
+	public List<Event> getEventsTimeline() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

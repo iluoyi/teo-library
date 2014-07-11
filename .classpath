@@ -24,6 +24,5 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Pellet Library"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OWLAPI"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/AllenIntervalAlgebra"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -1,7 +1,20 @@
 package edu.tmc.uth.teo.model;
 
+import java.util.EnumSet;
+
 public class TemporalRelation {
 
+	public static EnumSet<TemporalRelationType> TemporalIntervalRelationSet = EnumSet.of(TemporalRelationType.BEFORE, TemporalRelationType.FINISH, TemporalRelationType.FINISHEDBY,
+																					TemporalRelationType.AFTER, TemporalRelationType.START, TemporalRelationType.STARTEDBY,
+																					TemporalRelationType.CONTAIN, TemporalRelationType.DURING, TemporalRelationType.MEET,
+																					TemporalRelationType.METBY, TemporalRelationType.EQUAL, TemporalRelationType.OVERLAP,
+																					TemporalRelationType.OVERLAPPEDBY);
+	
+	public static EnumSet<TemporalRelationType> TemporalPointRelationSet = EnumSet.of(TemporalRelationType.START_BEFORE_START, TemporalRelationType.START_AFTER_START,
+																					TemporalRelationType.START_BEFORE_END, TemporalRelationType.STAR_AFTER_END,
+																					TemporalRelationType.END_BEFORE_START, TemporalRelationType.END_AFTER_START,
+																					TemporalRelationType.END_BEFORE_END, TemporalRelationType.END_AFTER_END);
+	
 	private String sourceIRI, targetIRI;
 	private TemporalRelationType relationType;
 	private Granularity granularity;

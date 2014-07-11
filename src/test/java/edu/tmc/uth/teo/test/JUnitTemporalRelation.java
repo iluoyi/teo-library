@@ -51,21 +51,21 @@ public class JUnitTemporalRelation {
 
 	}
 	
-//	@Test
-//	public void testGetEventByIRIStr() {
-//		System.out.println("######################## Testing GetEventByIRIStr #####################################");
-//		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");
-//		Event event1 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event1");
-//		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event2");
-//		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event3");
-//		Event event4 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event4");
-//
-//		System.out.println("Event0:\n" + event0);
-//		System.out.println("\nEvent1:\n" + event1);
-//		System.out.println("\nEvent2:\n" + event2);
-//		System.out.println("\nEvent3:\n" + event3);
-//		System.out.println("\nEvent4:\n" + event4);
-//	}
+	@Test
+	public void testGetEventByIRIStr() {
+		System.out.println("######################## Testing GetEventByIRIStr #####################################");
+		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");
+		Event event1 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event1");
+		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event2");
+		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event3");
+		Event event4 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event4");
+
+		System.out.println("Event0:\n" + event0);
+		System.out.println("\nEvent1:\n" + event1);
+		System.out.println("\nEvent2:\n" + event2);
+		System.out.println("\nEvent3:\n" + event3);
+		System.out.println("\nEvent4:\n" + event4);
+	}
 	
 	@Test
 	public void testGetTemporalRelationsBetweenEvents() {
