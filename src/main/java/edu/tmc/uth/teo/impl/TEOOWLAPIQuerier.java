@@ -1,11 +1,15 @@
 package edu.tmc.uth.teo.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
+import edu.tmc.uth.teo.model.DirectedAcyclicGraph;
 import edu.tmc.uth.teo.model.Duration;
+import edu.tmc.uth.teo.model.Edge;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
 import edu.tmc.uth.teo.model.TemporalRelation;
@@ -13,6 +17,7 @@ import edu.tmc.uth.teo.model.TemporalRelationType;
 import edu.tmc.uth.teo.model.TemporalType;
 import edu.tmc.uth.teo.model.TimeInstant;
 import edu.tmc.uth.teo.model.TimeInterval;
+import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
 public class TEOOWLAPIQuerier implements TEOQuerier {
@@ -70,7 +75,6 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		}
 		return null;
 	}
-
 	
 	public Vector<TemporalRelationType> getTemporalRelationType(Event event1,
 			Event event2, Granularity granularity) {
@@ -88,8 +92,40 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 	}
 
 	public List<Event> getEventsTimeline() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> strSet = eventMap.keySet();
+		String[] vertexStr = new String[strSet.size()];
+		int count = 0;
+		for (String str : strSet) {
+			vertexStr[count++] = str;
+		}
+		
+		ArrayList<Edge> edges = new ArrayList<Edge>();
+		HashMap<String, Integer> viMap = new HashMap<String, Integer>();
+		
+		for (int i = 0; i < vertexStr.length; i ++) {
+			viMap.put(vertexStr[i], i);
+		}
+		
+		for (String oneString : vertexStr) {
+			Event oneEvent = eventMap.get(oneString);
+			Vector<TemporalRelation> relations = oneEvent.getTemporalRelations();
+			// add an edge if the relation can infer "startBeforeStart"
+			for (TemporalRelation relation : relations) {
+				if (TemporalRelationUtils.isStartBeforeStart(relation.getRelationType())) {
+					Edge newEdge = new Edge(viMap.get(relation.getSourceIRI()), viMap.get(relation.getTargetIRI()));
+					edges.add(newEdge);
+				}
+			}
+		}
+		
+		DirectedAcyclicGraph<String> graph = new DirectedAcyclicGraph<String>(edges, vertexStr);
+		List<String> vList = TemporalRelationUtils.<String>topologySort(graph);
+		List<Event> eventList = new ArrayList<Event>();
+		
+		for (String vStr : vList) {
+			eventList.add(eventMap.get(vStr));
+		}
+		
+		return eventList;
 	}
-
 }

@@ -1,4 +1,4 @@
-package edu.tmc.uth.teo.utils;
+package edu.tmc.uth.teo.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,15 @@ public class DirectedAcyclicGraph<V> {
 	}
 	
 	public DirectedAcyclicGraph(List<Edge> edges, List<V> vertices) {
+		for (V v : vertices) {
+			addVertex(v);
+		}
+		for (Edge e : edges) {
+			addEdge(e.getSource(), e.getTarget());
+		}
+	}
+	
+	public DirectedAcyclicGraph(List<Edge> edges, V[] vertices) {
 		for (V v : vertices) {
 			addVertex(v);
 		}
@@ -113,33 +122,7 @@ public class DirectedAcyclicGraph<V> {
 			return false;
 		}
 	}
-	
-	private static class Edge {
-		private int u; // source
-		private int v; // target
-		
-		public Edge(int u, int v) {
-			this.u = u;
-			this.v = v;
-		}
-		
-		public int getSource() {
-			return u;
-		}
-		
-		public int getTarget() {
-			return v;
-		}
-		
-		public boolean equals(Object o) {
-			if (o instanceof Edge) {
-				if (this.getSource() == ((Edge) o).getSource() && this.getTarget() == ((Edge) o).getTarget()) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
 }
+
 
 

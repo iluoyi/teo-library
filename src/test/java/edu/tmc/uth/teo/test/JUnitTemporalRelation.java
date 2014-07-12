@@ -1,8 +1,7 @@
 package edu.tmc.uth.teo.test;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import org.allen.temporalintervalrelationships.Node;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +14,6 @@ import edu.tmc.uth.teo.interfaces.TEOParser;
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
 import edu.tmc.uth.teo.interfaces.TEOReasoner;
 import edu.tmc.uth.teo.model.Event;
-import edu.tmc.uth.teo.model.Granularity;
-import edu.tmc.uth.teo.model.Unit;
 
 public class JUnitTemporalRelation {
 	private TEOLoader loader = null;
@@ -51,7 +48,7 @@ public class JUnitTemporalRelation {
 
 	}
 	
-	@Test
+	//@Test
 	public void testGetEventByIRIStr() {
 		System.out.println("######################## Testing GetEventByIRIStr #####################################");
 		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");
@@ -67,9 +64,9 @@ public class JUnitTemporalRelation {
 		System.out.println("\nEvent4:\n" + event4);
 	}
 	
-	@Test
+	//@Test
 	public void testGetTemporalRelationsBetweenEvents() {
-		System.out.println("######################## Testing GetEventByIRIStr #####################################");
+		System.out.println("######################## Testing GetRelations #####################################");
 		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");
 		Event event1 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event1");
 		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event2");
@@ -79,4 +76,12 @@ public class JUnitTemporalRelation {
 		System.out.println("event0 - event3:\n" + querier.getTemporalRelationType(event0, event3, null));
 	}
 	
+	@Test
+	public void testGetEventsTimeline() {
+		System.out.println("######################## Testing GetEventsTimeline #####################################");
+		List<Event> timeline = querier.getEventsTimeline();
+		for (Event event : timeline) {
+			System.out.println(event.getIRIStr());
+		}
+	}
 }
