@@ -64,6 +64,10 @@ public class TEOConstants {
 	public static final String TEO_TR_SAE_PRP_NAME = "TEO_0000153"; // startAfterEnd
 	public static final String TEO_TR_EAS_PRP_NAME = "TEO_0000156"; // endAfterStart
 	public static final String TEO_TR_EAE_PRP_NAME = "TEO_0000157"; // endAfterEnd
+	public static final String TEO_TR_SES_PRP_NAME = "TEO_0000149"; // startEqualStart
+	public static final String TEO_TR_SEE_PRP_NAME = "TEO_0000158"; // startEqualEnd
+	public static final String TEO_TR_EES_PRP_NAME = "TEO_0000159"; // endEqualStart
+	public static final String TEO_TR_EEE_PRP_NAME = "TEO_0000160"; // endEqualEnd
 	
 	// occur
 	public static final String TEO_OCCUR_PRP_NAME = "TEO_0000085"; // domain: ConnectedTemporalRegion (Yi: + Event?)
@@ -148,6 +152,10 @@ public class TEOConstants {
 	public static final String TEO_TR_SAE_PRP = getWithNS(TEO_TR_SAE_PRP_NAME);
 	public static final String TEO_TR_EAS_PRP = getWithNS(TEO_TR_EAS_PRP_NAME);
 	public static final String TEO_TR_EAE_PRP = getWithNS(TEO_TR_EAE_PRP_NAME);	
+	public static final String TEO_TR_SES_PRP = getWithNS(TEO_TR_SES_PRP_NAME);
+	public static final String TEO_TR_SEE_PRP = getWithNS(TEO_TR_SEE_PRP_NAME);
+	public static final String TEO_TR_EES_PRP = getWithNS(TEO_TR_EES_PRP_NAME);
+	public static final String TEO_TR_EEE_PRP = getWithNS(TEO_TR_EEE_PRP_NAME);
 	
 	public static final String TEO_OCCUR_PRP = getWithNS(TEO_OCCUR_PRP_NAME);
 	public static final String TEO_OCCURYEAR_PRP = getWithNS(TEO_OCCURYEAR_PRP_NAME);

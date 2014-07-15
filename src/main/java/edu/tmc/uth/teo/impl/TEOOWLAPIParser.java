@@ -35,6 +35,11 @@ import edu.tmc.uth.teo.model.Unit;
 import edu.tmc.uth.teo.utils.StringUtils;
 import edu.tmc.uth.teo.utils.TEOConstants;
 
+/**
+ * 
+ * @author yluo
+ *
+ */
 public class TEOOWLAPIParser implements TEOParser {
 
 	private OWLOntology ontology = null;
@@ -74,13 +79,17 @@ public class TEOOWLAPIParser implements TEOParser {
 	private OWLObjectProperty equal = null;
 	
 	private OWLObjectProperty SBS = null; // start before start
-	private OWLObjectProperty SBE = null; // start before end
-	private OWLObjectProperty EBS = null; // end before start
-	private OWLObjectProperty EBE = null; // end before end
 	private OWLObjectProperty SAS = null; // start after start
+	private OWLObjectProperty SES = null; // start equal start
+	private OWLObjectProperty SBE = null; // start before end
 	private OWLObjectProperty SAE = null; // start after end
+	private OWLObjectProperty SEE = null; // start equal end
+	private OWLObjectProperty EBS = null; // end before start
 	private OWLObjectProperty EAS = null; // end after start
+	private OWLObjectProperty EES = null; // end equal start
+	private OWLObjectProperty EBE = null; // end before end
 	private OWLObjectProperty EAE = null; // end after end
+	private OWLObjectProperty EEE = null; // end equal end
 	
 	private OWLDataProperty hasDurationPattern= null;
 
@@ -148,6 +157,10 @@ public class TEOOWLAPIParser implements TEOParser {
 		SAE = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_SAE_PRP));
 		EAS = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EAS_PRP));
 		EAE = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EAE_PRP));
+		SES = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_SES_PRP));
+		SEE = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_SEE_PRP));
+		EES = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EES_PRP));
+		EEE = df.getOWLObjectProperty(IRI.create(TEOConstants.TEO_TR_EEE_PRP));
 				
 		if (before != null) relationIntervalRoaster.put(before, TemporalRelationType.BEFORE);
 		if (after != null) relationIntervalRoaster.put(after, TemporalRelationType.AFTER);
@@ -168,9 +181,13 @@ public class TEOOWLAPIParser implements TEOParser {
 		if (EBS != null) relationPointRoaster.put(EBS, TemporalRelationType.END_BEFORE_START);
 		if (EBE != null) relationPointRoaster.put(EBE, TemporalRelationType.END_BEFORE_END);
 		if (SAS != null) relationPointRoaster.put(SAS, TemporalRelationType.START_AFTER_START);
-		if (SAE != null) relationPointRoaster.put(SAE, TemporalRelationType.STAR_AFTER_END);
+		if (SAE != null) relationPointRoaster.put(SAE, TemporalRelationType.START_AFTER_END);
 		if (EAS != null) relationPointRoaster.put(EAS, TemporalRelationType.END_AFTER_START);
 		if (EAE != null) relationPointRoaster.put(EAE, TemporalRelationType.END_AFTER_END);
+		if (SES != null) relationPointRoaster.put(SES, TemporalRelationType.START_EQUAL_START);
+		if (SEE != null) relationPointRoaster.put(SEE, TemporalRelationType.START_EQUAL_END);
+		if (EES != null) relationPointRoaster.put(EES, TemporalRelationType.END_EQUAL_START);
+		if (EEE != null) relationPointRoaster.put(EEE, TemporalRelationType.END_EQUAL_END);
 		
 		hasDurationPattern = df.getOWLDataProperty(IRI.create(TEOConstants.TEO_HASDURATIONPATTERN_PRP));
 	}

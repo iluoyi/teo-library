@@ -4,12 +4,12 @@
 
  * As Allen points out: the path consistency algorithm is not complete. However, this is not so important in practice.
  * A paper analyzing the completeness of the path consistency algorithm can be found here: 
- * Nebel, B. & Bürckert, H.-J. Reasoning about Temporal Relations: A Maximal Tractable Subclass of Allen's Interval Algebra Journal of the ACM, 1995, 42, 43-66
+ * Nebel, B. & Bï¿½rckert, H.-J. Reasoning about Temporal Relations: A Maximal Tractable Subclass of Allen's Interval Algebra Journal of the ACM, 1995, 42, 43-66
  * A complete version for all temporal relationships (which is significantly slower than the path consistency algorithm) will be part of a future version.
  * 
  * Please note that the paper contains some minor mistakes which have been corrected in this source code (see also comments). 
  *
- * Copyright 2010 Jörn Franke Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. 
+ * Copyright 2010 Jï¿½rn Franke Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. 
  *
  */
 package org.allen.temporalintervalrelationships;
@@ -17,10 +17,14 @@ package org.allen.temporalintervalrelationships;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+
 
 /**
- * @author Jörn Franke <jornfranke@gmail.com>
+ * @author Jï¿½rn Franke <jornfranke@gmail.com>
  *
+ * Adapted by Yi Luo for Point Relations.
+ * 
  */
 public class ConstraintNetwork<E> {
 	
@@ -36,37 +40,69 @@ public class ConstraintNetwork<E> {
 	
 	
 	// representation of the constraints in binary format
-	public final static short bin_before = 1; // 0000000000000001
-	public final static short bin_after = 2;  // 0000000000000010
-	public final static short bin_during = 4; // 0000000000000100
-	public final static short bin_contains = 8; // 0000000000001000
-	public final static short bin_overlaps = 16; // 0000000000010000
-	public final static short bin_overlappedby = 32; // 0000000000100000
-	public final static short bin_meets = 64; // 0000000001000000
-	public final static short bin_metby = 128; // 0000000010000000
-	public final static short bin_starts = 256;// 0000000100000000
-	public final static short bin_startedby = 512; // 0000001000000000
-	public final static short bin_finishes = 1024;  // 0000010000000000
-	public final static short bin_finishedby = 2048;// 0000100000000000
-	public final static short bin_equals = 4096;    // 0001000000000000
+	public final static short bin_before = 1; // 0000000000000001 - p
+	public final static short bin_after = 2;  // 0000000000000010 - P
+	public final static short bin_during = 4; // 0000000000000100 - d
+	public final static short bin_contains = 8; // 0000000000001000 - D
+	public final static short bin_overlaps = 16; // 0000000000010000 - o
+	public final static short bin_overlappedby = 32; // 0000000000100000 - O
+	public final static short bin_meets = 64; // 0000000001000000 - m
+	public final static short bin_metby = 128; // 0000000010000000 - M
+	public final static short bin_starts = 256;// 0000000100000000 - s
+	public final static short bin_startedby = 512; // 0000001000000000 - S
+	public final static short bin_finishes = 1024;  // 0000010000000000 - f
+	public final static short bin_finishedby = 2048;// 0000100000000000 - F
+	public final static short bin_equals = 4096;    // 0001000000000000- e
 	public final static short bin_all = (short) (bin_before | bin_after | bin_during | bin_contains | bin_overlaps | bin_overlappedby | bin_meets | bin_metby | bin_starts | bin_startedby | bin_finishes | bin_finishedby | bin_equals);		  // 0001111111111111
 
+	// Yi: point relations
+	public final static short bin_SBS = (short) (bin_before | bin_meets | bin_overlaps | bin_finishedby | bin_contains); // 0000100001011001 - startBeforeStart (pmoFD)
+	public final static short bin_SAS = (short) (bin_during | bin_finishes | bin_overlappedby | bin_metby | bin_after); // 0000010010100110 - startAfterStart (dfOMP)
+	public final static short bin_SES = (short) (bin_starts | bin_equals | bin_startedby); // 0001001100000000 - startEqualStart (seS)
+	public final static short bin_SBE = (short) (bin_before | bin_meets | bin_overlaps | bin_finishedby | 
+													bin_contains | bin_starts | bin_equals | bin_startedby |
+													bin_during | bin_finishes | bin_overlappedby); // 0001111101111101 - startBeforeEnd (pmoFDseSdfO)
+	public final static short bin_SAE = (short) (bin_after); // 0000000000000010 - startAfterEnd (P)
+	public final static short bin_SEE = (short) (bin_metby); // 0000000010000000 - startEqualEnd (M)
+	public final static short bin_EBE = (short) (bin_before | bin_meets | bin_overlaps | bin_starts | bin_during); // 0000000101010101 - endBeforeEnd (pmosd)
+	public final static short bin_EAE = (short) (bin_contains | bin_startedby | bin_overlappedby | bin_metby | bin_after); // 0000001010101010 - endAfterEnd (DSOMP)
+	public final static short bin_EEE = (short) (bin_finishes | bin_equals | bin_finishedby); // 0001110000000000 - endEqualEnd (feF)
+	public final static short bin_EBS = (short) (bin_before); // 0000100001011001 - endBeforeStart (p)
+	public final static short bin_EAS = (short) (bin_overlaps | bin_finishedby | bin_contains | bin_starts | 
+													bin_equals | bin_startedby | bin_during | bin_finishes |
+													bin_overlappedby | bin_metby | bin_after); // 0000000000010000 - endAfterStart (oFDseSdfOMP)
+	public final static short bin_EES = (short) (bin_meets); // 0000000001000000 - endEqualStart (m)
+	
 	// last bit is used as a sign
 
 	// representation of the constraints in string format 
 	public final static String str_before = "before";
 	public final static String str_after = "after";
 	public final static String str_during = "during";
-	public final static String str_contains = "contains";
-	public final static String str_overlaps = "overlaps";
-	public final static String str_overlappedby = "overlapped by";
-	public final static String str_meets = "meets";
-	public final static String str_metby = "met by";
-	public final static String str_starts = "starts";
-	public final static String str_startedby = "started by";
-	public final static String str_finishes = "finishes";
-	public final static String str_finishedby = "finished by";
-	public final static String str_equals = "equals";
+	public final static String str_contains = "contain";
+	public final static String str_overlaps = "overlap";
+	public final static String str_overlappedby = "overlappedBy";
+	public final static String str_meets = "meet";
+	public final static String str_metby = "metBy";
+	public final static String str_starts = "start";
+	public final static String str_startedby = "startedBy";
+	public final static String str_finishes = "finish";
+	public final static String str_finishedby = "finishedBy";
+	public final static String str_equals = "equal";
+	
+	// Yi: point relations
+	public final static String str_SBS = "startBeforeStart";
+	public final static String str_SAS = "startAfterStart";
+	public final static String str_SES = "startEqualStart";
+	public final static String str_EBE = "endBeforeStart";
+	public final static String str_EAE = "endAfterEnd";
+	public final static String str_EEE = "endEqualEnd";
+	public final static String str_SBE = "startBeforeEnd";
+	public final static String str_SAE = "startAfterEnd";
+	public final static String str_SEE = "startEqualEnd";
+	public final static String str_EBS = "endBeforeStart";
+	public final static String str_EAS = "endAfterStart";
+	public final static String str_EES = "endEqualStart";
 	
 	// A corrected version of the transivity matrix described by Allen
 	private final static short[][] transitivematrixshort = {
@@ -573,9 +609,56 @@ public class ConstraintNetwork<E> {
 	
 	public ArrayList<String> getConstraintStringFromConstraintShort(short c) {
 		ArrayList<String> result = new ArrayList<String>();
-		// test before
+		// if the result matches a higher level point relation, it should only return the point relation
+		// test SBE
+		if ((short)(c & bin_SBE)==bin_SBE) {
+			result.add(str_SBE);
+			return result;
+		}
+		// test EAS
+		if ((short) (c & bin_EAS) == bin_EAS) {
+			result.add(str_EAS);
+			return result;
+		}
+		// test SBS
+		if ((short) (c & bin_SBS) == bin_SBS) {
+			result.add(str_SBS);
+			return result;
+		}
+		// test EBE
+		if ((short) (c & bin_EBE) == bin_EBE) {
+			result.add(str_EAS);
+			return result;
+		}
+		// test SES
+		if ((short) (c & bin_SES) == bin_SES) {
+			result.add(str_SES);
+			return result;
+		}
+		// test EEE
+		if ((short) (c & bin_EEE) == bin_EEE) {
+			result.add(str_EEE);
+			return result;
+		}
+		// test SAS
+		if ((short) (c & bin_SAS) == bin_SAS) {
+			result.add(str_SAS);
+			return result;
+		}
+		// test EAE
+		if ((short) (c & bin_EAE) == bin_EAE) {
+			result.add(str_EAE);
+			return result;
+		}
+		// test EAS
+		if ((short) (c & bin_EAS) == bin_EAS) {
+			result.add(str_EAS);
+			return result;
+		}
+		
+		// test before (EBS)
 		if ((short)(c & bin_before)==bin_before) result.add(str_before);
-		// test after
+		// test after (SAE)
 		if ((short)(c & bin_after)==bin_after) result.add(str_after);
 		// test during
 		if ((short)(c & bin_during)==bin_during) result.add(str_during);
@@ -585,9 +668,9 @@ public class ConstraintNetwork<E> {
 		if ((short)(c & bin_overlaps)==bin_overlaps) result.add(str_overlaps);
 		// test overlappedby
 		if ((short)(c & bin_overlappedby)==bin_overlappedby) result.add(str_overlappedby);
-		// test meets
+		// test meets (EES)
 		if ((short)(c & bin_meets)==bin_meets) result.add(str_meets);
-		// test metby
+		// test metby (SEE)
 		if ((short)(c & bin_metby)==bin_metby) result.add(str_metby);
 		// test starts
 		if ((short)(c & bin_starts)==bin_starts) result.add(str_starts);

@@ -8,6 +8,12 @@ import java.util.Queue;
 import edu.tmc.uth.teo.model.DirectedAcyclicGraph;
 import edu.tmc.uth.teo.model.TemporalRelationType;
 
+/**
+ * We implemented the Kahn Algorithm to find the topology order
+ * 
+ * @author yluo
+ *
+ */
 public class TemporalRelationUtils {
 	
 	/**
@@ -61,4 +67,17 @@ public class TemporalRelationUtils {
 		}
 		return false;
 	}
+	
+//	public static int getStartStartRelation(TemporalRelationType relationType) {
+//		// -1 - unknown, 0 - equal, 1 - before, 2 - after 
+//		if (relationType.equals(TemporalRelationType.START_BEFORE_START) || 
+//				relationType.equals(TemporalRelationType.BEFORE) || 
+//				relationType.equals(TemporalRelationType.MEET) || 
+//				relationType.equals(TemporalRelationType.OVERLAP) ||
+//				relationType.equals(TemporalRelationType.FINISHEDBY) ||
+//				relationType.equals(TemporalRelationType.CONTAIN)) {
+//			return true;
+//		}
+//		return 0;
+//	}
 }

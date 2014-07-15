@@ -20,6 +20,11 @@ import edu.tmc.uth.teo.model.TimeInterval;
 import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
+/**
+ * 
+ * @author yluo
+ *
+ */
 public class TEOOWLAPIQuerier implements TEOQuerier {
 	public HashMap<String, Event> eventMap = null;
 	

@@ -20,11 +20,13 @@ import edu.tmc.uth.teo.model.TimeInstant;
 import edu.tmc.uth.teo.model.TimeInterval;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
+/**
+ * 
+ * @author yluo
+ *
+ */
 public class TEOOWLAPIReasoner implements TEOReasoner {
 	private HashMap<String, Event> eventMap = null;
-	
-	private Vector<Event> validTimeEvent = null; // events that contain validTime and can be used for inference
-	private Vector<Event> visitedEvent = null; // events that contain validTime and have been visited/used for inference
 	
 	public TEOOWLAPIReasoner(HashMap<String, Event> eventMap) {
 		this.eventMap = eventMap;
@@ -37,6 +39,9 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 	/**
 	 * Note: currently, we assume temporal relations only happen between Events.
 	 */
+	private Vector<Event> validTimeEvent = null; // events that contain validTime and can be used for inference
+	private Vector<Event> visitedEvent = null; // events that contain validTime and have been visited/used for inference
+	
 	public boolean reasonValidTime() {
 		if (eventMap != null) {
 			// 1. pin all events which have valid time onto the time line (put them in a Set "validTimeEvent")

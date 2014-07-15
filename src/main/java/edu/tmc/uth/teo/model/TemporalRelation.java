@@ -11,9 +11,11 @@ public class TemporalRelation {
 																					TemporalRelationType.OVERLAPPEDBY);
 	
 	public static EnumSet<TemporalRelationType> TemporalPointRelationSet = EnumSet.of(TemporalRelationType.START_BEFORE_START, TemporalRelationType.START_AFTER_START,
-																					TemporalRelationType.START_BEFORE_END, TemporalRelationType.STAR_AFTER_END,
+																					TemporalRelationType.START_BEFORE_END, TemporalRelationType.START_AFTER_END,
 																					TemporalRelationType.END_BEFORE_START, TemporalRelationType.END_AFTER_START,
-																					TemporalRelationType.END_BEFORE_END, TemporalRelationType.END_AFTER_END);
+																					TemporalRelationType.END_BEFORE_END, TemporalRelationType.END_AFTER_END,
+																					TemporalRelationType.START_EQUAL_START, TemporalRelationType.START_EQUAL_END,
+																					TemporalRelationType.END_EQUAL_START, TemporalRelationType.END_EQUAL_END);
 	
 	private String sourceIRI, targetIRI;
 	private TemporalRelationType relationType;
