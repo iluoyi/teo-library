@@ -1,7 +1,7 @@
 package edu.tmc.uth.teo.interfaces;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
@@ -20,7 +20,7 @@ public interface TEOQuerier {
 
 	public Duration getDurationBetweenEvents(Event event1, Event event2, Granularity granularity);
 
-	public Vector<TemporalRelationType> getTemporalRelationType(Event event1, Event event2, Granularity granularity);
+	public ArrayList<TemporalRelationType> getTemporalRelationType(Event event1, Event event2, Granularity granularity);
 
 //	public TemporalRelationType getTemporalRelationType(Event oneEvent,
 //			Time time) throws CNTROException;

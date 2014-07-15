@@ -48,7 +48,7 @@ public class JUnitTemporalRelation {
 
 	}
 	
-	//@Test
+	@Test
 	public void testGetEventByIRIStr() {
 		System.out.println("######################## Testing GetEventByIRIStr #####################################");
 		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");
@@ -56,15 +56,19 @@ public class JUnitTemporalRelation {
 		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event2");
 		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event3");
 		Event event4 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event4");
-
+		Event event5 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event5");
+		Event event6 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event6");
+		
 		System.out.println("Event0:\n" + event0);
 		System.out.println("\nEvent1:\n" + event1);
 		System.out.println("\nEvent2:\n" + event2);
 		System.out.println("\nEvent3:\n" + event3);
 		System.out.println("\nEvent4:\n" + event4);
+		System.out.println("\nEvent5:\n" + event5);
+		System.out.println("\nEvent6:\n" + event6);
 	}
 	
-	//@Test
+	@Test
 	public void testGetTemporalRelationsBetweenEvents() {
 		System.out.println("######################## Testing GetRelations #####################################");
 		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");
@@ -72,8 +76,10 @@ public class JUnitTemporalRelation {
 		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event2");
 		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event3");
 		Event event4 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event4");
-
-		System.out.println("event0 - event3:\n" + querier.getTemporalRelationType(event0, event3, null));
+		Event event5 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event5");
+		Event event6 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event6");
+		
+		System.out.println("event0 - event5:\n" + querier.getTemporalRelationType(event0, event5, null));
 	}
 	
 	@Test

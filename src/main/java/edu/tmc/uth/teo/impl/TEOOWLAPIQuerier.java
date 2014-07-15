@@ -2,9 +2,10 @@ package edu.tmc.uth.teo.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
-import java.util.Vector;
 
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
 import edu.tmc.uth.teo.model.DirectedAcyclicGraph;
@@ -12,7 +13,7 @@ import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Edge;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
-import edu.tmc.uth.teo.model.TemporalRelation;
+import edu.tmc.uth.teo.model.TemporalRelationHalf;
 import edu.tmc.uth.teo.model.TemporalRelationType;
 import edu.tmc.uth.teo.model.TemporalType;
 import edu.tmc.uth.teo.model.TimeInstant;
@@ -81,21 +82,25 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		return null;
 	}
 	
-	public Vector<TemporalRelationType> getTemporalRelationType(Event event1,
-			Event event2, Granularity granularity) {
-		Vector<TemporalRelationType> relationList = new Vector<TemporalRelationType>();
+	public ArrayList<TemporalRelationType> getTemporalRelationType(Event event1, Event event2, Granularity granularity) {
+		ArrayList<TemporalRelationType> relations= new ArrayList<TemporalRelationType>();
 		if (event1 != null && event2 != null) {
 			String targetIRIStr = event2.getIRIStr();
-			Vector<TemporalRelation> relations = event1.getTemporalRelations();
-			for (TemporalRelation relation : relations) {
-				if (relation.getTargetIRI().equals(targetIRIStr)) {
-					relationList.add(relation.getRelationType());
-				}
+			HashMap<String, ArrayList<TemporalRelationHalf>> relationMap = event1.getTemporalRelations();
+			ArrayList<TemporalRelationHalf> relationList = relationMap.get(targetIRIStr);
+			for (TemporalRelationHalf relation : relationList) {	
+				// TODO: need to consider the granularity
+				relations.add(relation.getRelationType());
 			}
+		} else {
+			relations.add(TemporalRelationType.FULL); // as the unknown relation
 		}
-		return relationList;
+		return relations;
 	}
 
+	/**
+	 * The default configuration is to compare the startTime between a pair of events
+	 */
 	public List<Event> getEventsTimeline() {
 		Set<String> strSet = eventMap.keySet();
 		String[] vertexStr = new String[strSet.size()];
@@ -111,13 +116,17 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 			viMap.put(vertexStr[i], i);
 		}
 		
-		for (String oneString : vertexStr) {
-			Event oneEvent = eventMap.get(oneString);
-			Vector<TemporalRelation> relations = oneEvent.getTemporalRelations();
-			// add an edge if the relation can infer "startBeforeStart"
-			for (TemporalRelation relation : relations) {
-				if (TemporalRelationUtils.isStartBeforeStart(relation.getRelationType())) {
-					Edge newEdge = new Edge(viMap.get(relation.getSourceIRI()), viMap.get(relation.getTargetIRI()));
+		for (String sourceIRI : vertexStr) {
+			Event sourceEvent = eventMap.get(sourceIRI);
+			HashMap<String, ArrayList<TemporalRelationHalf>> relationMap = sourceEvent.getTemporalRelations();
+			// TODO: to handle "startEqualStart"
+			Iterator<Entry<String, ArrayList<TemporalRelationHalf>>> itor = relationMap.entrySet().iterator();
+			while (itor.hasNext()) {
+				Entry<String, ArrayList<TemporalRelationHalf>> pair = itor.next();
+				String targetIRI = pair.getKey();
+				ArrayList<TemporalRelationHalf> relationList = pair.getValue();
+				if (TemporalRelationUtils.isStartBeforeStart(relationList)) {
+					Edge newEdge = new Edge(viMap.get(sourceIRI), viMap.get(targetIRI));
 					edges.add(newEdge);
 				}
 			}

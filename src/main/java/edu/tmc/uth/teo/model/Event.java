@@ -1,6 +1,9 @@
 package edu.tmc.uth.teo.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 
 /**
@@ -15,18 +18,18 @@ import java.util.Vector;
 public class Event extends TEOClass {
 	private TemporalType eventType; 
 	private TemporalRegion validTime; // might be TimeInsant, TimeInterval, PeriodicTimeInterval
-	private Vector<TemporalRelation> relations;
+	private HashMap<String, ArrayList<TemporalRelationHalf>> relationMap; // HashMap<targetIRI, relation list>: 1. better for retrieval; 2. compress the used memory
 	
 	public Event() {
 		this.eventType = TemporalType.UNKNOWN;
 		this.validTime = null;
-		this.relations = null;
+		this.relationMap = null;
 	}
 	
 	public Event(TemporalType type) {
 		this.eventType = type;
 		this.validTime = null;
-		this.relations = null;
+		this.relationMap = null;
 	}
 	
 	public TemporalType getEventType() {
@@ -45,23 +48,34 @@ public class Event extends TEOClass {
 		this.validTime = validTime;
 	}
 	
-	public Vector<TemporalRelation> getTemporalRelations() {
-		return this.relations;
+	public HashMap<String, ArrayList<TemporalRelationHalf>> getTemporalRelations() {
+		return this.relationMap;
 	}
 	
-	public void addTemporalRelation(TemporalRelation oneRelation) {
-		if (relations == null) {
-			relations = new Vector<TemporalRelation>();
+	public void addTemporalRelation(String targetIRI, TemporalRelationHalf relation) {
+		if (relationMap == null) {
+			relationMap = new HashMap<String, ArrayList<TemporalRelationHalf>>();
+		} 
+		if (relationMap.get(targetIRI) == null) {
+			relationMap.put(targetIRI, new ArrayList<TemporalRelationHalf>());
 		}
-		relations.add(oneRelation);
+		if (!relationMap.get(targetIRI).contains(relation)) {
+			relationMap.get(targetIRI).add(relation);
+		}
 	}
 	
 	public String printRelations() {
-		if (relations != null) {
+		if (relationMap != null) {
 			StringBuffer buf = null;
 			buf = new StringBuffer("{\n");
-			for (TemporalRelation oneRelation : relations) {
-				buf.append(oneRelation.printTarget() + "\n");
+			Iterator<Entry<String, ArrayList<TemporalRelationHalf>>> it = relationMap.entrySet().iterator();
+			
+			while (it.hasNext()) {
+				Entry<String, ArrayList<TemporalRelationHalf>> entry = it.next();
+				ArrayList<TemporalRelationHalf> relationList = entry.getValue();
+				for (TemporalRelationHalf oneRelation : relationList) {
+					buf.append(oneRelation + "->" + entry.getKey() + "\n");
+				}
 			}
 			buf.append("}");
 			return buf.toString();

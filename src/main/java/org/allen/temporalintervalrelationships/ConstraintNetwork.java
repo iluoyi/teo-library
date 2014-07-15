@@ -17,8 +17,6 @@ package org.allen.temporalintervalrelationships;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-
 
 /**
  * @author J�rn Franke <jornfranke@gmail.com>
@@ -75,6 +73,8 @@ public class ConstraintNetwork<E> {
 	
 	// last bit is used as a sign
 
+	// full
+	public final static String str_full = "full";	
 	// representation of the constraints in string format 
 	public final static String str_before = "before";
 	public final static String str_after = "after";
@@ -94,7 +94,7 @@ public class ConstraintNetwork<E> {
 	public final static String str_SBS = "startBeforeStart";
 	public final static String str_SAS = "startAfterStart";
 	public final static String str_SES = "startEqualStart";
-	public final static String str_EBE = "endBeforeStart";
+	public final static String str_EBE = "endBeforeEnd";
 	public final static String str_EAE = "endAfterEnd";
 	public final static String str_EEE = "endEqualEnd";
 	public final static String str_SBE = "startBeforeEnd";
@@ -380,10 +380,8 @@ public class ConstraintNetwork<E> {
 		stackEntries.get(startConstraint.getSourceNode().getAllenId()).set(startConstraint.getDestinationNode().getAllenId(),true);
 		// Put inverse also on the stack
 		stackEntries.get(startConstraint.getDestinationNode().getAllenId()).set(startConstraint.getSourceNode().getAllenId(), true);
-		//
-		int iterations=0;
+		
 		while (batchStack.size()>0) {
-			iterations++;
 			Pair<Integer,Integer> currentEdge = batchStack.get(0);
 			batchStack.remove(0);
 			// Remove stack entry
@@ -609,7 +607,14 @@ public class ConstraintNetwork<E> {
 	
 	public ArrayList<String> getConstraintStringFromConstraintShort(short c) {
 		ArrayList<String> result = new ArrayList<String>();
-		// if the result matches a higher level point relation, it should only return the point relation
+		// if the result matches a higher level point relation, it should only return this higher one
+		// test full
+		if ((short) (c & bin_all) == bin_all) {
+			result.add(str_full);
+			return result;
+		}
+		
+		// point relations
 		// test SBE
 		if ((short)(c & bin_SBE)==bin_SBE) {
 			result.add(str_SBE);

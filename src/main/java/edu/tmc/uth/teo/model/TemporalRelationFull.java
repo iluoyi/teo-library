@@ -2,7 +2,7 @@ package edu.tmc.uth.teo.model;
 
 import java.util.EnumSet;
 
-public class TemporalRelation {
+public class TemporalRelationFull {
 
 	public static EnumSet<TemporalRelationType> TemporalIntervalRelationSet = EnumSet.of(TemporalRelationType.BEFORE, TemporalRelationType.FINISH, TemporalRelationType.FINISHEDBY,
 																					TemporalRelationType.AFTER, TemporalRelationType.START, TemporalRelationType.STARTEDBY,
@@ -23,7 +23,7 @@ public class TemporalRelation {
 	private Duration timeOffset;
 	private AssemblyMethod assemblyMethod;
 
-	public TemporalRelation(String sourceIRI, String targetIRI,
+	public TemporalRelationFull(String sourceIRI, String targetIRI,
 			TemporalRelationType relationType) {
 		super();
 		this.sourceIRI = sourceIRI;
@@ -94,9 +94,9 @@ public class TemporalRelation {
 	
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof TemporalRelation) {
-			if (this.sourceIRI.equals(((TemporalRelation) o).sourceIRI) && this.targetIRI.equals(((TemporalRelation) o).targetIRI) 
-					&& this.relationType.equals(((TemporalRelation) o).relationType)) {
+		if (o instanceof TemporalRelationFull) {
+			if (this.sourceIRI.equals(((TemporalRelationFull) o).sourceIRI) && this.targetIRI.equals(((TemporalRelationFull) o).targetIRI) 
+					&& this.relationType.equals(((TemporalRelationFull) o).relationType)) {
 				return true;
 			}
 		}
