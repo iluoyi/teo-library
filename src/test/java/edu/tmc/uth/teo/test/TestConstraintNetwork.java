@@ -75,7 +75,7 @@ public class TestConstraintNetwork {
 		Constraint<String> constraintAB = new Constraint<String> (nodeA,nodeB,ConstraintNetwork.bin_finishedby);
 		myConstraintNetwork.addConstraint(constraintAB);
 		
-		Constraint<String> constraintBC = new Constraint<String> (nodeB,nodeC,(short) (ConstraintNetwork.bin_SBS));
+		Constraint<String> constraintBC = new Constraint<String> (nodeB,nodeC,ConstraintNetwork.bin_SBS);
 		myConstraintNetwork.addConstraint(constraintBC);
 		
 		Constraint<String> constraintAD = new Constraint<String> (nodeA,nodeD,ConstraintNetwork.bin_SES);

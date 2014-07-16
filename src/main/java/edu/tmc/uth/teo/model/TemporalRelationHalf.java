@@ -13,7 +13,7 @@ public class TemporalRelationHalf {
 		this.relationType = relationType;
 		this.timeOffset = null;
 		this.granularity = new Granularity(Unit.UNKNOWN);
-		this.assemblyMethod = AssemblyMethod.ASSERTED;
+		this.assemblyMethod = AssemblyMethod.UNKNOWN;
 	}
 
 	public AssemblyMethod getAssemblyMethod() {
@@ -51,11 +51,16 @@ public class TemporalRelationHalf {
 	@Override
 	public String toString() {
 		return "[" + getRelationType() + 
-				(timeOffset != null? ("(timeOffset: "+ timeOffset + ")"):"") + "]";
+				(timeOffset != null? ("(timeOffset: "+ timeOffset + ")"):"") + 
+				(!assemblyMethod.equals(AssemblyMethod.UNKNOWN)? ("(assemblyMethod: "+ assemblyMethod + ")"):"") + 
+				(!granularity.getUnit().equals(Unit.UNKNOWN)? ("(granularity: "+ granularity + ")"):"") + "]";
 	}
 	
+	/**
+	 * Only check the TemporalRelationType, no assembly/granularity information
+	 */
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(Object o) { 
 		if (o instanceof TemporalRelationHalf) {
 			if (this.relationType.equals(((TemporalRelationHalf) o).relationType)) {
 				return true;

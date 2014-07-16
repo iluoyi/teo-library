@@ -31,7 +31,7 @@ public class TemporalRelationFull {
 		this.relationType = relationType;
 		this.timeOffset = null;
 		this.granularity = new Granularity(Unit.UNKNOWN);
-		this.assemblyMethod = AssemblyMethod.ASSERTED;
+		this.assemblyMethod = AssemblyMethod.UNKNOWN;
 	}
 
 	public String getSourceIRI() {

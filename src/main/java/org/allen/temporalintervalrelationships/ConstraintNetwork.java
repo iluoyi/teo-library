@@ -605,7 +605,7 @@ public class ConstraintNetwork<E> {
 	 * 
 	 */
 	
-	public ArrayList<String> getConstraintStringFromConstraintShort(short c) {
+	public static ArrayList<String> getConstraintStringFromConstraintShort(short c) {
 		ArrayList<String> result = new ArrayList<String>();
 		// if the result matches a higher level point relation, it should only return this higher one
 		// test full

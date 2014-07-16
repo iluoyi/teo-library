@@ -23,15 +23,16 @@ public class JUnitTemporalRelation {
 	
 	@Before
 	public void setUp() throws Exception {
+		System.out.println("\n\n>>>>>>>>>>>>>>>>Start Testing>>>>>>>>>>>>>>>>>>>");
 		System.out.println("Loader: loading begins.");
 		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_4.owl");
 		System.out.println("Status: " + loader.load());
-		System.out.println("Loader: loading completes.\n");
+		System.out.println("Loader: loading completes.");
 		
 		System.out.println("Parser: parsing begins.");
 		parser = new TEOOWLAPIParser(loader.getOntology());
 		System.out.println("Status: " + parser.parse());
-		System.out.println("Parser: parsing completes.\n");
+		System.out.println("Parser: parsing completes.");
 		
 //		System.out.println("Querier: preparing the querier.");
 //		querier = new TEOOWLAPIQuerier(parser.getEventMap());
@@ -40,7 +41,7 @@ public class JUnitTemporalRelation {
 		System.out.println("Reasoner: reasoning begins.");
 		reasoner = new TEOOWLAPIReasoner(parser.getEventMap());
 		System.out.println("Status: " + reasoner.reasonTemporalRelations());
-		System.out.println("Reasoner: reasoning completes.\n");		
+		System.out.println("Reasoner: reasoning completes.");		
 		
 		System.out.println("Querier: preparing the querier.");
 		querier = new TEOOWLAPIQuerier(reasoner.getEventMap());
@@ -68,7 +69,7 @@ public class JUnitTemporalRelation {
 		System.out.println("\nEvent6:\n" + event6);
 	}
 	
-	@Test
+	//@Test
 	public void testGetTemporalRelationsBetweenEvents() {
 		System.out.println("######################## Testing GetRelations #####################################");
 		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");

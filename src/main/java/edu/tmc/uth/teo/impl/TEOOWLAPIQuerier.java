@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.allen.temporalintervalrelationships.ConstraintNetwork;
+
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
 import edu.tmc.uth.teo.model.DirectedAcyclicGraph;
 import edu.tmc.uth.teo.model.Duration;
@@ -124,8 +126,11 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 			while (itor.hasNext()) {
 				Entry<String, ArrayList<TemporalRelationHalf>> pair = itor.next();
 				String targetIRI = pair.getKey();
-				ArrayList<TemporalRelationHalf> relationList = pair.getValue();
-				if (TemporalRelationUtils.isStartBeforeStart(relationList)) {
+				ArrayList<TemporalRelationHalf> relationList = pair.getValue(); // contains "asserted" and "inferred" relations, should be merged first
+				ArrayList<String> minRelations = ConstraintNetwork.getConstraintStringFromConstraintShort(TemporalRelationUtils.getMergedTemporalRelationCode(relationList));
+				ArrayList<TemporalRelationType> relations = TemporalRelationUtils.getTemporalRelationTypeList(minRelations);
+				if (TemporalRelationUtils.isStartBeforeStart(relations)) {
+					System.out.println("Edge: " + sourceIRI + ", " + targetIRI + " <-" + relations);
 					Edge newEdge = new Edge(viMap.get(sourceIRI), viMap.get(targetIRI));
 					edges.add(newEdge);
 				}

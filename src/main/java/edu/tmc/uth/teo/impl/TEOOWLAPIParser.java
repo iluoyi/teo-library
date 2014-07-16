@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.Vector;
 
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
@@ -17,11 +16,13 @@ import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 
 import edu.tmc.uth.teo.interfaces.TEOParser;
+import edu.tmc.uth.teo.model.AssemblyMethod;
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
@@ -241,32 +242,48 @@ public class TEOOWLAPIParser implements TEOParser {
 			}
 		}
 		
-		//TODO: should detect time offsets here
-				
-		// because we don't have reification triples, every relation must be attached to an event
-		// parse Interval temporal relations
-		Iterator<Entry<OWLObjectProperty, TemporalRelationType>> it = relationIntervalRoaster.entrySet().iterator();
-		OWLObjectProperty relationPro = null;
+		// auxiliary variables prepared for parsing Temporal Relations
+		// TODO: granularity?	
 		TemporalRelationType relationType = null;
 		String targetIRIStr = null;
 		TemporalRelationHalf relation = null;
-		//String relationKey = null;
-		//TODO: assemblyMethod, granularity?		
+		
+		// 1. collected all "asserted" relations (for later relation merge) first and record timeOffsets for point relations
+		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
+		for (OWLObjectPropertyAssertionAxiom axiom : axiomSet) {
+			if (relationIntervalRoaster.containsKey(axiom.getProperty())) {
+				relationType = relationIntervalRoaster.get(axiom.getProperty());
+			} else {
+				relationType = relationPointRoaster.get(axiom.getProperty()); 
+				// TODO: may contain timeOffset info
+			}
+			targetIRIStr = axiom.getObject().asOWLNamedIndividual().getIRI().toString();
+			relation = new TemporalRelationHalf(relationType);
+			relation.setAssemblyMethod(AssemblyMethod.ASSERTED); // Asserted axioms
+			event.addTemporalRelation(targetIRIStr, relation); 
+			// duplicate relations cannot be added, it detects duplicate by "target" AND "type" only, (no asserted/granularity info)
+		}
+				
+		// because we don't have reification triples, every relation must be attached to an event
+		Iterator<Entry<OWLObjectProperty, TemporalRelationType>> it = null;
+		OWLObjectProperty relationPro = null;
+		// 2-1. parse inferred Interval temporal relations
+		it = relationIntervalRoaster.entrySet().iterator();	
 		while (it.hasNext()) {
 			Entry<OWLObjectProperty, TemporalRelationType> pair = it.next();
 			relationType = pair.getValue();
 			relationPro = pair.getKey();
 			if (relationPro != null) {
 				valueList = getObjectPropertyValue(eventIndividual, relationPro);
-				
 				for (OWLNamedIndividual target : valueList) {
 					targetIRIStr = target.getIRI().toString();
 					relation = new TemporalRelationHalf(relationType);
-					event.addTemporalRelation(targetIRIStr, relation); // ignore timeOffset here, will be handled outside		
+					relation.setAssemblyMethod(AssemblyMethod.INFERRED); // Inferred axioms
+					event.addTemporalRelation(targetIRIStr, relation); 
 				}
 			}
 		}
-		// parse Point temporal relations
+		// 2-2. parse inferred Point temporal relations
 		it = relationPointRoaster.entrySet().iterator();
 		//TODO: assemblyMethod, granularity?		
 		while (it.hasNext()) {
@@ -275,10 +292,10 @@ public class TEOOWLAPIParser implements TEOParser {
 			relationPro = pair.getKey();
 			if (relationPro != null) {
 				valueList = getObjectPropertyValue(eventIndividual, relationPro);
-						
 				for (OWLNamedIndividual target : valueList) {
 					targetIRIStr = target.getIRI().toString();
 					relation = new TemporalRelationHalf(relationType);
+					relation.setAssemblyMethod(AssemblyMethod.INFERRED); // Inferred axioms
 					event.addTemporalRelation(targetIRIStr, relation);
 				}
 			}
