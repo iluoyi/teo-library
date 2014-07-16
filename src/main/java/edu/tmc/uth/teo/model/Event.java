@@ -18,7 +18,7 @@ import java.util.Map.Entry;
 public class Event extends TEOClass {
 	private TemporalType eventType; 
 	private TemporalRegion validTime; // might be TimeInsant, TimeInterval, PeriodicTimeInterval
-	private HashMap<String, ArrayList<TemporalRelationHalf>> relationMap; // HashMap<targetIRI, relation list>: 1. better for retrieval; 2. compress the used memory
+	private HashMap<String, ArrayList<TemporalRelationTarget>> relationMap; // HashMap<targetIRI, relation list>: 1. better for retrieval; 2. compress the used memory
 	
 	public Event() {
 		this.eventType = TemporalType.UNKNOWN;
@@ -48,16 +48,16 @@ public class Event extends TEOClass {
 		this.validTime = validTime;
 	}
 	
-	public HashMap<String, ArrayList<TemporalRelationHalf>> getTemporalRelations() {
+	public HashMap<String, ArrayList<TemporalRelationTarget>> getTemporalRelations() {
 		return this.relationMap;
 	}
 	
-	public void addTemporalRelation(String targetIRI, TemporalRelationHalf relation) {
+	public void addTemporalRelation(String targetIRI, TemporalRelationTarget relation) {
 		if (relationMap == null) {
-			relationMap = new HashMap<String, ArrayList<TemporalRelationHalf>>();
+			relationMap = new HashMap<String, ArrayList<TemporalRelationTarget>>();
 		} 
 		if (relationMap.get(targetIRI) == null) {
-			relationMap.put(targetIRI, new ArrayList<TemporalRelationHalf>());
+			relationMap.put(targetIRI, new ArrayList<TemporalRelationTarget>());
 		}
 		if (!relationMap.get(targetIRI).contains(relation)) {
 			relationMap.get(targetIRI).add(relation);
@@ -68,12 +68,12 @@ public class Event extends TEOClass {
 		if (relationMap != null) {
 			StringBuffer buf = null;
 			buf = new StringBuffer("{\n");
-			Iterator<Entry<String, ArrayList<TemporalRelationHalf>>> it = relationMap.entrySet().iterator();
+			Iterator<Entry<String, ArrayList<TemporalRelationTarget>>> it = relationMap.entrySet().iterator();
 			
 			while (it.hasNext()) {
-				Entry<String, ArrayList<TemporalRelationHalf>> entry = it.next();
-				ArrayList<TemporalRelationHalf> relationList = entry.getValue();
-				for (TemporalRelationHalf oneRelation : relationList) {
+				Entry<String, ArrayList<TemporalRelationTarget>> entry = it.next();
+				ArrayList<TemporalRelationTarget> relationList = entry.getValue();
+				for (TemporalRelationTarget oneRelation : relationList) {
 					buf.append(oneRelation + "->" + entry.getKey() + "\n");
 				}
 			}

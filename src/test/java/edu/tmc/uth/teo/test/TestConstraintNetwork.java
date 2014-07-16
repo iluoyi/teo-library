@@ -5,7 +5,6 @@ package edu.tmc.uth.teo.test;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.allen.temporalintervalrelationships.Constraint;
 import org.allen.temporalintervalrelationships.ConstraintNetwork;
@@ -15,6 +14,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import edu.tmc.uth.teo.utils.TEOConstants;
+import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 
 /**
  * @author J�rn Franke <jornfranke@gmail.com>
@@ -72,13 +74,13 @@ public class TestConstraintNetwork {
 		Node<String> nodeD= new Node<String>("D");
 		myConstraintNetwork.addNode(nodeD);
 		
-		Constraint<String> constraintAB = new Constraint<String> (nodeA,nodeB,ConstraintNetwork.bin_finishedby);
+		Constraint<String> constraintAB = new Constraint<String> (nodeA,nodeB,TEOConstants.bin_finishedby);
 		myConstraintNetwork.addConstraint(constraintAB);
 		
-		Constraint<String> constraintBC = new Constraint<String> (nodeB,nodeC,ConstraintNetwork.bin_SBS);
+		Constraint<String> constraintBC = new Constraint<String> (nodeB,nodeC,TEOConstants.bin_SBS);
 		myConstraintNetwork.addConstraint(constraintBC);
 		
-		Constraint<String> constraintAD = new Constraint<String> (nodeA,nodeD,ConstraintNetwork.bin_SES);
+		Constraint<String> constraintAD = new Constraint<String> (nodeA,nodeD,TEOConstants.bin_SES);
 		myConstraintNetwork.addConstraint(constraintAD);
 		
 		System.out.println(myConstraintNetwork.pathConsistency());		
@@ -92,7 +94,7 @@ public class TestConstraintNetwork {
 		ArrayList<ArrayList<Short>> network = myConstraintNetwork.getConstraintNetwork();
 		for (ArrayList<Short> list : network) {
 			for (Short relation : list) {
-				System.out.print(myConstraintNetwork.getConstraintStringFromConstraintShort(relation) + ", ");
+				System.out.print(TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(relation) + ", ");
 			}
 			System.out.println();
 		}

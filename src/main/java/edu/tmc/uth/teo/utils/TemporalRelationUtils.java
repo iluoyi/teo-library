@@ -5,11 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.allen.temporalintervalrelationships.ConstraintNetwork;
-
-import edu.tmc.uth.teo.model.AssemblyMethod;
 import edu.tmc.uth.teo.model.DirectedAcyclicGraph;
-import edu.tmc.uth.teo.model.TemporalRelationHalf;
+import edu.tmc.uth.teo.model.TemporalRelationTarget;
 import edu.tmc.uth.teo.model.TemporalRelationType;
 
 /**
@@ -94,52 +91,41 @@ public class TemporalRelationUtils {
 		// full
 		return TemporalRelationType.FULL;
 	}
-	
-	public static ArrayList<TemporalRelationType> getTemporalRelationTypeList(ArrayList<String> relationStrList) {
-		ArrayList<TemporalRelationType> resultList = null;
-		if (relationStrList != null) {
-			resultList = new ArrayList<TemporalRelationType>();
-			for (String relationStr : relationStrList) {
-				resultList.add(getTemporalRelationType(relationStr));
-			}
-		}
-		return resultList;
-	}
-	
+		
 	/**
 	 * The helper function to get TemporalRelationCode from the relation type.
 	 */
 	public static short getTemporalRelationCode(TemporalRelationType relationType) {
 		switch (relationType) {
 			// interval relations
-			case AFTER: return ConstraintNetwork.bin_after;
-			case BEFORE: return ConstraintNetwork.bin_before;
-			case MEET: return ConstraintNetwork.bin_meets;
-			case METBY: return ConstraintNetwork.bin_metby;
-			case FINISH: return ConstraintNetwork.bin_finishes;
-			case FINISHEDBY: return ConstraintNetwork.bin_finishedby;
-			case START: return ConstraintNetwork.bin_starts;
-			case STARTEDBY: return ConstraintNetwork.bin_startedby;
-			case OVERLAP: return ConstraintNetwork.bin_overlaps;
-			case OVERLAPPEDBY: return ConstraintNetwork.bin_overlappedby;
-			case EQUAL: return ConstraintNetwork.bin_equals;
-			case CONTAIN: return ConstraintNetwork.bin_contains;
-			case DURING: return ConstraintNetwork.bin_during;
+			case AFTER: return TEOConstants.bin_after;
+			case BEFORE: return TEOConstants.bin_before;
+			case MEET: return TEOConstants.bin_meets;
+			case METBY: return TEOConstants.bin_metby;
+			case FINISH: return TEOConstants.bin_finishes;
+			case FINISHEDBY: return TEOConstants.bin_finishedby;
+			case START: return TEOConstants.bin_starts;
+			case STARTEDBY: return TEOConstants.bin_startedby;
+			case OVERLAP: return TEOConstants.bin_overlaps;
+			case OVERLAPPEDBY: return TEOConstants.bin_overlappedby;
+			case EQUAL: return TEOConstants.bin_equals;
+			case CONTAIN: return TEOConstants.bin_contains;
+			case DURING: return TEOConstants.bin_during;
 			// point relations
-			case START_BEFORE_START: return ConstraintNetwork.bin_SBS;
-			case START_AFTER_START: return ConstraintNetwork.bin_SAS;
-			case START_EQUAL_START: return ConstraintNetwork.bin_SES;
-			case START_BEFORE_END: return ConstraintNetwork.bin_SBE;
-			case START_AFTER_END: return ConstraintNetwork.bin_SAE;
-			case START_EQUAL_END: return ConstraintNetwork.bin_SEE;
-			case END_BEFORE_START: return ConstraintNetwork.bin_EBS;
-			case END_AFTER_START: return ConstraintNetwork.bin_EAS;
-			case END_EQUAL_START: return ConstraintNetwork.bin_EES;
-			case END_BEFORE_END: return ConstraintNetwork.bin_EBE;
-			case END_AFTER_END: return ConstraintNetwork.bin_EAE;
-			case END_EQUAL_END: return ConstraintNetwork.bin_EEE;
+			case START_BEFORE_START: return TEOConstants.bin_SBS;
+			case START_AFTER_START: return TEOConstants.bin_SAS;
+			case START_EQUAL_START: return TEOConstants.bin_SES;
+			case START_BEFORE_END: return TEOConstants.bin_SBE;
+			case START_AFTER_END: return TEOConstants.bin_SAE;
+			case START_EQUAL_END: return TEOConstants.bin_SEE;
+			case END_BEFORE_START: return TEOConstants.bin_EBS;
+			case END_AFTER_START: return TEOConstants.bin_EAS;
+			case END_EQUAL_START: return TEOConstants.bin_EES;
+			case END_BEFORE_END: return TEOConstants.bin_EBE;
+			case END_AFTER_END: return TEOConstants.bin_EAE;
+			case END_EQUAL_END: return TEOConstants.bin_EEE;
 			// full
-			default: return ConstraintNetwork.bin_all;
+			default: return TEOConstants.bin_full;
 		}
 	}
 	
@@ -148,18 +134,11 @@ public class TemporalRelationUtils {
 	 * @param relationList
 	 * @return
 	 */
-	public static short getMergedTemporalRelationCode(ArrayList<TemporalRelationHalf> relationList) {
-		short result = ConstraintNetwork.bin_all;
+	public static short getMergedTemporalRelationCode(ArrayList<TemporalRelationTarget> relationList) {
+		short result = TEOConstants.bin_full;
 		if (relationList != null && !relationList.isEmpty()) {
-			TemporalRelationHalf relation = relationList.get(0); // the first one
-			result = getTemporalRelationCode(relation.getRelationType());
-			for (int i = 1; i < relationList.size(); i++) {
-				relation = relationList.get(i);
-				if (relation.getAssemblyMethod().equals(AssemblyMethod.ASSERTED)) {
-					result |= getTemporalRelationCode(relation.getRelationType()); // union for "Asserted Relations"
-				} else {
-					result &= getTemporalRelationCode(relation.getRelationType()); // intersection for "Inferred Relations"
-				}
+			for (TemporalRelationTarget relation : relationList) {
+				result &= relation.getRelationCode(); // intersection for "Inferred Relations"
 			}
 		}
 		return result;
@@ -194,5 +173,96 @@ public class TemporalRelationUtils {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns a list of names of the constraints given in the set of constraints
+	 * 
+	 * @param set of constraints c
+	 * @return list of names of the constraints given in c
+	 */
+	public static ArrayList<TemporalRelationType> getTemporalRelationTypeListFromConstraintShort(short c) {
+		ArrayList<TemporalRelationType> result = new ArrayList<TemporalRelationType>();
+		// if the result matches a higher level point relation, it should only return this higher one
+		// test full
+		if ((short) (c & TEOConstants.bin_full) == TEOConstants.bin_full) {
+			result.add(TemporalRelationType.FULL);
+			return result;
+		}
+		
+		// point relations
+		// test SBE
+		if ((short)(c & TEOConstants.bin_SBE)==TEOConstants.bin_SBE) {
+			result.add(TemporalRelationType.START_BEFORE_END);
+			return result;
+		}
+		// test EAS
+		if ((short) (c & TEOConstants.bin_EAS) == TEOConstants.bin_EAS) {
+			result.add(TemporalRelationType.END_AFTER_START);
+			return result;
+		}
+		// test SBS
+		if ((short) (c & TEOConstants.bin_SBS) == TEOConstants.bin_SBS) {
+			result.add(TemporalRelationType.START_BEFORE_START);
+			return result;
+		}
+		// test EBE
+		if ((short) (c & TEOConstants.bin_EBE) == TEOConstants.bin_EBE) {
+			result.add(TemporalRelationType.END_AFTER_START);
+			return result;
+		}
+		// test SES
+		if ((short) (c & TEOConstants.bin_SES) == TEOConstants.bin_SES) {
+			result.add(TemporalRelationType.START_EQUAL_START);
+			return result;
+		}
+		// test EEE
+		if ((short) (c & TEOConstants.bin_EEE) == TEOConstants.bin_EEE) {
+			result.add(TemporalRelationType.END_EQUAL_END);
+			return result;
+		}
+		// test SAS
+		if ((short) (c & TEOConstants.bin_SAS) == TEOConstants.bin_SAS) {
+			result.add(TemporalRelationType.START_AFTER_START);
+			return result;
+		}
+		// test EAE
+		if ((short) (c & TEOConstants.bin_EAE) == TEOConstants.bin_EAE) {
+			result.add(TemporalRelationType.END_AFTER_END);
+			return result;
+		}
+		// test EAS
+		if ((short) (c & TEOConstants.bin_EAS) == TEOConstants.bin_EAS) {
+			result.add(TemporalRelationType.END_AFTER_START);
+			return result;
+		}
+		
+		// test before (EBS)
+		if ((short)(c & TEOConstants.bin_before)==TEOConstants.bin_before) result.add(TemporalRelationType.BEFORE);
+		// test after (SAE)
+		if ((short)(c & TEOConstants.bin_after)==TEOConstants.bin_after) result.add(TemporalRelationType.AFTER);
+		// test during
+		if ((short)(c & TEOConstants.bin_during)==TEOConstants.bin_during) result.add(TemporalRelationType.DURING);
+		// test contains
+		if ((short)(c & TEOConstants.bin_contains)==TEOConstants.bin_contains) result.add(TemporalRelationType.CONTAIN);
+		// test overlaps
+		if ((short)(c & TEOConstants.bin_overlaps)==TEOConstants.bin_overlaps) result.add(TemporalRelationType.OVERLAP);
+		// test overlappedby
+		if ((short)(c & TEOConstants.bin_overlappedby)==TEOConstants.bin_overlappedby) result.add(TemporalRelationType.OVERLAPPEDBY);
+		// test meets (EES)
+		if ((short)(c & TEOConstants.bin_meets)==TEOConstants.bin_meets) result.add(TemporalRelationType.MEET);
+		// test metby (SEE)
+		if ((short)(c & TEOConstants.bin_metby)==TEOConstants.bin_metby) result.add(TemporalRelationType.METBY);
+		// test starts
+		if ((short)(c & TEOConstants.bin_starts)==TEOConstants.bin_starts) result.add(TemporalRelationType.START);
+		// test startedby
+		if ((short)(c & TEOConstants.bin_startedby)==TEOConstants.bin_startedby) result.add(TemporalRelationType.STARTEDBY);
+		// test finishes
+		if ((short)(c & TEOConstants.bin_finishes)==TEOConstants.bin_finishes) result.add(TemporalRelationType.FINISH);
+		// test finished by
+		if ((short)(c & TEOConstants.bin_finishedby)==TEOConstants.bin_finishedby) result.add(TemporalRelationType.FINISHEDBY);
+		// test equals 
+		if ((short)(c & TEOConstants.bin_equals)==TEOConstants.bin_equals) result.add(TemporalRelationType.EQUAL);
+		return result;
 	}
 }

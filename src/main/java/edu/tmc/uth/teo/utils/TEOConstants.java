@@ -173,6 +173,95 @@ public class TEOConstants {
 	public static final String TEO_HASTIMEOFFSET_PRP = getWithNS(TEO_HASTIMEOFFSET_PRP_NAME);
 	
 	
+	// ------------------------------------Temporal Relation Short Code-----------------------------------------------
+	// representation of the constraints in binary format
+		public final static short bin_before = 1; // 0000000000000001 - p
+		public final static short bin_after = 2;  // 0000000000000010 - P
+		public final static short bin_during = 4; // 0000000000000100 - d
+		public final static short bin_contains = 8; // 0000000000001000 - D
+		public final static short bin_overlaps = 16; // 0000000000010000 - o
+		public final static short bin_overlappedby = 32; // 0000000000100000 - O
+		public final static short bin_meets = 64; // 0000000001000000 - m
+		public final static short bin_metby = 128; // 0000000010000000 - M
+		public final static short bin_starts = 256;// 0000000100000000 - s
+		public final static short bin_startedby = 512; // 0000001000000000 - S
+		public final static short bin_finishes = 1024;  // 0000010000000000 - f
+		public final static short bin_finishedby = 2048;// 0000100000000000 - F
+		public final static short bin_equals = 4096;    // 0001000000000000- e
+		public final static short bin_full = (short) (bin_before | bin_after | bin_during | bin_contains | bin_overlaps | bin_overlappedby | bin_meets | bin_metby | bin_starts | bin_startedby | bin_finishes | bin_finishedby | bin_equals);		  // 0001111111111111
+
+		// Yi: point relations
+		public final static short bin_SBS = (short) (bin_before | bin_meets | bin_overlaps | bin_finishedby | bin_contains); // 0000100001011001 - startBeforeStart (pmoFD)
+		public final static short bin_SAS = (short) (bin_during | bin_finishes | bin_overlappedby | bin_metby | bin_after); // 0000010010100110 - startAfterStart (dfOMP)
+		public final static short bin_SES = (short) (bin_starts | bin_equals | bin_startedby); // 0001001100000000 - startEqualStart (seS)
+		public final static short bin_SBE = (short) (bin_before | bin_meets | bin_overlaps | bin_finishedby | 
+														bin_contains | bin_starts | bin_equals | bin_startedby |
+														bin_during | bin_finishes | bin_overlappedby); // 0001111101111101 - startBeforeEnd (pmoFDseSdfO)
+		public final static short bin_SAE = (short) (bin_after); // 0000000000000010 - startAfterEnd (P)
+		public final static short bin_SEE = (short) (bin_metby); // 0000000010000000 - startEqualEnd (M)
+		public final static short bin_EBE = (short) (bin_before | bin_meets | bin_overlaps | bin_starts | bin_during); // 0000000101010101 - endBeforeEnd (pmosd)
+		public final static short bin_EAE = (short) (bin_contains | bin_startedby | bin_overlappedby | bin_metby | bin_after); // 0000001010101010 - endAfterEnd (DSOMP)
+		public final static short bin_EEE = (short) (bin_finishes | bin_equals | bin_finishedby); // 0001110000000000 - endEqualEnd (feF)
+		public final static short bin_EBS = (short) (bin_before); // 0000100001011001 - endBeforeStart (p)
+		public final static short bin_EAS = (short) (bin_overlaps | bin_finishedby | bin_contains | bin_starts | 
+														bin_equals | bin_startedby | bin_during | bin_finishes |
+														bin_overlappedby | bin_metby | bin_after); // 0000000000010000 - endAfterStart (oFDseSdfOMP)
+		public final static short bin_EES = (short) (bin_meets); // 0000000001000000 - endEqualStart (m)	
+		// last bit is used as a sign
+	
+		// A corrected version of the transivity matrix described by Allen
+		public final static short[][] transitivematrixshort = {
+			// first row before
+			{bin_before,bin_full,bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_before, bin_before, bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_before, bin_before| bin_overlaps | bin_meets | bin_during | bin_starts,  bin_before, bin_before, bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_before, bin_before},
+		//	{"<","< > d di o oi m mi s si f fi e","< o m d s","<","<","< o m d s","<","< o m d s","<","<","< o m d s","<","<"}
+			
+			// second row after
+			{bin_full,bin_after,bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes, bin_after, bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes,bin_after,bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes,bin_after,bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes,bin_after,bin_after,bin_after,bin_after },
+		//	{"< > d di o oi m mi s si f fi e",">","> oi mi d f", ">", "> oi mi d f", ">", "> oi mi d f", ">", "> oi mi d f", ">", ">", ">", ">"}
+			// third row during
+			{bin_before, bin_after,bin_during,bin_full,bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes, bin_before, bin_after, bin_during, bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes, bin_during, bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_during},
+//			{"<",">","d", "< > d di o oi m mi s si f fi e", "< o m d s", "> oi mi d f", "<", ">", "d", "> oi mi d f", "d", "< o m d s","d"},
+			// fourth row contains
+			// note: there seems to be a confusion in allens original table
+			// bin_contains -> bin_during is in the original: o, oi, dur, con, e
+			// it should be: o oi dur con e s si f fi
+			{bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_after | bin_overlappedby | bin_contains | bin_metby | bin_startedby, bin_overlaps | bin_overlappedby | bin_during | bin_contains | bin_equals | bin_starts| bin_startedby | bin_finishes | bin_finishedby, bin_contains, bin_overlaps | bin_contains | bin_finishedby,bin_overlappedby | bin_contains | bin_startedby,bin_overlaps | bin_contains | bin_finishedby,bin_overlappedby | bin_contains | bin_startedby,bin_contains | bin_finishedby | bin_overlaps, bin_contains, bin_contains | bin_startedby | bin_overlappedby, bin_contains,bin_contains},
+//			{"< o m di fi","> oi mi di si","o oi dur con e s si f fi","di","o di fi","oi di si","o di fi","oi di si","di fi o","di","di si oi","di","di"}
+			// fifth row overlaps 
+			// note: there seems to be a confusion in allens original table
+			// bin_overlaps -> bin_overlappedby is in the original: o oi dur con e
+			// it should be: o oi dur con e s si f fi
+			{bin_before,bin_after | bin_overlappedby | bin_contains | bin_metby | bin_startedby,bin_overlaps | bin_during | bin_starts, bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_before | bin_overlaps | bin_meets, bin_overlaps | bin_overlappedby | bin_during | bin_contains | bin_equals | bin_starts| bin_startedby | bin_finishes | bin_finishedby, bin_before, bin_overlappedby | bin_contains | bin_startedby, bin_overlaps, bin_contains | bin_finishedby | bin_overlaps, bin_during | bin_starts | bin_overlaps, bin_before | bin_overlaps | bin_meets, bin_overlaps},
+//			{"<","> oi di mi si","o d s","< o m di fi","< o m", "o oi dur con e s si f fi","<","oi di si","o","di fi o","d s o","< o m","o"},
+			// six row overlapped by
+			// note: there seems to be a mistake in allens original table
+			// bin_overlappedby -> bin_overlaps is in the original: o oi dur con e
+			// it should be: o oi dur con e s si f fi
+			{bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby, bin_overlaps | bin_overlappedby | bin_during | bin_contains | bin_equals | bin_starts | bin_startedby | bin_finishes| bin_finishedby, bin_after | bin_overlappedby | bin_metby, bin_overlaps | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_overlappedby | bin_after | bin_metby, bin_overlappedby, bin_overlappedby | bin_contains | bin_startedby, bin_overlappedby},
+//			{"< o m di fi",">","oi d f","> oi mi di si","o oi d di e","> oi mi","o di fi",">","oi d f","oi > mi","oi","oi di si","oi"},
+			// seventh row meets    
+			{bin_before, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby, bin_overlaps | bin_during | bin_starts, bin_before, bin_before, bin_overlaps | bin_during | bin_starts, bin_before, bin_finishes | bin_finishedby | bin_equals, bin_meets, bin_meets, bin_during | bin_starts | bin_overlaps, bin_before, bin_meets},
+//			{"<","> oi mi di si","o d s","<","<","o d s","<","f fi e","m","m","d s o","<","m"},
+			// eights row metby 
+			{bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_after,bin_overlappedby | bin_during | bin_finishes, bin_after, bin_starts | bin_startedby | bin_equals, bin_after, bin_during | bin_finishes | bin_overlappedby, bin_after, bin_metby, bin_metby, bin_metby},
+//			{"< o m di fi",">","oi d f",">","oi d f",">","s si e",">","d f oiX",">","mi","mi","mi"},
+			// ninth row starts 
+			{bin_before, bin_after, bin_during, bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby,bin_before | bin_overlaps | bin_meets, bin_overlappedby | bin_during | bin_finishes, bin_before, bin_metby, bin_starts, bin_starts | bin_startedby | bin_equals, bin_during, bin_before | bin_meets | bin_overlaps, bin_starts},
+//			{"<",">","d","< o m di fi","< o m","oi d f","<","mi","s","s si e","d","< m o","s"},
+			// tenth row startedby 
+			{bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_contains, bin_overlaps | bin_contains | bin_finishedby, bin_overlappedby, bin_overlaps | bin_contains | bin_finishedby, bin_metby, bin_starts | bin_startedby | bin_equals, bin_startedby, bin_overlappedby, bin_contains, bin_startedby},
+//			{"< o m di fi",">","oi d f","di","o di fi","oi","o di fi","mi","s si eX","si","oi","di","si"},
+			// eleventh row finishes   
+			{bin_before, bin_after, bin_during, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby,bin_overlaps | bin_during | bin_starts, bin_after | bin_overlappedby | bin_metby , bin_meets, bin_after, bin_during, bin_after | bin_overlappedby | bin_metby, bin_finishes, bin_finishes | bin_finishedby | bin_equals, bin_finishes},
+//			{"<",">","d","> oi mi di si","o d s","> oi mi di","m",">","d","> oi mX","f","f fi e","f"},
+			// twelfth row finishedby 
+			{bin_before, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby, bin_overlaps | bin_during | bin_starts, bin_contains, bin_overlaps, bin_overlappedby | bin_contains | bin_startedby, bin_meets, bin_startedby | bin_overlappedby | bin_contains, bin_overlaps, bin_contains, bin_finishes | bin_finishedby | bin_equals, bin_finishedby, bin_finishedby},
+//			{"<","> oi mi di si","o d s","di","o","oi di si","m","si oi di","o","di","f fi eX","fi","fi"},
+			// thirteenth row equals 
+			{bin_before,bin_after,bin_during,bin_contains,bin_overlaps,bin_overlappedby,bin_meets,bin_metby,bin_starts,bin_startedby,bin_finishes,bin_finishedby,bin_equals},
+//			{"<",">","d","di","o","oi","m","mi","s","si","f","fi","e"}
+				
+		};
 	/**
 	 *  Data Properties
 	 */

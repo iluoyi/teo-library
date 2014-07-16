@@ -20,7 +20,7 @@ public interface TEOQuerier {
 
 	public Duration getDurationBetweenEvents(Event event1, Event event2, Granularity granularity);
 
-	public ArrayList<TemporalRelationType> getTemporalRelationType(Event event1, Event event2, Granularity granularity);
+	public ArrayList<Short> getTemporalRelationType(Event event1, Event event2, Granularity granularity);
 
 //	public TemporalRelationType getTemporalRelationType(Event oneEvent,
 //			Time time) throws CNTROException;

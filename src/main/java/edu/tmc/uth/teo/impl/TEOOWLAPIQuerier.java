@@ -7,19 +7,18 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.allen.temporalintervalrelationships.ConstraintNetwork;
-
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
 import edu.tmc.uth.teo.model.DirectedAcyclicGraph;
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Edge;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
-import edu.tmc.uth.teo.model.TemporalRelationHalf;
+import edu.tmc.uth.teo.model.TemporalRelationTarget;
 import edu.tmc.uth.teo.model.TemporalRelationType;
 import edu.tmc.uth.teo.model.TemporalType;
 import edu.tmc.uth.teo.model.TimeInstant;
 import edu.tmc.uth.teo.model.TimeInterval;
+import edu.tmc.uth.teo.utils.TEOConstants;
 import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
@@ -84,18 +83,21 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		return null;
 	}
 	
-	public ArrayList<TemporalRelationType> getTemporalRelationType(Event event1, Event event2, Granularity granularity) {
-		ArrayList<TemporalRelationType> relations= new ArrayList<TemporalRelationType>();
+	/**
+	 * Here we return the temporalRelationCode list due to possible relation combinations (e.g. "[before, contain]" as a relation), need to be interpreted further.
+	 */
+	public ArrayList<Short> getTemporalRelationType(Event event1, Event event2, Granularity granularity) {
+		ArrayList<Short> relations= new ArrayList<Short>();
 		if (event1 != null && event2 != null) {
 			String targetIRIStr = event2.getIRIStr();
-			HashMap<String, ArrayList<TemporalRelationHalf>> relationMap = event1.getTemporalRelations();
-			ArrayList<TemporalRelationHalf> relationList = relationMap.get(targetIRIStr);
-			for (TemporalRelationHalf relation : relationList) {	
+			HashMap<String, ArrayList<TemporalRelationTarget>> relationMap = event1.getTemporalRelations();
+			ArrayList<TemporalRelationTarget> relationList = relationMap.get(targetIRIStr);
+			for (TemporalRelationTarget relation : relationList) {	
 				// TODO: need to consider the granularity
-				relations.add(relation.getRelationType());
+				relations.add(relation.getRelationCode());
 			}
 		} else {
-			relations.add(TemporalRelationType.FULL); // as the unknown relation
+			relations.add(TEOConstants.bin_full); // as the unknown relation
 		}
 		return relations;
 	}
@@ -120,15 +122,15 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		
 		for (String sourceIRI : vertexStr) {
 			Event sourceEvent = eventMap.get(sourceIRI);
-			HashMap<String, ArrayList<TemporalRelationHalf>> relationMap = sourceEvent.getTemporalRelations();
+			HashMap<String, ArrayList<TemporalRelationTarget>> relationMap = sourceEvent.getTemporalRelations();
 			// TODO: to handle "startEqualStart"
-			Iterator<Entry<String, ArrayList<TemporalRelationHalf>>> itor = relationMap.entrySet().iterator();
+			Iterator<Entry<String, ArrayList<TemporalRelationTarget>>> itor = relationMap.entrySet().iterator();
 			while (itor.hasNext()) {
-				Entry<String, ArrayList<TemporalRelationHalf>> pair = itor.next();
+				Entry<String, ArrayList<TemporalRelationTarget>> pair = itor.next();
 				String targetIRI = pair.getKey();
-				ArrayList<TemporalRelationHalf> relationList = pair.getValue(); // contains "asserted" and "inferred" relations, should be merged first
-				ArrayList<String> minRelations = ConstraintNetwork.getConstraintStringFromConstraintShort(TemporalRelationUtils.getMergedTemporalRelationCode(relationList));
-				ArrayList<TemporalRelationType> relations = TemporalRelationUtils.getTemporalRelationTypeList(minRelations);
+				ArrayList<TemporalRelationTarget> relationList = pair.getValue(); // relations should be merged first (intersection)
+				short minRelations = TemporalRelationUtils.getMergedTemporalRelationCode(relationList);
+				ArrayList<TemporalRelationType> relations = TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(minRelations);
 				if (TemporalRelationUtils.isStartBeforeStart(relations)) {
 					System.out.println("Edge: " + sourceIRI + ", " + targetIRI + " <-" + relations);
 					Edge newEdge = new Edge(viMap.get(sourceIRI), viMap.get(targetIRI));

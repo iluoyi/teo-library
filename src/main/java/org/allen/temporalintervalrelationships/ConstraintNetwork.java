@@ -17,6 +17,8 @@ package org.allen.temporalintervalrelationships;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import edu.tmc.uth.teo.utils.TEOConstants;
+
 
 /**
  * @author J�rn Franke <jornfranke@gmail.com>
@@ -38,125 +40,36 @@ public class ConstraintNetwork<E> {
 	
 	
 	// representation of the constraints in binary format
-	public final static short bin_before = 1; // 0000000000000001 - p
-	public final static short bin_after = 2;  // 0000000000000010 - P
-	public final static short bin_during = 4; // 0000000000000100 - d
-	public final static short bin_contains = 8; // 0000000000001000 - D
-	public final static short bin_overlaps = 16; // 0000000000010000 - o
-	public final static short bin_overlappedby = 32; // 0000000000100000 - O
-	public final static short bin_meets = 64; // 0000000001000000 - m
-	public final static short bin_metby = 128; // 0000000010000000 - M
-	public final static short bin_starts = 256;// 0000000100000000 - s
-	public final static short bin_startedby = 512; // 0000001000000000 - S
-	public final static short bin_finishes = 1024;  // 0000010000000000 - f
-	public final static short bin_finishedby = 2048;// 0000100000000000 - F
-	public final static short bin_equals = 4096;    // 0001000000000000- e
-	public final static short bin_all = (short) (bin_before | bin_after | bin_during | bin_contains | bin_overlaps | bin_overlappedby | bin_meets | bin_metby | bin_starts | bin_startedby | bin_finishes | bin_finishedby | bin_equals);		  // 0001111111111111
-
-	// Yi: point relations
-	public final static short bin_SBS = (short) (bin_before | bin_meets | bin_overlaps | bin_finishedby | bin_contains); // 0000100001011001 - startBeforeStart (pmoFD)
-	public final static short bin_SAS = (short) (bin_during | bin_finishes | bin_overlappedby | bin_metby | bin_after); // 0000010010100110 - startAfterStart (dfOMP)
-	public final static short bin_SES = (short) (bin_starts | bin_equals | bin_startedby); // 0001001100000000 - startEqualStart (seS)
-	public final static short bin_SBE = (short) (bin_before | bin_meets | bin_overlaps | bin_finishedby | 
-													bin_contains | bin_starts | bin_equals | bin_startedby |
-													bin_during | bin_finishes | bin_overlappedby); // 0001111101111101 - startBeforeEnd (pmoFDseSdfO)
-	public final static short bin_SAE = (short) (bin_after); // 0000000000000010 - startAfterEnd (P)
-	public final static short bin_SEE = (short) (bin_metby); // 0000000010000000 - startEqualEnd (M)
-	public final static short bin_EBE = (short) (bin_before | bin_meets | bin_overlaps | bin_starts | bin_during); // 0000000101010101 - endBeforeEnd (pmosd)
-	public final static short bin_EAE = (short) (bin_contains | bin_startedby | bin_overlappedby | bin_metby | bin_after); // 0000001010101010 - endAfterEnd (DSOMP)
-	public final static short bin_EEE = (short) (bin_finishes | bin_equals | bin_finishedby); // 0001110000000000 - endEqualEnd (feF)
-	public final static short bin_EBS = (short) (bin_before); // 0000100001011001 - endBeforeStart (p)
-	public final static short bin_EAS = (short) (bin_overlaps | bin_finishedby | bin_contains | bin_starts | 
-													bin_equals | bin_startedby | bin_during | bin_finishes |
-													bin_overlappedby | bin_metby | bin_after); // 0000000000010000 - endAfterStart (oFDseSdfOMP)
-	public final static short bin_EES = (short) (bin_meets); // 0000000001000000 - endEqualStart (m)
-	
-	// last bit is used as a sign
-
-	// full
-	public final static String str_full = "full";	
-	// representation of the constraints in string format 
-	public final static String str_before = "before";
-	public final static String str_after = "after";
-	public final static String str_during = "during";
-	public final static String str_contains = "contain";
-	public final static String str_overlaps = "overlap";
-	public final static String str_overlappedby = "overlappedBy";
-	public final static String str_meets = "meet";
-	public final static String str_metby = "metBy";
-	public final static String str_starts = "start";
-	public final static String str_startedby = "startedBy";
-	public final static String str_finishes = "finish";
-	public final static String str_finishedby = "finishedBy";
-	public final static String str_equals = "equal";
+	short bin_before = TEOConstants.bin_before;
+	short bin_after = TEOConstants.bin_after;
+	short bin_during = TEOConstants.bin_during;
+	short bin_contains = TEOConstants.bin_contains;
+	short bin_overlaps = TEOConstants.bin_overlaps;
+	short bin_overlappedby = TEOConstants.bin_overlappedby; 
+	short bin_meets = TEOConstants.bin_meets;
+	short bin_metby = TEOConstants.bin_metby; 
+	short bin_starts = TEOConstants.bin_starts;
+	short bin_startedby = TEOConstants.bin_startedby;
+	short bin_finishes = TEOConstants.bin_finishes;
+	short bin_finishedby = TEOConstants.bin_finishedby;
+	short bin_equals = TEOConstants.bin_equals;
+	short bin_all = TEOConstants.bin_full;
 	
 	// Yi: point relations
-	public final static String str_SBS = "startBeforeStart";
-	public final static String str_SAS = "startAfterStart";
-	public final static String str_SES = "startEqualStart";
-	public final static String str_EBE = "endBeforeEnd";
-	public final static String str_EAE = "endAfterEnd";
-	public final static String str_EEE = "endEqualEnd";
-	public final static String str_SBE = "startBeforeEnd";
-	public final static String str_SAE = "startAfterEnd";
-	public final static String str_SEE = "startEqualEnd";
-	public final static String str_EBS = "endBeforeStart";
-	public final static String str_EAS = "endAfterStart";
-	public final static String str_EES = "endEqualStart";
+	short bin_SBS = TEOConstants.bin_SBS;
+	short bin_SAS = TEOConstants.bin_SAS;
+	short bin_SES = TEOConstants.bin_SES;
+	short bin_SBE = TEOConstants.bin_SBE;
+	short bin_SAE = TEOConstants.bin_SAE;
+	short bin_SEE = TEOConstants.bin_SEE;
+	short bin_EBE = TEOConstants.bin_EBE;
+	short bin_EAE = TEOConstants.bin_EAE;
+	short bin_EEE = TEOConstants.bin_EEE;
+	short bin_EBS = TEOConstants.bin_EBS;
+	short bin_EAS = TEOConstants.bin_EAS;
+	short bin_EES = TEOConstants.bin_EES;
 	
-	// A corrected version of the transivity matrix described by Allen
-	private final static short[][] transitivematrixshort = {
-		// first row before
-		{bin_before,bin_all,bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_before, bin_before, bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_before, bin_before| bin_overlaps | bin_meets | bin_during | bin_starts,  bin_before, bin_before, bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_before, bin_before},
-	//	{"<","< > d di o oi m mi s si f fi e","< o m d s","<","<","< o m d s","<","< o m d s","<","<","< o m d s","<","<"}
-		
-		// second row after
-		{bin_all,bin_after,bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes, bin_after, bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes,bin_after,bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes,bin_after,bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes,bin_after,bin_after,bin_after,bin_after },
-	//	{"< > d di o oi m mi s si f fi e",">","> oi mi d f", ">", "> oi mi d f", ">", "> oi mi d f", ">", "> oi mi d f", ">", ">", ">", ">"}
-		// third row during
-		{bin_before, bin_after,bin_during,bin_all,bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes, bin_before, bin_after, bin_during, bin_after | bin_overlappedby | bin_metby | bin_during | bin_finishes, bin_during, bin_before | bin_overlaps | bin_meets | bin_during | bin_starts, bin_during},
-//		{"<",">","d", "< > d di o oi m mi s si f fi e", "< o m d s", "> oi mi d f", "<", ">", "d", "> oi mi d f", "d", "< o m d s","d"},
-		// fourth row contains
-		// note: there seems to be a confusion in allens original table
-		// bin_contains -> bin_during is in the original: o, oi, dur, con, e
-		// it should be: o oi dur con e s si f fi
-		{bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_after | bin_overlappedby | bin_contains | bin_metby | bin_startedby, bin_overlaps | bin_overlappedby | bin_during | bin_contains | bin_equals | bin_starts| bin_startedby | bin_finishes | bin_finishedby, bin_contains, bin_overlaps | bin_contains | bin_finishedby,bin_overlappedby | bin_contains | bin_startedby,bin_overlaps | bin_contains | bin_finishedby,bin_overlappedby | bin_contains | bin_startedby,bin_contains | bin_finishedby | bin_overlaps, bin_contains, bin_contains | bin_startedby | bin_overlappedby, bin_contains,bin_contains},
-//		{"< o m di fi","> oi mi di si","o oi dur con e s si f fi","di","o di fi","oi di si","o di fi","oi di si","di fi o","di","di si oi","di","di"}
-		// fifth row overlaps 
-		// note: there seems to be a confusion in allens original table
-		// bin_overlaps -> bin_overlappedby is in the original: o oi dur con e
-		// it should be: o oi dur con e s si f fi
-		{bin_before,bin_after | bin_overlappedby | bin_contains | bin_metby | bin_startedby,bin_overlaps | bin_during | bin_starts, bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_before | bin_overlaps | bin_meets, bin_overlaps | bin_overlappedby | bin_during | bin_contains | bin_equals | bin_starts| bin_startedby | bin_finishes | bin_finishedby, bin_before, bin_overlappedby | bin_contains | bin_startedby, bin_overlaps, bin_contains | bin_finishedby | bin_overlaps, bin_during | bin_starts | bin_overlaps, bin_before | bin_overlaps | bin_meets, bin_overlaps},
-//		{"<","> oi di mi si","o d s","< o m di fi","< o m", "o oi dur con e s si f fi","<","oi di si","o","di fi o","d s o","< o m","o"},
-		// six row overlapped by
-		// note: there seems to be a mistake in allens original table
-		// bin_overlappedby -> bin_overlaps is in the original: o oi dur con e
-		// it should be: o oi dur con e s si f fi
-		{bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby, bin_overlaps | bin_overlappedby | bin_during | bin_contains | bin_equals | bin_starts | bin_startedby | bin_finishes| bin_finishedby, bin_after | bin_overlappedby | bin_metby, bin_overlaps | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_overlappedby | bin_after | bin_metby, bin_overlappedby, bin_overlappedby | bin_contains | bin_startedby, bin_overlappedby},
-//		{"< o m di fi",">","oi d f","> oi mi di si","o oi d di e","> oi mi","o di fi",">","oi d f","oi > mi","oi","oi di si","oi"},
-		// seventh row meets    
-		{bin_before, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby, bin_overlaps | bin_during | bin_starts, bin_before, bin_before, bin_overlaps | bin_during | bin_starts, bin_before, bin_finishes | bin_finishedby | bin_equals, bin_meets, bin_meets, bin_during | bin_starts | bin_overlaps, bin_before, bin_meets},
-//		{"<","> oi mi di si","o d s","<","<","o d s","<","f fi e","m","m","d s o","<","m"},
-		// eights row metby 
-		{bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_after,bin_overlappedby | bin_during | bin_finishes, bin_after, bin_starts | bin_startedby | bin_equals, bin_after, bin_during | bin_finishes | bin_overlappedby, bin_after, bin_metby, bin_metby, bin_metby},
-//		{"< o m di fi",">","oi d f",">","oi d f",">","s si e",">","d f oiX",">","mi","mi","mi"},
-		// ninth row starts 
-		{bin_before, bin_after, bin_during, bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby,bin_before | bin_overlaps | bin_meets, bin_overlappedby | bin_during | bin_finishes, bin_before, bin_metby, bin_starts, bin_starts | bin_startedby | bin_equals, bin_during, bin_before | bin_meets | bin_overlaps, bin_starts},
-//		{"<",">","d","< o m di fi","< o m","oi d f","<","mi","s","s si e","d","< m o","s"},
-		// tenth row startedby 
-		{bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_contains, bin_overlaps | bin_contains | bin_finishedby, bin_overlappedby, bin_overlaps | bin_contains | bin_finishedby, bin_metby, bin_starts | bin_startedby | bin_equals, bin_startedby, bin_overlappedby, bin_contains, bin_startedby},
-//		{"< o m di fi",">","oi d f","di","o di fi","oi","o di fi","mi","s si eX","si","oi","di","si"},
-		// eleventh row finishes   
-		{bin_before, bin_after, bin_during, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby,bin_overlaps | bin_during | bin_starts, bin_after | bin_overlappedby | bin_metby , bin_meets, bin_after, bin_during, bin_after | bin_overlappedby | bin_metby, bin_finishes, bin_finishes | bin_finishedby | bin_equals, bin_finishes},
-//		{"<",">","d","> oi mi di si","o d s","> oi mi di","m",">","d","> oi mX","f","f fi e","f"},
-		// twelfth row finishedby 
-		{bin_before, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby, bin_overlaps | bin_during | bin_starts, bin_contains, bin_overlaps, bin_overlappedby | bin_contains | bin_startedby, bin_meets, bin_startedby | bin_overlappedby | bin_contains, bin_overlaps, bin_contains, bin_finishes | bin_finishedby | bin_equals, bin_finishedby, bin_finishedby},
-//		{"<","> oi mi di si","o d s","di","o","oi di si","m","si oi di","o","di","f fi eX","fi","fi"},
-		// thirteenth row equals 
-		{bin_before,bin_after,bin_during,bin_contains,bin_overlaps,bin_overlappedby,bin_meets,bin_metby,bin_starts,bin_startedby,bin_finishes,bin_finishedby,bin_equals},
-//		{"<",">","d","di","o","oi","m","mi","s","si","f","fi","e"}
-			
-	};
+	short[][] transitivematrixshort = TEOConstants.transitivematrixshort;
 	
 	/*
 	 * Constructor creates an empty constraint network
@@ -595,98 +508,4 @@ public class ConstraintNetwork<E> {
 		return this.modeledNodes;
 	}
 	
-	/*
-	 * Returns a list of names of the constraints given in the set of constraints
-	 * 
-	 * @param set of constraints c
-	 * 
-	 * @return list of names of the constraints given in c
-	 * 
-	 * 
-	 */
-	
-	public static ArrayList<String> getConstraintStringFromConstraintShort(short c) {
-		ArrayList<String> result = new ArrayList<String>();
-		// if the result matches a higher level point relation, it should only return this higher one
-		// test full
-		if ((short) (c & bin_all) == bin_all) {
-			result.add(str_full);
-			return result;
-		}
-		
-		// point relations
-		// test SBE
-		if ((short)(c & bin_SBE)==bin_SBE) {
-			result.add(str_SBE);
-			return result;
-		}
-		// test EAS
-		if ((short) (c & bin_EAS) == bin_EAS) {
-			result.add(str_EAS);
-			return result;
-		}
-		// test SBS
-		if ((short) (c & bin_SBS) == bin_SBS) {
-			result.add(str_SBS);
-			return result;
-		}
-		// test EBE
-		if ((short) (c & bin_EBE) == bin_EBE) {
-			result.add(str_EAS);
-			return result;
-		}
-		// test SES
-		if ((short) (c & bin_SES) == bin_SES) {
-			result.add(str_SES);
-			return result;
-		}
-		// test EEE
-		if ((short) (c & bin_EEE) == bin_EEE) {
-			result.add(str_EEE);
-			return result;
-		}
-		// test SAS
-		if ((short) (c & bin_SAS) == bin_SAS) {
-			result.add(str_SAS);
-			return result;
-		}
-		// test EAE
-		if ((short) (c & bin_EAE) == bin_EAE) {
-			result.add(str_EAE);
-			return result;
-		}
-		// test EAS
-		if ((short) (c & bin_EAS) == bin_EAS) {
-			result.add(str_EAS);
-			return result;
-		}
-		
-		// test before (EBS)
-		if ((short)(c & bin_before)==bin_before) result.add(str_before);
-		// test after (SAE)
-		if ((short)(c & bin_after)==bin_after) result.add(str_after);
-		// test during
-		if ((short)(c & bin_during)==bin_during) result.add(str_during);
-		// test contains
-		if ((short)(c & bin_contains)==bin_contains) result.add(str_contains);
-		// test overlaps
-		if ((short)(c & bin_overlaps)==bin_overlaps) result.add(str_overlaps);
-		// test overlappedby
-		if ((short)(c & bin_overlappedby)==bin_overlappedby) result.add(str_overlappedby);
-		// test meets (EES)
-		if ((short)(c & bin_meets)==bin_meets) result.add(str_meets);
-		// test metby (SEE)
-		if ((short)(c & bin_metby)==bin_metby) result.add(str_metby);
-		// test starts
-		if ((short)(c & bin_starts)==bin_starts) result.add(str_starts);
-		// test startedby
-		if ((short)(c & bin_startedby)==bin_startedby) result.add(str_startedby);
-		// test finishes
-		if ((short)(c & bin_finishes)==bin_finishes) result.add(str_finishes);
-		// test finished by
-		if ((short)(c & bin_finishedby)==bin_finishedby) result.add(str_finishedby);
-		// test equals 
-		if ((short)(c & bin_equals)==bin_equals) result.add(str_equals);
-		return result;
-	}
 }

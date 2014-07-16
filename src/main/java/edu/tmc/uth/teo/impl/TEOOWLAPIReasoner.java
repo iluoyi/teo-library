@@ -13,7 +13,7 @@ import org.allen.temporalintervalrelationships.Node;
 import edu.tmc.uth.teo.interfaces.TEOReasoner;
 import edu.tmc.uth.teo.model.AssemblyMethod;
 import edu.tmc.uth.teo.model.Event;
-import edu.tmc.uth.teo.model.TemporalRelationHalf;
+import edu.tmc.uth.teo.model.TemporalRelationTarget;
 import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 
 /**
@@ -60,8 +60,8 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 //					startTime = ((TimeInterval) startEvent.getValidTime()).getStartTime();
 //				}
 //				if (startTime != null) {
-//					Vector<TemporalRelationFull> relations = startEvent.getTemporalRelations();
-//					for (TemporalRelationFull relation : relations) {// Assumption: the target IRI must be an Event
+//					Vector<TemporalRelationMeta> relations = startEvent.getTemporalRelations();
+//					for (TemporalRelationMeta relation : relations) {// Assumption: the target IRI must be an Event
 //						if (relation.getTimeOffset() != null) { // before or after
 //							Event targetEvent = eventMap.get(relation.getTargetIRI());
 //							if (!visitedEvent.contains(targetEvent)) { // then we can add new validTime info for this targetEvent
@@ -114,14 +114,14 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 			while (it != null && it.hasNext()) {
 				Event event = it.next();
 				String sourceStr = event.getIRIStr();
-				HashMap<String, ArrayList<TemporalRelationHalf>> relationMap = event.getTemporalRelations();
+				HashMap<String, ArrayList<TemporalRelationTarget>> relationMap = event.getTemporalRelations();
 				
 				if (relationMap != null) {
-					Iterator<Entry<String, ArrayList<TemporalRelationHalf>>> itor = relationMap.entrySet().iterator();
+					Iterator<Entry<String, ArrayList<TemporalRelationTarget>>> itor = relationMap.entrySet().iterator();
 					while (itor.hasNext()) { // for each targetIRI
-						Entry<String, ArrayList<TemporalRelationHalf>> pair = itor.next();
+						Entry<String, ArrayList<TemporalRelationTarget>> pair = itor.next();
 						String targetStr = pair.getKey();
-						ArrayList<TemporalRelationHalf> relationList = pair.getValue();
+						ArrayList<TemporalRelationTarget> relationList = pair.getValue();
 						short typeCode = TemporalRelationUtils.getMergedTemporalRelationCode(relationList); // should merge them and get the minimum labeling set
 						Constraint<String> constraint = new Constraint<String>(nodeMap.get(sourceStr), nodeMap.get(targetStr), typeCode);
 						constraintNetwork.addConstraint(constraint);
@@ -139,12 +139,10 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 
 					for (int j = 0; j < matrixNodes.size(); j ++) {
 						String targetStr = matrixNodes.get(j).getIdentifier();
-						ArrayList<String> relationStrs = ConstraintNetwork.getConstraintStringFromConstraintShort(matrix.get(i).get(j));
-						for (String relationStr : relationStrs) {
-							TemporalRelationHalf relation = new TemporalRelationHalf(TemporalRelationUtils.getTemporalRelationType(relationStr));
-							relation.setAssemblyMethod(AssemblyMethod.INFERRED); // inferred relations
-							event.addTemporalRelation(targetStr, relation);
-						}
+						// Yi: the short code "matrix.get(i).get(j)" represents a single relation (relation combination), so we should not split them
+						TemporalRelationTarget relation = new TemporalRelationTarget(matrix.get(i).get(j));
+						relation.setAssemblyMethod(AssemblyMethod.INFERRED); // inferred relations
+						event.addTemporalRelation(targetStr, relation);
 					}
 				}
 				return true;
