@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import edu.tmc.uth.teo.model.DirectedAcyclicGraph;
+import edu.tmc.uth.teo.datastruct.DirectedAcyclicGraph;
 import edu.tmc.uth.teo.model.TemporalRelationInShortCode;
 import edu.tmc.uth.teo.model.TemporalRelationType;
 

@@ -107,8 +107,8 @@ public class JUnitTemporalRelation {
 	public void testGetEventsTimeline() {
 		System.out.println("######################## Testing GetEventsTimeline #####################################");
 		List<Event> timeline = querier.getEventsTimeline();
-		for (Event event : timeline) {
-			System.out.println(event.getIRIStr());
-		}
+//		for (Event event : timeline) {
+//			System.out.println(event.getIRIStr());
+//		}
 	}
 }

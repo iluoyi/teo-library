@@ -23,7 +23,7 @@
 :ER_Admission1 rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
                         owl:NamedIndividual ;
                
-               rdfs:label "PATIENT PRESENTED"@en .
+               rdfs:comment "PATIENT PRESENTED"@en .
 
 
 
@@ -32,7 +32,7 @@
 :EndAntiplateletTherapy1 rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
                                   owl:NamedIndividual ;
                          
-                         rdfs:label "PATIENT HAD NOT BEEN TAKING PRESCRIBED MEDICATIONS FOR A SIGNIFICANT PERIOD OF TIME"@en ;
+                         rdfs:comment "PATIENT HAD NOT BEEN TAKING PRESCRIBED MEDICATIONS FOR A SIGNIFICANT PERIOD OF TIME"@en ;
                          
                          <http://informatics.mayo.edu/TEO.owl#TEO_0000002> :Late_Stent_Thrombosis1 .
 
@@ -43,7 +43,7 @@
 :InitialDrugElustingStentImplantation1 rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
                                                 owl:NamedIndividual ;
                                        
-                                       rdfs:label "A 2.75X12MM TAXUS EXPRESS2 STENT WAS DEPLOYED IN THE RV BRANCH"@en ;
+                                       rdfs:comment "A 2.75X12MM TAXUS EXPRESS2 STENT WAS DEPLOYED IN THE RV BRANCH"@en ;
                                        
                                        <http://informatics.mayo.edu/TEO.owl#TEO_0000002> :EndAntiplateletTherapy1 ;
                                        
@@ -60,7 +60,7 @@
 :InitialDrugElutingStentImplantation2 rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
                                                owl:NamedIndividual ;
                                       
-                                      rdfs:label "A 2.75X16MM TAXUS EXPRESS2 STENT WAS DEPLOYED IN THE RCA"@en .
+                                      rdfs:comment "A 2.75X16MM TAXUS EXPRESS2 STENT WAS DEPLOYED IN THE RCA"@en .
 
 
 
@@ -69,7 +69,7 @@
 :Late_Stent_Thrombosis1 rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
                                  owl:NamedIndividual ;
                         
-                        rdfs:label "THE RCA AND LCX WERE FOUND TO BE OCCLUDED WITH THROMBUS"@en ;
+                        rdfs:comment "THE RCA AND LCX WERE FOUND TO BE OCCLUDED WITH THROMBUS"@en ;
                         
                         <http://informatics.mayo.edu/TEO.owl#TEO_0000002> :ER_Admission1 ;
                         
@@ -82,7 +82,7 @@
 :StartAntiplateletTherapy1 rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
                                     owl:NamedIndividual ;
                            
-                           rdfs:label "THE PATIENT WAS TAKING PLAVIX"@en ;
+                           rdfs:comment "THE PATIENT WAS TAKING PLAVIX"@en ;
                            
                            <http://informatics.mayo.edu/TEO.owl#TEO_0000002> :InitialDrugElustingStentImplantation1 .
 
@@ -93,7 +93,7 @@
 :StartAntiplateletTherapy2 rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
                                     owl:NamedIndividual ;
                            
-                           rdfs:label "PATIENT RECEIVED HEPARIN AND INTEGRILIN DURING THE PROCEDURE AND PLAVIX AND ASPIRIN POST-PROCEDURE"@en ;
+                           rdfs:comment "PATIENT RECEIVED HEPARIN AND INTEGRILIN DURING THE PROCEDURE AND PLAVIX AND ASPIRIN POST-PROCEDURE"@en ;
                            
                            <http://informatics.mayo.edu/TEO.owl#TEO_0000014> :ER_Admission1 .
 
