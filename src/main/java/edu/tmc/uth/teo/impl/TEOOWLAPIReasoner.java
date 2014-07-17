@@ -13,7 +13,9 @@ import org.allen.temporalintervalrelationships.Node;
 import edu.tmc.uth.teo.interfaces.TEOReasoner;
 import edu.tmc.uth.teo.model.AssemblyMethod;
 import edu.tmc.uth.teo.model.Event;
-import edu.tmc.uth.teo.model.TemporalRelationTarget;
+import edu.tmc.uth.teo.model.TemporalRelationInShortCode;
+import edu.tmc.uth.teo.model.TemporalRelationType;
+import edu.tmc.uth.teo.utils.TEOConstants;
 import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 
 /**
@@ -60,8 +62,8 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 //					startTime = ((TimeInterval) startEvent.getValidTime()).getStartTime();
 //				}
 //				if (startTime != null) {
-//					Vector<TemporalRelationMeta> relations = startEvent.getTemporalRelations();
-//					for (TemporalRelationMeta relation : relations) {// Assumption: the target IRI must be an Event
+//					Vector<TemporalRelationTripleMeta> relations = startEvent.getTemporalRelations();
+//					for (TemporalRelationTripleMeta relation : relations) {// Assumption: the target IRI must be an Event
 //						if (relation.getTimeOffset() != null) { // before or after
 //							Event targetEvent = eventMap.get(relation.getTargetIRI());
 //							if (!visitedEvent.contains(targetEvent)) { // then we can add new validTime info for this targetEvent
@@ -114,25 +116,47 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 			while (it != null && it.hasNext()) {
 				Event event = it.next();
 				String sourceStr = event.getIRIStr();
-				HashMap<String, ArrayList<TemporalRelationTarget>> relationMap = event.getTemporalRelations();
+				HashMap<String, ArrayList<TemporalRelationInShortCode>> relationMap = event.getTemporalRelations();
 				
 				if (relationMap != null) {
-					Iterator<Entry<String, ArrayList<TemporalRelationTarget>>> itor = relationMap.entrySet().iterator();
+					Iterator<Entry<String, ArrayList<TemporalRelationInShortCode>>> itor = relationMap.entrySet().iterator();
 					while (itor.hasNext()) { // for each targetIRI
-						Entry<String, ArrayList<TemporalRelationTarget>> pair = itor.next();
+						Entry<String, ArrayList<TemporalRelationInShortCode>> pair = itor.next();
 						String targetStr = pair.getKey();
-						ArrayList<TemporalRelationTarget> relationList = pair.getValue();
+						
+						if (sourceStr.equals(targetStr)) continue; // relations between the same node cannot be added as a constraint, it can only be inferred although it is "equal"
+						
+						ArrayList<TemporalRelationInShortCode> relationList = pair.getValue();
 						short typeCode = TemporalRelationUtils.getMergedTemporalRelationCode(relationList); // should merge them and get the minimum labeling set
 						Constraint<String> constraint = new Constraint<String>(nodeMap.get(sourceStr), nodeMap.get(targetStr), typeCode);
-						constraintNetwork.addConstraint(constraint);
+						constraintNetwork.addConstraint(constraint);			
+//						System.out.println("Constraint: (" + nodeMap.get(sourceStr).getAllenId() + ", " + nodeMap.get(targetStr).getAllenId() + ", " 
+//											+ "merged: "+ TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(typeCode) + ")");									
 					}
 				}
 			}
 			
-			if (constraintNetwork.pathConsistency()) { // this network is consistent, then populate the Matrix (eventMap)
+			if (constraintNetwork.pathConsistency()) { // if the network is consistent, then populate the Matrix (eventMap)
 				// a quick-and-dirty implementation here for the consistency of querier's API
 				ArrayList<Node<String>> matrixNodes = constraintNetwork.getModeledNodes();
 				ArrayList<ArrayList<Short>> matrix = constraintNetwork.getConstraintNetwork();
+				
+//				//---------------------------
+//				ArrayList<Node<String>> nodeList = constraintNetwork.getModeledNodes();
+//				for (Node<String> node : nodeList) {
+//					System.out.print(node.getIdentifier() + "(" + node.getAllenId() + "), ");
+//				}
+//				System.out.println();
+//				
+//				ArrayList<ArrayList<Short>> network = constraintNetwork.getConstraintNetwork();
+//				for (ArrayList<Short> list : network) {
+//					for (Short relation : list) {
+//						System.out.print(TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(relation) + ", ");
+//					}
+//					System.out.println();
+//				}
+//				//---------------------------
+				
 				for (int i = 0; i < matrixNodes.size(); i ++) {
 					String sourceStr = matrixNodes.get(i).getIdentifier();
 					Event event = eventMap.get(sourceStr);
@@ -140,7 +164,7 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 					for (int j = 0; j < matrixNodes.size(); j ++) {
 						String targetStr = matrixNodes.get(j).getIdentifier();
 						// Yi: the short code "matrix.get(i).get(j)" represents a single relation (relation combination), so we should not split them
-						TemporalRelationTarget relation = new TemporalRelationTarget(matrix.get(i).get(j));
+						TemporalRelationInShortCode relation = new TemporalRelationInShortCode(matrix.get(i).get(j));
 						relation.setAssemblyMethod(AssemblyMethod.INFERRED); // inferred relations
 						event.addTemporalRelation(targetStr, relation);
 					}

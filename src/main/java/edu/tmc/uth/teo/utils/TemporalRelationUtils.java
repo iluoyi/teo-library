@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Queue;
 
 import edu.tmc.uth.teo.model.DirectedAcyclicGraph;
-import edu.tmc.uth.teo.model.TemporalRelationTarget;
+import edu.tmc.uth.teo.model.TemporalRelationInShortCode;
 import edu.tmc.uth.teo.model.TemporalRelationType;
 
 /**
@@ -134,47 +134,17 @@ public class TemporalRelationUtils {
 	 * @param relationList
 	 * @return
 	 */
-	public static short getMergedTemporalRelationCode(ArrayList<TemporalRelationTarget> relationList) {
+	public static short getMergedTemporalRelationCode(ArrayList<TemporalRelationInShortCode> relationList) {
 		short result = TEOConstants.bin_full;
 		if (relationList != null && !relationList.isEmpty()) {
-			for (TemporalRelationTarget relation : relationList) {
+			for (TemporalRelationInShortCode relation : relationList) {
 				result &= relation.getRelationCode(); // intersection for "Inferred Relations"
 			}
 		}
 		return result;
 	}
-	
-	public static boolean isStartBeforeStart(TemporalRelationType relationType) {
-		if (relationType.equals(TemporalRelationType.START_BEFORE_START) || 
-				relationType.equals(TemporalRelationType.BEFORE) || 
-				relationType.equals(TemporalRelationType.MEET) || 
-				relationType.equals(TemporalRelationType.OVERLAP) ||
-				relationType.equals(TemporalRelationType.FINISHEDBY) ||
-				relationType.equals(TemporalRelationType.CONTAIN)) {
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * For a list of relations, they should be consistent.
-	 * @param relationList
-	 * @return
-	 */
-	public static boolean isStartBeforeStart(ArrayList<TemporalRelationType> relationList) {
-		if (relationList != null) {
-			for (TemporalRelationType relation : relationList) {
-				if (!isStartBeforeStart(relation)) {
-					return false;
-				}
-			}
-			if (!relationList.isEmpty()) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
+		
+		
 	/**
 	 * Returns a list of names of the constraints given in the set of constraints
 	 * 

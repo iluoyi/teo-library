@@ -61,27 +61,76 @@ public class TestConstraintNetwork {
 	 * D finish B
 	 * 
 	 */
+//	@Test
+//	public void testPathReasoning2() throws Exception {
+//		ConstraintNetwork<String> myConstraintNetwork = new ConstraintNetwork<String>();
+//		Node<String> nodeA = new Node<String>("A");
+//		myConstraintNetwork.addNode(nodeA);
+//		Node<String> nodeB = new Node<String>("B");
+//		myConstraintNetwork.addNode(nodeB);
+//		Node<String> nodeC = new Node<String>("C");
+//		myConstraintNetwork.addNode(nodeC);
+//		Node<String> nodeD= new Node<String>("D");
+//		myConstraintNetwork.addNode(nodeD);
+//		
+//		Constraint<String> constraintAB = new Constraint<String> (nodeA,nodeB,TEOConstants.bin_finishedby);
+//		myConstraintNetwork.addConstraint(constraintAB);
+//		
+//		Constraint<String> constraintBC = new Constraint<String> (nodeB,nodeC,TEOConstants.bin_SBS);
+//		myConstraintNetwork.addConstraint(constraintBC);
+//		
+//		Constraint<String> constraintAD = new Constraint<String> (nodeA,nodeD,TEOConstants.bin_SES);
+//		myConstraintNetwork.addConstraint(constraintAD);
+//		
+//		System.out.println(myConstraintNetwork.pathConsistency());		
+//		
+//		ArrayList<Node<String>> nodeList = myConstraintNetwork.getModeledNodes();
+//		for (Node<String> node : nodeList) {
+//			System.out.print(node.getIdentifier() + "(" + node.getAllenId() + "), ");
+//		}
+//		System.out.println();
+//		
+//		ArrayList<ArrayList<Short>> network = myConstraintNetwork.getConstraintNetwork();
+//		for (ArrayList<Short> list : network) {
+//			for (Short relation : list) {
+//				System.out.print(TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(relation) + ", ");
+//			}
+//			System.out.println();
+//		}
+//	}
 	
 	@Test
 	public void testPathReasoning2() throws Exception {
 		ConstraintNetwork<String> myConstraintNetwork = new ConstraintNetwork<String>();
-		Node<String> nodeA = new Node<String>("A");
-		myConstraintNetwork.addNode(nodeA);
-		Node<String> nodeB = new Node<String>("B");
-		myConstraintNetwork.addNode(nodeB);
-		Node<String> nodeC = new Node<String>("C");
-		myConstraintNetwork.addNode(nodeC);
-		Node<String> nodeD= new Node<String>("D");
-		myConstraintNetwork.addNode(nodeD);
+		Node<String> node0= new Node<String>("0");
+		myConstraintNetwork.addNode(node0);
+		Node<String> node1 = new Node<String>("1");
+		myConstraintNetwork.addNode(node1);
+		Node<String> node2 = new Node<String>("2");
+		myConstraintNetwork.addNode(node2);
+		Node<String> node3 = new Node<String>("3");
+		myConstraintNetwork.addNode(node3);
+		Node<String> node4 = new Node<String>("4");
+		myConstraintNetwork.addNode(node4);
+		Node<String> node5 = new Node<String>("5");
+		myConstraintNetwork.addNode(node5);
+		Node<String> node6 = new Node<String>("6");
+		myConstraintNetwork.addNode(node6);
 		
-		Constraint<String> constraintAB = new Constraint<String> (nodeA,nodeB,TEOConstants.bin_finishedby);
-		myConstraintNetwork.addConstraint(constraintAB);
-		
-		Constraint<String> constraintBC = new Constraint<String> (nodeB,nodeC,TEOConstants.bin_SBS);
-		myConstraintNetwork.addConstraint(constraintBC);
-		
-		Constraint<String> constraintAD = new Constraint<String> (nodeA,nodeD,TEOConstants.bin_SES);
-		myConstraintNetwork.addConstraint(constraintAD);
+		Constraint<String> constraint04 = new Constraint<String> (node0,node4,TEOConstants.bin_equals);
+		myConstraintNetwork.addConstraint(constraint04);
+		Constraint<String> constraint21 = new Constraint<String> (node2,node1,TEOConstants.bin_before);
+		myConstraintNetwork.addConstraint(constraint21);	
+		Constraint<String> constraint34 = new Constraint<String> (node3,node4,TEOConstants.bin_before);
+		myConstraintNetwork.addConstraint(constraint34);
+		Constraint<String> constraint46 = new Constraint<String> (node4,node6,TEOConstants.bin_before);
+		myConstraintNetwork.addConstraint(constraint46);
+		Constraint<String> constraint42 = new Constraint<String> (node4,node2,TEOConstants.bin_before);
+		myConstraintNetwork.addConstraint(constraint42);
+		Constraint<String> constraint62 = new Constraint<String> (node6,node2,TEOConstants.bin_before);
+		myConstraintNetwork.addConstraint(constraint62);
+		Constraint<String> constraint51 = new Constraint<String> (node5,node1,TEOConstants.bin_starts);
+		myConstraintNetwork.addConstraint(constraint51);
 		
 		System.out.println(myConstraintNetwork.pathConsistency());		
 		

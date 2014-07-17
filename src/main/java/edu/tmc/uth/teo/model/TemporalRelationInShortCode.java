@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 
 
-public class TemporalRelationTarget {
+public class TemporalRelationInShortCode {
 
 	private short relationCode; // this is a relation combination, we use its short code to represent e.g. "pmoFD"
 	private Granularity granularity;
 	private Duration timeOffset;
 	private AssemblyMethod assemblyMethod;
 
-	public TemporalRelationTarget(short relationCode) {
+	public TemporalRelationInShortCode(short relationCode) {
 		super();
 		this.relationCode = relationCode;
 		this.timeOffset = null;
@@ -75,8 +75,8 @@ public class TemporalRelationTarget {
 	 */
 	@Override
 	public boolean equals(Object o) { 
-		if (o instanceof TemporalRelationTarget) {
-			if (this.relationCode == ((TemporalRelationTarget) o).relationCode) {
+		if (o instanceof TemporalRelationInShortCode) {
+			if (this.relationCode == ((TemporalRelationInShortCode) o).relationCode) {
 				return true;
 			}
 		}

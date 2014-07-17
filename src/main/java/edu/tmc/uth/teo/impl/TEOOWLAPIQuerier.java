@@ -13,7 +13,7 @@ import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Edge;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
-import edu.tmc.uth.teo.model.TemporalRelationTarget;
+import edu.tmc.uth.teo.model.TemporalRelationInShortCode;
 import edu.tmc.uth.teo.model.TemporalRelationType;
 import edu.tmc.uth.teo.model.TemporalType;
 import edu.tmc.uth.teo.model.TimeInstant;
@@ -90,9 +90,9 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		ArrayList<Short> relations= new ArrayList<Short>();
 		if (event1 != null && event2 != null) {
 			String targetIRIStr = event2.getIRIStr();
-			HashMap<String, ArrayList<TemporalRelationTarget>> relationMap = event1.getTemporalRelations();
-			ArrayList<TemporalRelationTarget> relationList = relationMap.get(targetIRIStr);
-			for (TemporalRelationTarget relation : relationList) {	
+			HashMap<String, ArrayList<TemporalRelationInShortCode>> relationMap = event1.getTemporalRelations();
+			ArrayList<TemporalRelationInShortCode> relationList = relationMap.get(targetIRIStr);
+			for (TemporalRelationInShortCode relation : relationList) {	
 				// TODO: need to consider the granularity
 				relations.add(relation.getRelationCode());
 			}
@@ -122,20 +122,21 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		
 		for (String sourceIRI : vertexStr) {
 			Event sourceEvent = eventMap.get(sourceIRI);
-			HashMap<String, ArrayList<TemporalRelationTarget>> relationMap = sourceEvent.getTemporalRelations();
+			HashMap<String, ArrayList<TemporalRelationInShortCode>> relationMap = sourceEvent.getTemporalRelations();
 			// TODO: to handle "startEqualStart"
-			Iterator<Entry<String, ArrayList<TemporalRelationTarget>>> itor = relationMap.entrySet().iterator();
+			Iterator<Entry<String, ArrayList<TemporalRelationInShortCode>>> itor = relationMap.entrySet().iterator();
 			while (itor.hasNext()) {
-				Entry<String, ArrayList<TemporalRelationTarget>> pair = itor.next();
+				Entry<String, ArrayList<TemporalRelationInShortCode>> pair = itor.next();
 				String targetIRI = pair.getKey();
-				ArrayList<TemporalRelationTarget> relationList = pair.getValue(); // relations should be merged first (intersection)
+				ArrayList<TemporalRelationInShortCode> relationList = pair.getValue(); // relations should be merged first (intersection)
 				short minRelations = TemporalRelationUtils.getMergedTemporalRelationCode(relationList);
-				ArrayList<TemporalRelationType> relations = TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(minRelations);
-				if (TemporalRelationUtils.isStartBeforeStart(relations)) {
-					System.out.println("Edge: " + sourceIRI + ", " + targetIRI + " <-" + relations);
+				if ((minRelations & TEOConstants.bin_SBS) == minRelations) { // if startBeforeStart, we add an Edge. It is implemented in bit operations
+					System.out.println("Edge: " + sourceIRI + ", " + targetIRI + " <-" + TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(minRelations));
 					Edge newEdge = new Edge(viMap.get(sourceIRI), viMap.get(targetIRI));
 					edges.add(newEdge);
-				}
+				} 
+//				else if ((minRelations & TEOConstants.bin_SES) == minRelations) { // if two nodes are equal
+//				} // has been handled during the relation reasoning...
 			}
 		}
 		

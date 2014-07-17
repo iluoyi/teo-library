@@ -187,7 +187,7 @@ public class TEOConstants {
 		public final static short bin_startedby = 512; // 0000001000000000 - S
 		public final static short bin_finishes = 1024;  // 0000010000000000 - f
 		public final static short bin_finishedby = 2048;// 0000100000000000 - F
-		public final static short bin_equals = 4096;    // 0001000000000000- e
+		public final static short bin_equals = 4096;    // 0001000000000000 - e
 		public final static short bin_full = (short) (bin_before | bin_after | bin_during | bin_contains | bin_overlaps | bin_overlappedby | bin_meets | bin_metby | bin_starts | bin_startedby | bin_finishes | bin_finishedby | bin_equals);		  // 0001111111111111
 
 		// Yi: point relations
@@ -238,7 +238,7 @@ public class TEOConstants {
 			// bin_overlappedby -> bin_overlaps is in the original: o oi dur con e
 			// it should be: o oi dur con e s si f fi
 			{bin_before | bin_overlaps | bin_meets | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby, bin_overlaps | bin_overlappedby | bin_during | bin_contains | bin_equals | bin_starts | bin_startedby | bin_finishes| bin_finishedby, bin_after | bin_overlappedby | bin_metby, bin_overlaps | bin_contains | bin_finishedby, bin_after, bin_overlappedby | bin_during | bin_finishes, bin_overlappedby | bin_after | bin_metby, bin_overlappedby, bin_overlappedby | bin_contains | bin_startedby, bin_overlappedby},
-//			{"< o m di fi",">","oi d f","> oi mi di si","o oi d di e","> oi mi","o di fi",">","oi d f","oi > mi","oi","oi di si","oi"},
+//			{"< o m di fi",">","oi d f","> oi mi di si","o oi d di e"[fixed: "o oi dur con e s si f fi"],"> oi mi","o di fi",">","oi d f","oi > mi","oi","oi di si","oi"},
 			// seventh row meets    
 			{bin_before, bin_after | bin_overlappedby | bin_metby | bin_contains | bin_startedby, bin_overlaps | bin_during | bin_starts, bin_before, bin_before, bin_overlaps | bin_during | bin_starts, bin_before, bin_finishes | bin_finishedby | bin_equals, bin_meets, bin_meets, bin_during | bin_starts | bin_overlaps, bin_before, bin_meets},
 //			{"<","> oi mi di si","o d s","<","<","o d s","<","f fi e","m","m","d s o","<","m"},

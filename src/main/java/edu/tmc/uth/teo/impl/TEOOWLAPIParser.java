@@ -26,7 +26,7 @@ import edu.tmc.uth.teo.model.AssemblyMethod;
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
-import edu.tmc.uth.teo.model.TemporalRelationTarget;
+import edu.tmc.uth.teo.model.TemporalRelationInShortCode;
 import edu.tmc.uth.teo.model.TemporalRelationType;
 import edu.tmc.uth.teo.model.TemporalType;
 import edu.tmc.uth.teo.model.TimeInstant;
@@ -49,7 +49,7 @@ public class TEOOWLAPIParser implements TEOParser {
 	
 	// inner helper data structures
 	private HashMap<String, Event> eventMap = null;
-	//private HashMap<String, TemporalRelationMeta> relationMap = null;
+	//private HashMap<String, TemporalRelationTripleMeta> relationMap = null;
 	private HashMap<OWLObjectProperty, TemporalRelationType> relationIntervalRoaster = null;
 	private HashMap<OWLObjectProperty, TemporalRelationType> relationPointRoaster = null;
 
@@ -247,7 +247,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		// TODO: granularity?	
 		TemporalRelationType relationType = null;
 		String targetIRIStr = null;
-		TemporalRelationTarget relation = null;
+		TemporalRelationInShortCode relation = null;
 		
 		// 1. collected all "asserted" relations (for later relation merge) first and record timeOffsets for point relations
 		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
@@ -258,11 +258,13 @@ public class TEOOWLAPIParser implements TEOParser {
 				relationType = relationPointRoaster.get(axiom.getProperty()); 
 				// TODO: may contain timeOffset info
 			}
-			targetIRIStr = axiom.getObject().asOWLNamedIndividual().getIRI().toString();
-			relation = new TemporalRelationTarget(TemporalRelationUtils.getTemporalRelationCode(relationType));
-			relation.setAssemblyMethod(AssemblyMethod.ASSERTED); // Asserted axioms
-			event.addTemporalRelation(targetIRIStr, relation); 
-			// duplicate relations cannot be added, it detects duplicate by "target" AND "type" only, (no asserted/granularity info)
+			if (relationType != null) {
+				targetIRIStr = axiom.getObject().asOWLNamedIndividual().getIRI().toString();
+				relation = new TemporalRelationInShortCode(TemporalRelationUtils.getTemporalRelationCode(relationType));
+				relation.setAssemblyMethod(AssemblyMethod.ASSERTED); // Asserted axioms
+				event.addTemporalRelation(targetIRIStr, relation); 
+				// duplicate relations cannot be added, it detects duplicate by "target" AND "type" only, (no asserted/granularity info)
+			}
 		}
 				
 		// because we don't have reification triples, every relation must be attached to an event
@@ -278,7 +280,7 @@ public class TEOOWLAPIParser implements TEOParser {
 				valueList = getObjectPropertyValue(eventIndividual, relationPro);
 				for (OWLNamedIndividual target : valueList) {
 					targetIRIStr = target.getIRI().toString();
-					relation = new TemporalRelationTarget(TemporalRelationUtils.getTemporalRelationCode(relationType));
+					relation = new TemporalRelationInShortCode(TemporalRelationUtils.getTemporalRelationCode(relationType));
 					relation.setAssemblyMethod(AssemblyMethod.INFERRED); // Inferred axioms
 					event.addTemporalRelation(targetIRIStr, relation); 
 				}
@@ -295,7 +297,7 @@ public class TEOOWLAPIParser implements TEOParser {
 				valueList = getObjectPropertyValue(eventIndividual, relationPro);
 				for (OWLNamedIndividual target : valueList) {
 					targetIRIStr = target.getIRI().toString();
-					relation = new TemporalRelationTarget(TemporalRelationUtils.getTemporalRelationCode(relationType));
+					relation = new TemporalRelationInShortCode(TemporalRelationUtils.getTemporalRelationCode(relationType));
 					relation.setAssemblyMethod(AssemblyMethod.INFERRED); // Inferred axioms
 					event.addTemporalRelation(targetIRIStr, relation);
 				}
