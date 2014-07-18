@@ -104,7 +104,7 @@ public class DirectedAcyclicGraph<V> {
 		}
 	}
 	
-	// never rushly remove vertices, it would change the index 
+	// never remove vertices in a harry, it would change the index 
 	
 	public boolean removeEdge(int u, int v) {
 		if (u < 0 || u > getSize() - 1) {

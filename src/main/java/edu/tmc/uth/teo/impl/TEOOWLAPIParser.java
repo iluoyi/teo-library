@@ -1,5 +1,6 @@
 package edu.tmc.uth.teo.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,6 +27,7 @@ import edu.tmc.uth.teo.model.AssemblyMethod;
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
+import edu.tmc.uth.teo.model.TemporalRelation;
 import edu.tmc.uth.teo.model.TemporalRelationInShortCode;
 import edu.tmc.uth.teo.model.TemporalRelationType;
 import edu.tmc.uth.teo.model.TemporalType;
@@ -35,6 +37,7 @@ import edu.tmc.uth.teo.model.Unit;
 import edu.tmc.uth.teo.utils.StringUtils;
 import edu.tmc.uth.teo.utils.TEOConstants;
 import edu.tmc.uth.teo.utils.TemporalRelationUtils;
+import edu.tmc.uth.teo.utils.TemporalTypeUtils;
 
 /**
  * 
@@ -49,7 +52,7 @@ public class TEOOWLAPIParser implements TEOParser {
 	
 	// inner helper data structures
 	private HashMap<String, Event> eventMap = null;
-	//private HashMap<String, TemporalRelationTripleMeta> relationMap = null;
+	//private HashMap<String, TemporalRelation> relationMap = null;
 	private HashMap<OWLObjectProperty, TemporalRelationType> relationIntervalRoaster = null;
 	private HashMap<OWLObjectProperty, TemporalRelationType> relationPointRoaster = null;
 
@@ -198,20 +201,43 @@ public class TEOOWLAPIParser implements TEOParser {
 		Set<OWLNamedIndividual> individuals = null;
 		
 		/*
-		 * Yi: To find out all individuals of "Event" class after reasoning.
+		 * Yi: To find out all individuals of "Event" class after Pellet reasoning.
 		 */
 		c = df.getOWLClass(IRI.create(TEOConstants.TEO_EVENT_CLS));
 		individuals = reasoner.getInstances(c, false).getFlattened(); // from the reasoner
 		
 		for (OWLNamedIndividual eventIndividual : individuals) {
 			if (eventIndividual != null) {
-				System.out.println("[####################################]Processing Events....--> " + eventIndividual.getIRI().toString());
-				
+//				System.out.println("[####################################]Processing Events....--> " + eventIndividual.getIRI().toString());
 				Event event = parseEvent(eventIndividual);
 				eventMap.put(eventIndividual.getIRI().toString(), event);
 			}
 		}
-				
+		
+		// double check the consistency for each event, between EventTemporalType (instant/interval) and its relations
+		// can only print out error messages if detected inconsistent situations...
+		for (Event eachEvent : eventMap.values()) {
+			HashMap<String, ArrayList<TemporalRelationInShortCode>> relationMap = eachEvent.getTemporalRelations();
+			if (relationMap != null) {
+				Set<String> targetStrSet = relationMap.keySet(); // might be revised in the following steps
+				for (String targetStr : targetStrSet) {
+					Event targetEvent = eventMap.get(targetStr);
+					ArrayList<TemporalRelationInShortCode> relations = relationMap.get(targetStr); // might be revised in the following steps
+					for (TemporalRelationInShortCode relation : relations) {
+						// check basic interval relations here; for point relations like "start?start, start?end...", they will be checked in the reasoner...
+						if (!TemporalTypeUtils.checkTemporalTypeConsistency(eachEvent, relation, targetEvent)) {
+							// eachEvent.remove(String targetIRI, TemporalRelationInShortCode relation); 
+							// converse(relation) will be removed by targetEvent in the following certain loops...
+							System.out.println("Relations should be removed.");
+						} else {
+							// decides the event type (if unknown) with second priority
+							TemporalTypeUtils.assignTemporalType(eachEvent, relation, targetEvent);
+						}
+					}
+				}
+			}
+		}
+		
 		return noError;
 	}
 	
@@ -228,7 +254,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		Set<OWLNamedIndividual> valueList = null;		
 		
 		// parse the valid time
-		valueList = getObjectPropertyValue(eventIndividual, hasValidTime); // hasValidTime
+		valueList = getObjectPropertyValue(eventIndividual, hasValidTime); // hasValidTime (decides the event type with first priority)
 		for (OWLNamedIndividual validTime : valueList) {
 			TemporalType parsedType = getTemporalType(validTime);
 			if (parsedType.equals(TemporalType.TIMEINSTANT)) {
@@ -249,25 +275,38 @@ public class TEOOWLAPIParser implements TEOParser {
 		String targetIRIStr = null;
 		TemporalRelationInShortCode relation = null;
 		
-		// 1. collected all "asserted" relations (for later relation merge) first and record timeOffsets for point relations
+		// 1. collect all "asserted" relations (for later relation merge) first and record timeOffsets for point relations
 		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
 		for (OWLObjectPropertyAssertionAxiom axiom : axiomSet) {
 			if (relationIntervalRoaster.containsKey(axiom.getProperty())) {
 				relationType = relationIntervalRoaster.get(axiom.getProperty());
 			} else {
 				relationType = relationPointRoaster.get(axiom.getProperty()); 
-				// TODO: may contain timeOffset info
 			}
 			if (relationType != null) {
+				// may contain timeOffset info
+				// Note: both timeInstant and timeInterval can have start/end relations, will be determined in the reasoning process
+				if (TemporalRelation.TemporalPointRelationSet.contains(relationType)) {
+					// TODO: use the same method as before
+				}
+				
 				targetIRIStr = axiom.getObject().asOWLNamedIndividual().getIRI().toString();
 				relation = new TemporalRelationInShortCode(TemporalRelationUtils.getTemporalRelationCode(relationType));
 				relation.setAssemblyMethod(AssemblyMethod.ASSERTED); // Asserted axioms
 				event.addTemporalRelation(targetIRIStr, relation); 
-				// duplicate relations cannot be added, it detects duplicate by "target" AND "type" only, (no asserted/granularity info)
+				// duplicate relations cannot be added, it detects duplicate by "target" AND "type" only, (no asserted/granularity info involved)
 			}
 		}
 				
-		// because we don't have reification triples, every relation must be attached to an event
+/**
+ * Yi: consider to give up Pellet's reasoning here...
+ * 	 	then we have to totally rely on the Allen's Interval Reasoning algorithm.
+ * 
+ * NB: Experiments on Annotation_6.owl shows that there are different results between integrating and Not integrating Pellet's results, we can merge 
+ * their results later.
+ * 
+ */
+		// 2. collect all "inferred" relation (by Pellet only)
 		Iterator<Entry<OWLObjectProperty, TemporalRelationType>> it = null;
 		OWLObjectProperty relationPro = null;
 		// 2-1. parse inferred Interval temporal relations
@@ -475,6 +514,12 @@ public class TEOOWLAPIParser implements TEOParser {
 			return dataProperties.get(dataProperty);
 		}
 
+		return null;
+	}
+	
+	// TODO
+	public String getTimeOffsetMapKey(String sourceStr, TemporalRelationType pointRelation, String targetStr) {
+		
 		return null;
 	}
 }

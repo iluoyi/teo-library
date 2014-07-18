@@ -54,13 +54,14 @@ public class TemporalRelationInShortCode {
 
 	@Override
 	public String toString() {
-		return "[" + printRelationsFrom(getRelationCode()) + 
+		return "[" + printRelations() + 
 				(timeOffset != null? ("(timeOffset: "+ timeOffset + ")"):"") + 
 				(!assemblyMethod.equals(AssemblyMethod.UNKNOWN)? ("(assemblyMethod: "+ assemblyMethod + ")"):"") + 
 				(!granularity.getUnit().equals(Unit.UNKNOWN)? ("(granularity: "+ granularity + ")"):"") + "]";
 	}
 	
-	public String printRelationsFrom(short code) {
+	public String printRelations() {
+		short code = getRelationCode();
 		String relations = "";
 		ArrayList<TemporalRelationType> relationList = TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(code);
 		if (relationList != null && !relationList.isEmpty()) relations += relationList.get(0);

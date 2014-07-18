@@ -62,8 +62,8 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 //					startTime = ((TimeInterval) startEvent.getValidTime()).getStartTime();
 //				}
 //				if (startTime != null) {
-//					Vector<TemporalRelationTripleMeta> relations = startEvent.getTemporalRelations();
-//					for (TemporalRelationTripleMeta relation : relations) {// Assumption: the target IRI must be an Event
+//					Vector<TemporalRelation> relations = startEvent.getTemporalRelations();
+//					for (TemporalRelation relation : relations) {// Assumption: the target IRI must be an Event
 //						if (relation.getTimeOffset() != null) { // before or after
 //							Event targetEvent = eventMap.get(relation.getTargetIRI());
 //							if (!visitedEvent.contains(targetEvent)) { // then we can add new validTime info for this targetEvent
