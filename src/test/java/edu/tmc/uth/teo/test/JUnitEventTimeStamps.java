@@ -41,7 +41,7 @@ public class JUnitEventTimeStamps {
 		System.out.println("Reasoner: reasoning begins.");
 		reasoner = new TEOOWLAPIReasoner(parser.getEventMap());
 		System.out.println("reasonValidTime Status: " + reasoner.reasonValidTime());
-		//System.out.println("reasonTemporalRelations Status: " + reasoner.reasonTemporalRelations());
+		System.out.println("reasonTemporalRelations Status: " + reasoner.reasonTemporalRelations());
 		System.out.println("Reasoner: reasoning completes.");		
 		
 		System.out.println("Querier: preparing the querier.");

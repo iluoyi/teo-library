@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.Vector;
 
 import org.allen.temporalintervalrelationships.Constraint;
@@ -12,11 +13,17 @@ import org.allen.temporalintervalrelationships.Node;
 
 import edu.tmc.uth.teo.interfaces.TEOReasoner;
 import edu.tmc.uth.teo.model.AssemblyMethod;
+import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
+import edu.tmc.uth.teo.model.TemporalRegion;
+import edu.tmc.uth.teo.model.TemporalRelation;
 import edu.tmc.uth.teo.model.TemporalRelationInShortCode;
 import edu.tmc.uth.teo.model.TemporalRelationType;
-import edu.tmc.uth.teo.utils.TEOConstants;
+import edu.tmc.uth.teo.model.TemporalType;
+import edu.tmc.uth.teo.model.TimeInstant;
+import edu.tmc.uth.teo.model.TimeInterval;
 import edu.tmc.uth.teo.utils.TemporalRelationUtils;
+import edu.tmc.uth.teo.utils.TimeUtils;
 
 /**
  * 
@@ -37,65 +44,272 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 	/**
 	 * Note: currently, we assume temporal relations only happen between Events.
 	 */
-	private Vector<Event> validTimeEvent = null; // events that contain validTime and can be used for inference
-	private Vector<Event> visitedEvent = null; // events that contain validTime and have been visited/used for inference
-	
 	public boolean reasonValidTime() {
-//		if (eventMap != null) {
-//			// 1. pin all events which have valid time onto the time line (put them in a Set "validTimeEvent")
-//			Iterator<Entry<String, Event>> it = eventMap.entrySet().iterator();
-//			if (it != null && it.hasNext()) validTimeEvent = new Vector<Event>();
-//			while (it.hasNext()) {
-//				Event crtEvent = it.next().getValue();
-//				if (crtEvent.getValidTime() != null)
-//					validTimeEvent.add(crtEvent);
-//			}
-//			if (validTimeEvent != null) visitedEvent = new Vector<Event>();
-//			
-//			// 2. iteration: reason validTimes for other events
-//			while (validTimeEvent != null && !validTimeEvent.isEmpty()) {
-//				Event startEvent = validTimeEvent.firstElement();
-//				TimeInstant startTime = null;
-//				if (startEvent.getEventType().equals(TemporalType.TIMEINSTANT)) {
-//					startTime = (TimeInstant) startEvent.getValidTime();
-//				} else if (startEvent.getEventType().equals(TemporalType.TIMEINTERVAL)) {
-//					startTime = ((TimeInterval) startEvent.getValidTime()).getStartTime();
-//				}
-//				if (startTime != null) {
-//					Vector<TemporalRelation> relations = startEvent.getTemporalRelations();
-//					for (TemporalRelation relation : relations) {// Assumption: the target IRI must be an Event
-//						if (relation.getTimeOffset() != null) { // before or after
-//							Event targetEvent = eventMap.get(relation.getTargetIRI());
-//							if (!visitedEvent.contains(targetEvent)) { // then we can add new validTime info for this targetEvent
-//								TemporalRegion validTime = null;
-//								if (targetEvent.getEventType().equals(TemporalType.TIMEINTERVAL)) {
-//									//TODO: for time interval 
-//									
-//								} else { // Unknown or timeInstant -> timeInstant
-//									if (targetEvent.getEventType().equals(TemporalType.UNKNOWN)) {
-//										targetEvent.setEventType(TemporalType.TIMEINSTANT);
-//									}
-//									if (targetEvent.getValidTime() != null) {
-//										System.err.println("Error: deteced duplicate infered results for a sigle Event - " + targetEvent);
-//									} else {
-//										if (relation.getRelationType().equals(TemporalRelationType.BEFORE)) {
-//											validTime = TimeUtils.getEndTimeInstantFrom(startTime, relation.getTimeOffset(), null);
-//										} else if (relation.getRelationType().equals(TemporalRelationType.AFTER)) {
-//											validTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), startTime, null);
-//										}
-//										targetEvent.setValidTime(validTime);
-//										validTimeEvent.add(targetEvent);
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//				visitedEvent.add(startEvent);
-//				validTimeEvent.remove(startEvent);
-//			}
-//			return true;
-//		}
+		if (eventMap != null) {
+			Vector<Event> validTimeEvent = null; // events that contain validTime and can be used for inference
+			
+			// 1. pin all events which have valid time onto the time line (put them in a Set "validTimeEvent")
+			Iterator<Entry<String, Event>> it = eventMap.entrySet().iterator();
+			if (it != null && it.hasNext()) validTimeEvent = new Vector<Event>();
+			while (it.hasNext()) {
+				Event crtEvent = it.next().getValue();
+				if (crtEvent.getValidTime() != null) // validTime can be instant/interval
+					validTimeEvent.add(crtEvent);
+			}
+			
+			// 2. iteration: reason validTimes for other events
+			while (validTimeEvent != null && !validTimeEvent.isEmpty()) {
+				Event startEvent = validTimeEvent.firstElement();
+				TimeInstant startTime = null;
+				TimeInstant endTime = null;
+				if (startEvent.getEventType().equals(TemporalType.TIMEINSTANT)) {
+					startTime = (TimeInstant) startEvent.getValidTime();
+					endTime = (TimeInstant) startEvent.getValidTime(); // endTime = startTime for a TimeInstant
+				} else if (startEvent.getEventType().equals(TemporalType.TIMEINTERVAL)) {
+					startTime = ((TimeInterval) startEvent.getValidTime()).getStartTime();
+					endTime = ((TimeInterval) startEvent.getValidTime()).getEndTime();
+				}
+				if (startTime != null || endTime != null) { // to infer other events, it must contain start or end time
+					HashMap<String, ArrayList<TemporalRelationInShortCode>> relations = startEvent.getTemporalRelations();
+					Set<String> targetStrSet = relations.keySet();
+					
+					for (String targetIRIStr : targetStrSet) { // for each target event
+						Event targetEvent = eventMap.get(targetIRIStr); // Assumption: the target IRI must be an Event
+						if (!validTimeIsComplete(targetEvent)) { // if incomplete, then we can investigate new validTime info
+							TimeInstant tStartTime = null, tEndTime = null;
+							TemporalRegion validTime = null;
+							ArrayList<TemporalRelationInShortCode> relationList = relations.get(targetIRIStr);
+							for (TemporalRelationInShortCode relation : relationList) {
+								if (relation.getTimeOffset() != null) { // if the relation conveys a valid TimeOffset
+									// detect the Point Relation Type first (SBS?SBE?...)
+									TemporalRelationType relationType = TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(relation.getRelationCode()).get(0); // should be only one Point relation
+									switch (relationType) {
+										case START_BEFORE_START:
+											tStartTime = TimeUtils.getEndTimeInstantFrom(startTime, relation.getTimeOffset(), null);
+											break;
+										case START_AFTER_START:
+											tStartTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), startTime, null);
+											break;
+										case START_BEFORE_END:
+											tEndTime = TimeUtils.getEndTimeInstantFrom(startTime, relation.getTimeOffset(), null);
+											break;
+										case START_AFTER_END:
+											tEndTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), startTime, null);
+											break;
+										case END_BEFORE_START:
+											tStartTime = TimeUtils.getEndTimeInstantFrom(endTime, relation.getTimeOffset(), null);
+											break;
+										case END_AFTER_START:
+											tStartTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), endTime, null);
+											break;
+										case END_BEFORE_END:
+											tEndTime = TimeUtils.getEndTimeInstantFrom(endTime, relation.getTimeOffset(), null);
+											break;
+										case END_AFTER_END:
+											tEndTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), endTime, null);
+											break;
+										default:
+											tStartTime = null;
+											tEndTime = null;
+											break;
+									}
+								}
+							}
+							// check if the target event has start/end time to be valid
+							// Note: only when the targetEvent is updated with NEW info can we add it into the validTimeEvent queue, otherwise it triggers infinite recursion
+							TemporalType targetEventType = targetEvent.getEventType();
+//							System.out.println("Now Reasoning: " + targetEvent);
+							switch (targetEventType) {
+								case TIMEINSTANT:  // then the target event must have a null validTime
+									if (tStartTime != null && tEndTime != null) {
+										if (tStartTime.compareTo(endTime) == 0) {
+											validTime = tStartTime;
+											targetEvent.setValidTime(validTime);
+											validTimeEvent.add(targetEvent); 
+										} else {
+											System.out.println("Error: inferred startTime conflicts with inferred endTime for TimeInstant event: " + targetEvent.getIRIStr());
+										}
+									} else if (tStartTime != null) {
+										validTime = tStartTime;
+										targetEvent.setValidTime(validTime);
+										validTimeEvent.add(targetEvent);
+									} else if (tEndTime != null) {
+										validTime = tEndTime;
+										targetEvent.setValidTime(validTime);
+										validTimeEvent.add(targetEvent);
+									} else {
+										// cannot infer validTime for the target TimeInstant event
+									}
+									break;
+								case TIMEINTERVAL:
+									// it may: 1. missing startTime, duration and endTime;
+									//         2. missing startTime and duration;
+									//         3. missing duration and endTime;
+									//         4. missing startTime and endTime.
+																	
+									// 1. missing startTime, duration and endTime;
+									if (targetEvent.getValidTime() == null) {
+										if (tStartTime != null && tEndTime != null) {
+											if (tStartTime.compareTo(tEndTime) <= 0) {
+												validTime = new TimeInterval(tStartTime, tEndTime);
+												targetEvent.setValidTime(validTime);
+												validTimeEvent.add(targetEvent); 
+											} else {
+												System.out.println("Error: inferred startTime is larger than inferred endTime for TimeInterval event: " + targetEvent.getIRIStr());
+											}
+										} else if (tStartTime != null) {
+											validTime = new TimeInterval();
+											((TimeInterval) validTime).setStartTime(tStartTime);
+											targetEvent.setValidTime(validTime);
+											validTimeEvent.add(targetEvent); 
+											// we still all this (incomplete) timeInterval for reasoning process (they might convey knowledge for inference)
+										} else if (tEndTime != null) {
+											validTime = new TimeInterval();
+											((TimeInterval) validTime).setEndTime(tEndTime);
+											targetEvent.setValidTime(validTime);
+											validTimeEvent.add(targetEvent); 
+											// we still all this (incomplete) timeInterval for reasoning process (they might convey knowledge for inference)
+										} else {
+											// cannot infer validTime for the target TimeInstant event
+										}
+									} else {
+										TimeInstant origStartTime = ((TimeInterval) targetEvent.getValidTime()).getStartTime();
+										TimeInstant origEndTime = ((TimeInterval) targetEvent.getValidTime()).getStartTime();
+										Duration origDur = ((TimeInterval) targetEvent.getValidTime()).getDuration();
+										
+										// 2. missing startTime and duration;
+									 	if (origStartTime == null && origDur == null && origEndTime != null) {
+											if (tEndTime != null) {
+												if (tEndTime.compareTo(origEndTime) != 0) {
+													System.out.println("Error: inferred endTime conflicts with existed endTime for TimeInterval event: " + targetEvent.getIRIStr());
+												} else if (tStartTime != null) {
+														if (tStartTime.compareTo(tEndTime) <= 0) {
+															validTime = new TimeInterval(tStartTime, tEndTime);
+															targetEvent.setValidTime(validTime);
+															validTimeEvent.add(targetEvent); 
+														} else {
+															System.out.println("Error: inferred startTime is larger than existed endTime for TimeInterval event: " + targetEvent.getIRIStr());
+														}
+												} 
+												// else if (tStartTime == null), no new info added, drop it
+											} else if (tStartTime != null) {
+												validTime = new TimeInterval();
+												((TimeInterval) validTime).setStartTime(tStartTime);
+												targetEvent.setValidTime(validTime);
+												validTimeEvent.add(targetEvent); 
+												// we still all this (incomplete) timeInterval for reasoning process (they might convey knowledge for inference)
+											} 
+											// else if (tStartTime == null && tEndTime == null), drop it
+										}
+										// 3. missing duration and endTime;
+										else if (origStartTime != null && origDur == null && origEndTime == null) {
+											if (tStartTime != null) {
+												if (tStartTime.compareTo(origStartTime) != 0) {
+													System.out.println("Error: inferred startTime conflicts with existed startTime for TimeInterval event: " + targetEvent.getIRIStr());
+												} else if (tEndTime != null) {
+														if (tStartTime.compareTo(tEndTime) <= 0) {
+															validTime = new TimeInterval(tStartTime, tEndTime);
+															targetEvent.setValidTime(validTime);
+															validTimeEvent.add(targetEvent); 
+														} else {
+															System.out.println("Error: existed startTime is larger than inferred endTime for TimeInterval event: " + targetEvent.getIRIStr());
+														}
+												} 
+												// else if (tEndTime == null), no new info added, drop it
+											} else if (tEndTime != null) {
+												validTime = new TimeInterval();
+												((TimeInterval) validTime).setEndTime(tEndTime);
+												targetEvent.setValidTime(validTime);
+												validTimeEvent.add(targetEvent); 
+												// we still all this (incomplete) timeInterval for reasoning process (they might convey knowledge for inference)
+											}
+											// else if (tStartTime == null && tEndTime == null), drop it
+										}
+										// 4. missing startTime and endTime.
+										else if (origStartTime == null && origDur != null && origEndTime == null) {
+											if (tStartTime != null && tEndTime != null) {
+												if (TimeInterval.isValidTimeInterval(tStartTime, tEndTime, origDur)) {
+													validTime = new TimeInterval(tStartTime, tEndTime);
+													targetEvent.setValidTime(validTime);
+													validTimeEvent.add(targetEvent); 
+												} else {
+													System.out.println("Error: inferred startTime and endTime conflict with original duration for TimeInterval event: " + targetEvent.getIRIStr());
+												}
+											} else if (tStartTime != null) {
+												validTime = new TimeInterval(tStartTime, origDur);
+												targetEvent.setValidTime(validTime);
+												validTimeEvent.add(targetEvent); 
+											} else if (tEndTime != null) {
+												validTime = new TimeInterval(origDur, tEndTime);
+												targetEvent.setValidTime(validTime);
+												validTimeEvent.add(targetEvent); 
+											} else {
+												// cannot infer validTime for the target TimeInstant event
+											}
+										}
+									}
+									break;
+								case PERIODICTIMEINTERVAL: // TODO
+									break;
+									
+								default: // UNKNOWN
+									if (tStartTime != null && tEndTime != null) { 
+										if (tStartTime.compareTo(tEndTime) < 0) { // should be an interval
+											validTime = new TimeInterval(tStartTime, tEndTime);
+											targetEvent.setValidTime(validTime);
+											targetEvent.setEventType(TemporalType.TIMEINTERVAL); // assign the event to be an interval
+											validTimeEvent.add(targetEvent); 
+										} else if (tStartTime.compareTo(tEndTime) > 0) {
+											System.out.println("Error: inferred startTime is larger than inferred endTime for UNKNOWN event: " + targetEvent.getIRIStr());
+										} else { // should be an instant
+											validTime = tStartTime;
+											targetEvent.setValidTime(validTime);
+											targetEvent.setEventType(TemporalType.TIMEINSTANT); // assign the event to be an interval
+											validTimeEvent.add(targetEvent); 
+										}
+									} else if (tStartTime != null) { // Note: we treat TimeInterval event as the Default event form!
+										validTime = new TimeInterval();
+										((TimeInterval) validTime).setStartTime(tStartTime);
+										targetEvent.setValidTime(validTime);
+										targetEvent.setEventType(TemporalType.TIMEINTERVAL); // assign the event to be an interval (default)
+										validTimeEvent.add(targetEvent); 
+										// we still all this (incomplete) timeInterval for reasoning process (they might convey knowledge for inference)
+									} else if (tEndTime != null) {
+										validTime = new TimeInterval();
+										((TimeInterval) validTime).setEndTime(tEndTime);
+										targetEvent.setValidTime(validTime);
+										targetEvent.setEventType(TemporalType.TIMEINTERVAL); // assign the event to be an interval (default)
+										validTimeEvent.add(targetEvent); 
+										// we still all this (incomplete) timeInterval for reasoning process (they might convey knowledge for inference)
+									} else {
+										// cannot infer validTime for the target TimeInstant event
+									} 
+									break;
+							}
+						}
+					}
+				}
+				validTimeEvent.remove(startEvent);
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	// helper function for reasonValidTime().
+	private boolean validTimeIsComplete(Event event) {
+		TemporalRegion validTime = event.getValidTime();
+		if (validTime != null) {
+			if (event.getEventType().equals(TemporalType.TIMEINSTANT)) {
+				TimeInstant timeInstant = (TimeInstant) validTime;
+				if (timeInstant.getNormalizedTime() > -1) return true;
+			} else if (event.getEventType().equals(TemporalType.TIMEINTERVAL)) {
+				TimeInterval timeInterval = (TimeInterval) validTime;
+				if (TimeInterval.isValidTimeInterval(timeInterval.getStartTime(), timeInterval.getEndTime(), timeInterval.getDuration())) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
