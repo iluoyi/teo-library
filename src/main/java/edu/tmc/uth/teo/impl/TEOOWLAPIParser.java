@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Vector;
 
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
@@ -52,9 +53,12 @@ public class TEOOWLAPIParser implements TEOParser {
 	
 	// inner helper data structures
 	private HashMap<String, Event> eventMap = null;
-	//private HashMap<String, TemporalRelation> relationMap = null;
+	private HashMap<String, TemporalRelationInShortCode> relationMap = null;
 	private HashMap<OWLObjectProperty, TemporalRelationType> relationIntervalRoaster = null;
 	private HashMap<OWLObjectProperty, TemporalRelationType> relationPointRoaster = null;
+	
+	private Vector<String> iriList = null;
+	private HashMap<String, String> timeOffsetMap = null;
 
 	// Properties
 	private OWLAnnotationProperty rdfLabel = null;
@@ -118,7 +122,9 @@ public class TEOOWLAPIParser implements TEOParser {
 		this.ontology = (OWLOntology) ont;
 		this.df = this.ontology.getOWLOntologyManager().getOWLDataFactory();
 		this.reasoner = com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory.getInstance().createReasoner(this.ontology);
-
+		this.relationMap = new HashMap<String, TemporalRelationInShortCode>();
+		this.timeOffsetMap = new HashMap<String, String>();
+		
 		if ((df == null) || (reasoner == null)) {
 			System.out.println("!!!!!!!!!! Initialization Error!! df/reasoner is null. Nothing will work !!!!!!!!!!!!!");
 			return;
@@ -238,6 +244,17 @@ public class TEOOWLAPIParser implements TEOParser {
 			}
 		}
 		
+		// assign the timeOffset to related relations
+		if (timeOffsetMap != null && !timeOffsetMap.isEmpty()) {
+			Set<String> keySet = timeOffsetMap.keySet();
+			for (String keyStr : keySet) {
+//				System.out.println(relationMap.get(keyStr));
+				OWLNamedIndividual duration = df.getOWLNamedIndividual(IRI.create(timeOffsetMap.get(keyStr)));
+				relationMap.get(keyStr).setTimeOffset(this.parseDuration(duration));
+			}
+//			System.out.println(iriList);
+		}
+		
 		return noError;
 	}
 	
@@ -274,6 +291,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		TemporalRelationType relationType = null;
 		String targetIRIStr = null;
 		TemporalRelationInShortCode relation = null;
+		String relationMapKey = null;
 		
 		// 1. collect all "asserted" relations (for later relation merge) first and record timeOffsets for point relations
 		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
@@ -284,17 +302,35 @@ public class TEOOWLAPIParser implements TEOParser {
 				relationType = relationPointRoaster.get(axiom.getProperty()); 
 			}
 			if (relationType != null) {
+				targetIRIStr = axiom.getObject().asOWLNamedIndividual().getIRI().toString();
+				
 				// may contain timeOffset info
 				// Note: both timeInstant and timeInterval can have start/end relations, will be determined in the reasoning process
 				if (TemporalRelation.TemporalPointRelationSet.contains(relationType)) {
-					// TODO: use the same method as before
+					if (getConversePointRelation(relationType) != null) { // means it is possible to have timeOffset
+						String key1 = getRelationMapKey(sourceIRIStr, relationType, targetIRIStr);
+						String key2 = getRelationMapKey(targetIRIStr, getConversePointRelation(relationType), sourceIRIStr);
+						if (!this.timeOffsetMap.containsKey(key1) && !this.timeOffsetMap.containsKey(key2)) {
+							Set<OWLAnnotation> annotSet = axiom.getAnnotations(hasTimeOffset);
+							if (annotSet != null) {
+								for (OWLAnnotation annot : annotSet) {	
+									//annot.getValue().toString() - The IRI String of the duration individual 
+									timeOffsetMap.put(key1, annot.getValue().toString());
+									timeOffsetMap.put(key2, annot.getValue().toString());
+								}
+							}
+						} else {
+							System.out.println("Error: Duplicate point relation (with duplicate timeOffset) information detected!");
+						}
+					}
 				}
-				
-				targetIRIStr = axiom.getObject().asOWLNamedIndividual().getIRI().toString();
+
 				relation = new TemporalRelationInShortCode(TemporalRelationUtils.getTemporalRelationCode(relationType));
 				relation.setAssemblyMethod(AssemblyMethod.ASSERTED); // Asserted axioms
 				event.addTemporalRelation(targetIRIStr, relation); 
 				// duplicate relations cannot be added, it detects duplicate by "target" AND "type" only, (no asserted/granularity info involved)
+				relationMapKey = getRelationMapKey(sourceIRIStr, relationType, targetIRIStr);
+				relationMap.put(relationMapKey, relation);
 			}
 		}
 				
@@ -321,13 +357,16 @@ public class TEOOWLAPIParser implements TEOParser {
 					targetIRIStr = target.getIRI().toString();
 					relation = new TemporalRelationInShortCode(TemporalRelationUtils.getTemporalRelationCode(relationType));
 					relation.setAssemblyMethod(AssemblyMethod.INFERRED); // Inferred axioms
-					event.addTemporalRelation(targetIRIStr, relation); 
+					event.addTemporalRelation(targetIRIStr, relation);
+					relationMapKey = getRelationMapKey(sourceIRIStr, relationType, targetIRIStr);
+					if (!relationMap.containsKey(relationMapKey)) {
+						relationMap.put(relationMapKey, relation);
+					}
 				}
 			}
 		}
 		// 2-2. parse inferred Point temporal relations
-		it = relationPointRoaster.entrySet().iterator();
-		//TODO: assemblyMethod, granularity?		
+		it = relationPointRoaster.entrySet().iterator();	
 		while (it.hasNext()) {
 			Entry<OWLObjectProperty, TemporalRelationType> pair = it.next();
 			relationType = pair.getValue();
@@ -339,6 +378,10 @@ public class TEOOWLAPIParser implements TEOParser {
 					relation = new TemporalRelationInShortCode(TemporalRelationUtils.getTemporalRelationCode(relationType));
 					relation.setAssemblyMethod(AssemblyMethod.INFERRED); // Inferred axioms
 					event.addTemporalRelation(targetIRIStr, relation);
+					relationMapKey = getRelationMapKey(sourceIRIStr, relationType, targetIRIStr);
+					if (!relationMap.containsKey(relationMapKey)) {
+						relationMap.put(relationMapKey, relation);
+					}
 				}
 			}
 		}
@@ -423,7 +466,7 @@ public class TEOOWLAPIParser implements TEOParser {
 				// Assumption: if start, end and duration are valid and given, we use start and end to populate the time interval.
 				timeInterval = new TimeInterval(startTimeInstant, endTimeInstant); 
 			} else {
-				System.out.println("Inconsistent startTime, endTime and duration for TimeInterval: " + timeIndividual.getIRI());
+				System.out.println("Error: Inconsistent startTime, endTime and duration for TimeInterval: " + timeIndividual.getIRI());
 			}
 		} else if (startTimeInstant != null && endTimeInstant != null) {
 			timeInterval = new TimeInterval(startTimeInstant, endTimeInstant);
@@ -432,7 +475,12 @@ public class TEOOWLAPIParser implements TEOParser {
 		} else if (endTimeInstant != null && duration != null) {
 			timeInterval = new TimeInterval(duration, endTimeInstant);
 		} else {
-			System.out.println("Given information is not sufficient to parse the TimeInterval: " + timeIndividual.getIRI());
+			System.out.println("Error: Given information is not sufficient to parse the TimeInterval: " + timeIndividual.getIRI());			
+			timeInterval = new TimeInterval();
+			if (startTimeInstant != null) timeInterval.setStartTime(startTimeInstant);
+			if (endTimeInstant != null) timeInterval.setEndTime(endTimeInstant);
+			if (duration != null) timeInterval.setDuration(duration);
+			// we still return the (incomplete) timeInterval for reasoning process (they might convey knowledge for inference)
 		}
 		
 		return timeInterval;
@@ -453,7 +501,6 @@ public class TEOOWLAPIParser implements TEOParser {
 				duration = new Duration(durValueStr, unit);
 			}
 		}
-		
 		return duration;
 	}
 	
@@ -517,9 +564,46 @@ public class TEOOWLAPIParser implements TEOParser {
 		return null;
 	}
 	
-	// TODO
-	public String getTimeOffsetMapKey(String sourceStr, TemporalRelationType pointRelation, String targetStr) {
-		
-		return null;
+	public TemporalRelationType getConversePointRelation(TemporalRelationType pointRelation) {
+		switch (pointRelation) {
+			case START_BEFORE_START: return TemporalRelationType.START_AFTER_START;
+			case START_AFTER_START: return TemporalRelationType.START_BEFORE_START;
+			
+			case START_BEFORE_END: return TemporalRelationType.END_AFTER_START;
+			case END_AFTER_START: return TemporalRelationType.START_BEFORE_END;
+			
+			case END_BEFORE_START: return TemporalRelationType.START_AFTER_END;
+			case START_AFTER_END: return TemporalRelationType.END_BEFORE_START;
+			
+			case END_BEFORE_END: return TemporalRelationType.END_AFTER_END;
+			case END_AFTER_END: return TemporalRelationType.END_BEFORE_END;
+			default: return null;
+		}
+	}
+	
+	public String getRelationMapKey(String sourceStr, TemporalRelationType relation, String targetStr) {
+		return this.getEventIRIIndex(sourceStr) + "-" + relation + "-" + this.getEventIRIIndex(targetStr);
+	}
+	
+	private void addEventIRI(String iriStr) {
+		if (this.iriList == null) {
+			iriList = new Vector<String>();
+		}
+		if (!iriList.contains(iriStr)) {
+			iriList.add(iriStr);
+		}
+	}
+	
+	private int getEventIRIIndex(String iriStr) {
+		if (iriList == null) {
+			addEventIRI(iriStr);
+		}
+		int index = iriList.indexOf(iriStr);
+		if (index < 0) {
+			addEventIRI(iriStr);
+			return iriList.size() - 1;
+		} else {
+			return index;
+		}
 	}
 }

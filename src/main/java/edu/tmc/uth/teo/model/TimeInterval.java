@@ -7,8 +7,7 @@ import edu.tmc.uth.teo.utils.TimeUtils;
 /**
  * Note: startTime, endTime and duration should be unified to the same granularity when initializing the TimeInterval.
  * 
- * 1. We put constraints on Constructors so that we can only have valid instances of TimeInterval.
- * 2. Any 2 conditions can lead to the 3rd condition, so we have 3 constructors.
+ * Any 2 conditions can automatically lead to the 3rd condition.
  * 
  * @author yluo
  *
@@ -24,12 +23,36 @@ public class TimeInterval extends ConnectedTemporalRegion {
 		return this.startTime;
 	}
 	
+	public void setStartTime(TimeInstant startTime) {
+		this.startTime = startTime;
+	}
+	
 	public TimeInstant getEndTime() {
 		return this.endTime;
 	}
 	
+	public void setEndTime(TimeInstant endTime) {
+		this.endTime = endTime;
+	}
+	
 	public Duration getDuration() {
 		return this.duration;
+	}
+	
+	public void setDuration(Duration duration) {
+		this.duration = duration;
+	}
+	
+	/**
+	 * Constructor 0
+	 * @param startTime
+	 * @param endTime
+	 */
+	public TimeInterval() {
+		this.startTime = null;
+		this.endTime = null;
+		this.setGranularity(new Granularity());
+		this.duration = null;
 	}
 	
 	/**
