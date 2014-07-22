@@ -70,6 +70,10 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 		return this.assemblyMethod;
 	}
 	
+	public void setAssemblyMethod(AssemblyMethod method) {
+		this.assemblyMethod = method;
+	}
+	
 	public String toString() {
 //		return "{[durUnit:" + this.durUnit + "]" + "[durStr:" + this.durStr + "]" + 
 //				"[durValue:" + this.durValue + "]" + "[AssemblyMethod:" + this.assemblyMethod + "]" + "}";

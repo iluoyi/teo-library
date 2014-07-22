@@ -207,9 +207,31 @@ public class TemporalRelationUtils {
 			return result;
 		}
 		
-		// test before (EBS)
+		// test EAS
+		if ((short) (c & TEOConstants.bin_EBS) == TEOConstants.bin_EBS) {
+			result.add(TemporalRelationType.END_BEFORE_START);
+			return result;
+		}
+				
+		if ((short) (c & TEOConstants.bin_SAE) == TEOConstants.bin_SAE) {
+			result.add(TemporalRelationType.START_AFTER_END);
+			return result;
+		}
+		
+		if ((short) (c & TEOConstants.bin_EES) == TEOConstants.bin_EES) {
+			result.add(TemporalRelationType.END_EQUAL_START);
+			return result;
+		}
+		
+		if ((short) (c & TEOConstants.bin_SEE) == TEOConstants.bin_SEE) {
+			result.add(TemporalRelationType.START_EQUAL_END);
+			return result;
+		}
+				
+		
+		// test before
 		if ((short)(c & TEOConstants.bin_before)==TEOConstants.bin_before) result.add(TemporalRelationType.BEFORE);
-		// test after (SAE)
+		// test after
 		if ((short)(c & TEOConstants.bin_after)==TEOConstants.bin_after) result.add(TemporalRelationType.AFTER);
 		// test during
 		if ((short)(c & TEOConstants.bin_during)==TEOConstants.bin_during) result.add(TemporalRelationType.DURING);
@@ -219,9 +241,9 @@ public class TemporalRelationUtils {
 		if ((short)(c & TEOConstants.bin_overlaps)==TEOConstants.bin_overlaps) result.add(TemporalRelationType.OVERLAP);
 		// test overlappedby
 		if ((short)(c & TEOConstants.bin_overlappedby)==TEOConstants.bin_overlappedby) result.add(TemporalRelationType.OVERLAPPEDBY);
-		// test meets (EES)
+		// test meets
 		if ((short)(c & TEOConstants.bin_meets)==TEOConstants.bin_meets) result.add(TemporalRelationType.MEET);
-		// test metby (SEE)
+		// test metby
 		if ((short)(c & TEOConstants.bin_metby)==TEOConstants.bin_metby) result.add(TemporalRelationType.METBY);
 		// test starts
 		if ((short)(c & TEOConstants.bin_starts)==TEOConstants.bin_starts) result.add(TemporalRelationType.START);

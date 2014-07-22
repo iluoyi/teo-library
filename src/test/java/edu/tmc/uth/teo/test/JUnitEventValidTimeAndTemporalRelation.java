@@ -15,7 +15,7 @@ import edu.tmc.uth.teo.interfaces.TEOQuerier;
 import edu.tmc.uth.teo.interfaces.TEOReasoner;
 import edu.tmc.uth.teo.model.Event;
 
-public class JUnitEventTimeStamps {
+public class JUnitEventValidTimeAndTemporalRelation {
 	private TEOLoader loader = null;
 	private TEOParser parser = null;
 	private TEOQuerier querier = null;
@@ -57,20 +57,20 @@ public class JUnitEventTimeStamps {
 		Event event2 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event2");
 		Event event3 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event3");
 		Event event4 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event4");
-//		Event event5 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event5");
-//		Event event6 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event6");
+		Event event5 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event5");
+		Event event6 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event6");
 		
 	
 		System.out.println("Event1:\n" + event1);
 		System.out.println("\nEvent2:\n" + event2);
 		System.out.println("\nEvent3:\n" + event3);
 		System.out.println("\nEvent4:\n" + event4);
-//		System.out.println("\nEvent5:\n" + event5);
-//		System.out.println("\nEvent6:\n" + event6);
+		System.out.println("\nEvent5:\n" + event5);
+		System.out.println("\nEvent6:\n" + event6);
 	}
 	
 	
-	//@Test
+	@Test
 	public void testGetEventsTimeline() {
 		System.out.println("######################## Testing GetEventsTimeline #####################################");
 		List<Event> timeline = querier.getEventsTimeline();

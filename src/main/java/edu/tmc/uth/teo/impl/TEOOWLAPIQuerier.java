@@ -87,6 +87,9 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 	
 	/**
 	 * Here we return the temporalRelationCode list due to possible relation combinations (e.g. "[before, contain]" as a relation), need to be interpreted further.
+	 * 
+	 * Note: should compare their validTimes first.
+	 * 
 	 */
 	public ArrayList<Short> getTemporalRelationType(Event event1, Event event2, Granularity granularity) {
 		ArrayList<Short> relations= new ArrayList<Short>();

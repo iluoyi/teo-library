@@ -60,6 +60,7 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 			// 2. iteration: reason validTimes for other events
 			while (validTimeEvent != null && !validTimeEvent.isEmpty()) {
 				Event startEvent = validTimeEvent.firstElement();
+				System.out.println(startEvent.getIRIStr());
 				TimeInstant startTime = null;
 				TimeInstant endTime = null;
 				if (startEvent.getEventType().equals(TemporalType.TIMEINSTANT)) {
@@ -80,37 +81,60 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 							TemporalRegion validTime = null;
 							ArrayList<TemporalRelationInShortCode> relationList = relations.get(targetIRIStr);
 							for (TemporalRelationInShortCode relation : relationList) {
-								if (relation.getTimeOffset() != null) { // if the relation conveys a valid TimeOffset
-									// detect the Point Relation Type first (SBS?SBE?...)
-									TemporalRelationType relationType = TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(relation.getRelationCode()).get(0); // should be only one Point relation
+								//if (relation.getTimeOffset() != null) { // if the relation conveys a valid TimeOffset	
+								// detect the Point Relation Type first (SBS?SBE?...)
+								TemporalRelationType relationType = TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(relation.getRelationCode()).get(0); // should be only one Point relation
+								if (TemporalRelation.TemporalPointRelationSet.contains(relationType)) {
 									switch (relationType) {
 										case START_BEFORE_START:
-											tStartTime = TimeUtils.getEndTimeInstantFrom(startTime, relation.getTimeOffset(), null);
+											if (tStartTime == null && startTime != null)
+												tStartTime = TimeUtils.getEndTimeInstantFrom(startTime, relation.getTimeOffset(), null);
 											break;
 										case START_AFTER_START:
-											tStartTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), startTime, null);
+											if (tStartTime == null && startTime != null)
+												tStartTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), startTime, null);
 											break;
 										case START_BEFORE_END:
-											tEndTime = TimeUtils.getEndTimeInstantFrom(startTime, relation.getTimeOffset(), null);
+											if (tEndTime == null && startTime != null)
+												tEndTime = TimeUtils.getEndTimeInstantFrom(startTime, relation.getTimeOffset(), null);
 											break;
 										case START_AFTER_END:
-											tEndTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), startTime, null);
+											if (tEndTime == null && startTime != null)
+												tEndTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), startTime, null);
 											break;
 										case END_BEFORE_START:
-											tStartTime = TimeUtils.getEndTimeInstantFrom(endTime, relation.getTimeOffset(), null);
+											if (tStartTime == null && endTime != null)
+												tStartTime = TimeUtils.getEndTimeInstantFrom(endTime, relation.getTimeOffset(), null);
 											break;
 										case END_AFTER_START:
-											tStartTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), endTime, null);
+											if (tStartTime == null && endTime != null)
+												tStartTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), endTime, null);
 											break;
 										case END_BEFORE_END:
-											tEndTime = TimeUtils.getEndTimeInstantFrom(endTime, relation.getTimeOffset(), null);
+											if (tEndTime == null && endTime != null)
+												tEndTime = TimeUtils.getEndTimeInstantFrom(endTime, relation.getTimeOffset(), null);
 											break;
 										case END_AFTER_END:
-											tEndTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), endTime, null);
+											if (tEndTime == null && endTime != null)
+												tEndTime = TimeUtils.getStartTimeInstantFrom(relation.getTimeOffset(), endTime, null);
+											break;
+										case START_EQUAL_START:
+											if (tStartTime == null && startTime != null)
+												tStartTime = new TimeInstant(startTime.getNormalizedTime());
+											break;
+										case START_EQUAL_END:
+											if (tEndTime == null && startTime != null)
+												tEndTime = new TimeInstant(startTime.getNormalizedTime());
+											break;
+										case END_EQUAL_START:
+											if (tStartTime == null && endTime != null)
+												tStartTime = new TimeInstant(endTime.getNormalizedTime());
+											break;
+										case END_EQUAL_END:
+											if (tEndTime == null && endTime != null)
+												tEndTime = new TimeInstant(endTime.getNormalizedTime());
 											break;
 										default:
-											tStartTime = null;
-											tEndTime = null;
 											break;
 									}
 								}
@@ -172,9 +196,9 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 										} else {
 											// cannot infer validTime for the target TimeInstant event
 										}
-									} else {
+									} else {// then validTime is not null, we cannot create a new one, just add some extra information 
 										TimeInstant origStartTime = ((TimeInterval) targetEvent.getValidTime()).getStartTime();
-										TimeInstant origEndTime = ((TimeInterval) targetEvent.getValidTime()).getStartTime();
+										TimeInstant origEndTime = ((TimeInterval) targetEvent.getValidTime()).getEndTime();
 										Duration origDur = ((TimeInterval) targetEvent.getValidTime()).getDuration();
 										
 										// 2. missing startTime and duration;
@@ -193,11 +217,9 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 												} 
 												// else if (tStartTime == null), no new info added, drop it
 											} else if (tStartTime != null) {
-												validTime = new TimeInterval();
-												((TimeInterval) validTime).setStartTime(tStartTime);
+												validTime = new TimeInterval(tStartTime, origEndTime);
 												targetEvent.setValidTime(validTime);
 												validTimeEvent.add(targetEvent); 
-												// we still all this (incomplete) timeInterval for reasoning process (they might convey knowledge for inference)
 											} 
 											// else if (tStartTime == null && tEndTime == null), drop it
 										}
@@ -217,11 +239,9 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 												} 
 												// else if (tEndTime == null), no new info added, drop it
 											} else if (tEndTime != null) {
-												validTime = new TimeInterval();
-												((TimeInterval) validTime).setEndTime(tEndTime);
+												validTime = new TimeInterval(origStartTime, tEndTime);
 												targetEvent.setValidTime(validTime);
 												validTimeEvent.add(targetEvent); 
-												// we still all this (incomplete) timeInterval for reasoning process (they might convey knowledge for inference)
 											}
 											// else if (tStartTime == null && tEndTime == null), drop it
 										}

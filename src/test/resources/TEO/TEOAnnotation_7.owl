@@ -69,7 +69,7 @@
 <http://www.cse.lehigh.edu/~yil712/TEO/annotation_7.owl#Event2> rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
                                                                          owl:NamedIndividual ;
                                                                 
-                                                                rdfs:comment "event 2 instant"@en ;
+                                                                rdfs:comment "event 2"@en ;
                                                                 
                                                                 <http://informatics.mayo.edu/TEO.owl#TEO_0000152> <http://www.cse.lehigh.edu/~yil712/TEO/annotation_7.owl#Event1> .
 [ rdf:type owl:Axiom ;
@@ -86,7 +86,7 @@
 <http://www.cse.lehigh.edu/~yil712/TEO/annotation_7.owl#Event3> rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
                                                                          owl:NamedIndividual ;
                                                                 
-                                                                rdfs:comment "event 3 instant" ;
+                                                                rdfs:comment "event 3" ;
                                                                 
                                                                 <http://informatics.mayo.edu/TEO.owl#TEO_0000150> <http://www.cse.lehigh.edu/~yil712/TEO/annotation_7.owl#Event2> .
 [ rdf:type owl:Axiom ;

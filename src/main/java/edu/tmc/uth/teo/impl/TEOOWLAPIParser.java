@@ -248,9 +248,15 @@ public class TEOOWLAPIParser implements TEOParser {
 		if (timeOffsetMap != null && !timeOffsetMap.isEmpty()) {
 			Set<String> keySet = timeOffsetMap.keySet();
 			for (String keyStr : keySet) {
-//				System.out.println(relationMap.get(keyStr));
-				OWLNamedIndividual duration = df.getOWLNamedIndividual(IRI.create(timeOffsetMap.get(keyStr)));
-				relationMap.get(keyStr).setTimeOffset(this.parseDuration(duration));
+				String[] parts = timeOffsetMap.get(keyStr).split("-");
+				OWLNamedIndividual duration = df.getOWLNamedIndividual(IRI.create(iriList.get(Integer.parseInt(parts[1]))));
+				Duration dur = this.parseDuration(duration);
+				if (parts[0].equals("A")) {
+					dur.setAssemblyMethod(AssemblyMethod.ASSERTED);
+				} else {
+					dur.setAssemblyMethod(AssemblyMethod.INFERRED);
+				}		
+				relationMap.get(keyStr).setTimeOffset(dur);
 			}
 //			System.out.println(iriList);
 		}
@@ -308,15 +314,15 @@ public class TEOOWLAPIParser implements TEOParser {
 				// Note: both timeInstant and timeInterval can have start/end relations, will be determined in the reasoning process
 				if (TemporalRelation.TemporalPointRelationSet.contains(relationType)) {
 					if (getConversePointRelation(relationType) != null) { // means it is possible to have timeOffset
-						String key1 = getRelationMapKey(sourceIRIStr, relationType, targetIRIStr);
-						String key2 = getRelationMapKey(targetIRIStr, getConversePointRelation(relationType), sourceIRIStr);
+						String key1 = getRelationMapKey(sourceIRIStr, relationType, targetIRIStr); // Asserted
+						String key2 = getRelationMapKey(targetIRIStr, getConversePointRelation(relationType), sourceIRIStr); // Inferred
 						if (!this.timeOffsetMap.containsKey(key1) && !this.timeOffsetMap.containsKey(key2)) {
 							Set<OWLAnnotation> annotSet = axiom.getAnnotations(hasTimeOffset);
 							if (annotSet != null) {
 								for (OWLAnnotation annot : annotSet) {	
 									//annot.getValue().toString() - The IRI String of the duration individual 
-									timeOffsetMap.put(key1, annot.getValue().toString());
-									timeOffsetMap.put(key2, annot.getValue().toString());
+									timeOffsetMap.put(key1, "A-" + this.getIRIIndex(annot.getValue().toString()));
+									timeOffsetMap.put(key2, "I-" + this.getIRIIndex(annot.getValue().toString()));
 								}
 							}
 						} else {
@@ -475,7 +481,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		} else if (endTimeInstant != null && duration != null) {
 			timeInterval = new TimeInterval(duration, endTimeInstant);
 		} else {
-			System.out.println("Error: Given information is not sufficient to parse the TimeInterval: " + timeIndividual.getIRI());			
+			System.out.println("Warning: Given information is not sufficient to parse the TimeInterval: " + timeIndividual.getIRI());			
 			timeInterval = new TimeInterval();
 			if (startTimeInstant != null) timeInterval.setStartTime(startTimeInstant);
 			if (endTimeInstant != null) timeInterval.setEndTime(endTimeInstant);
@@ -568,24 +574,29 @@ public class TEOOWLAPIParser implements TEOParser {
 		switch (pointRelation) {
 			case START_BEFORE_START: return TemporalRelationType.START_AFTER_START;
 			case START_AFTER_START: return TemporalRelationType.START_BEFORE_START;
+			//case START_EQUAL_START: return TemporalRelationType.START_EQUAL_START;
 			
 			case START_BEFORE_END: return TemporalRelationType.END_AFTER_START;
-			case END_AFTER_START: return TemporalRelationType.START_BEFORE_END;
-			
-			case END_BEFORE_START: return TemporalRelationType.START_AFTER_END;
 			case START_AFTER_END: return TemporalRelationType.END_BEFORE_START;
+			//case START_EQUAL_END: return TemporalRelationType.END_EQUAL_START;
+			
+			case END_AFTER_START: return TemporalRelationType.START_BEFORE_END;
+			case END_BEFORE_START: return TemporalRelationType.START_AFTER_END;
+			//case END_EQUAL_START: return TemporalRelationType.START_EQUAL_END;
 			
 			case END_BEFORE_END: return TemporalRelationType.END_AFTER_END;
 			case END_AFTER_END: return TemporalRelationType.END_BEFORE_END;
+			//case END_EQUAL_END: return TemporalRelationType.END_EQUAL_END;
+			
 			default: return null;
 		}
 	}
 	
 	public String getRelationMapKey(String sourceStr, TemporalRelationType relation, String targetStr) {
-		return this.getEventIRIIndex(sourceStr) + "-" + relation + "-" + this.getEventIRIIndex(targetStr);
+		return this.getIRIIndex(sourceStr) + "-" + relation + "-" + this.getIRIIndex(targetStr);
 	}
 	
-	private void addEventIRI(String iriStr) {
+	private void addIRIStr(String iriStr) {
 		if (this.iriList == null) {
 			iriList = new Vector<String>();
 		}
@@ -594,13 +605,13 @@ public class TEOOWLAPIParser implements TEOParser {
 		}
 	}
 	
-	private int getEventIRIIndex(String iriStr) {
+	private int getIRIIndex(String iriStr) {
 		if (iriList == null) {
-			addEventIRI(iriStr);
+			addIRIStr(iriStr);
 		}
 		int index = iriList.indexOf(iriStr);
 		if (index < 0) {
-			addEventIRI(iriStr);
+			addIRIStr(iriStr);
 			return iriList.size() - 1;
 		} else {
 			return index;
