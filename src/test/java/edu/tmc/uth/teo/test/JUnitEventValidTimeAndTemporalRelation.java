@@ -73,9 +73,10 @@ public class JUnitEventValidTimeAndTemporalRelation {
 	@Test
 	public void testGetEventsTimeline() {
 		System.out.println("######################## Testing GetEventsTimeline #####################################");
-		List<Event> timeline = querier.getEventsTimeline();
+//		List<Event> timeline = querier.getEventsTimeline();
 //		for (Event event : timeline) {
 //			System.out.println(event.getIRIStr());
 //		}
+		querier.getEventsTimeline();
 	}
 }

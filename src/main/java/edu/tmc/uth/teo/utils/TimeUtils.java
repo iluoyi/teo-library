@@ -82,7 +82,7 @@ public class TimeUtils {
 				int minute = (int) (delta / 1000 / 30);
 				durValue.setMinute(minute);
 			}
-			if (gran.getUnit().compareTo(Unit.SECOND) == 0) {
+			if (gran.getUnit().compareTo(Unit.SECOND) == 0 || gran.getUnit().compareTo(Unit.UNKNOWN) == 0) {
 				int second = (int) (delta / 1000);
 				durValue.setSecond(second);
 			}

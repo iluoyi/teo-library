@@ -155,6 +155,25 @@
 
 
 
+###  http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event6
+
+<http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event6> rdf:type <http://informatics.mayo.edu/TEO.owl#TEO_0000025> ,
+                                                                         owl:NamedIndividual ;
+                                                                
+                                                                rdfs:comment "event 6" ;
+                                                                
+                                                                <http://informatics.mayo.edu/TEO.owl#TEO_0000152> <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event1> ;
+                                                                
+                                                                <http://informatics.mayo.edu/TEO.owl#TEO_0000020> <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event5> .
+[ rdf:type owl:Axiom ;
+  owl:annotatedProperty <http://informatics.mayo.edu/TEO.owl#TEO_0000152> ;
+  <http://informatics.mayo.edu/TEO.owl#hasTimeOffset> <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Duration5> ;
+  owl:annotatedTarget <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event1> ;
+  owl:annotatedSource <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event6>
+] .
+
+
+
 ###  http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#TimeInstant2
 
 <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#TimeInstant2> rdf:type <http://www.ifomis.org/bfo/1.1/span#TemporalInstant> ,
