@@ -274,7 +274,7 @@ public class ConstraintNetwork<E> {
 	
 	public boolean pathConsistency() {
 		if (this.modeledConstraints.size()==0) return true; // no constraint => nothing todo		
-		ArrayList<Pair<Integer,Integer>> batchStack = new ArrayList<Pair<Integer,Integer>>();
+		ArrayList<Pair<Integer,Integer>> batchStack = new ArrayList<Pair<Integer,Integer>>(); 
 		// cache to check if an entry is already on the stack => faster then looking up the whole stack each time
 		ArrayList<ArrayList<Boolean>> stackEntries = new ArrayList<ArrayList<Boolean>>();
 		for (int i=0;i<this.constraintnetwork.size();i++) {
@@ -291,15 +291,15 @@ public class ConstraintNetwork<E> {
 		batchStack.add(new Pair<Integer,Integer>(startConstraint.getSourceNode().getAllenId(),startConstraint.getDestinationNode().getAllenId()));
 		// Add stack entry
 		stackEntries.get(startConstraint.getSourceNode().getAllenId()).set(startConstraint.getDestinationNode().getAllenId(),true);
+		
 		// Put inverse also on the stack
-		stackEntries.get(startConstraint.getDestinationNode().getAllenId()).set(startConstraint.getSourceNode().getAllenId(), true);
+		//stackEntries.get(startConstraint.getDestinationNode().getAllenId()).set(startConstraint.getSourceNode().getAllenId(), true);
 		
 		while (batchStack.size()>0) {
-			Pair<Integer,Integer> currentEdge = batchStack.get(0);
+			Pair<Integer,Integer> currentEdge = batchStack.get(0); // Yi: this is used as a queue
 			batchStack.remove(0);
 			// Remove stack entry
 			stackEntries.get(currentEdge.getP1()).set(currentEdge.getP2(),false);
-			
 			
 			int i = currentEdge.getP1().intValue();
 			int j = currentEdge.getP2().intValue();
@@ -308,8 +308,6 @@ public class ConstraintNetwork<E> {
 				// Preliminaries get the constraints 
 				short ckj = this.constraintnetwork.get(k).get(j);
 				short cki = this.constraintnetwork.get(k).get(i);
-				short cik = this.constraintnetwork.get(i).get(k);
-				short cjk = this.constraintnetwork.get(j).get(k);
 				short cij = this.constraintnetwork.get(i).get(j);
 				/////////////////////////////////////////First Part
 				// get the constraints for k -> j
@@ -330,7 +328,6 @@ public class ConstraintNetwork<E> {
 					//if (subsetConstraintsShort(ckj,this.staticmodelshort.get(k).get(j)==true) {
 				short ckjtemp = this.constraintnetwork.get(k).get(j);
 				if ((ckj!=ckjtemp && ((short)ckjtemp&ckj)==ckj)) {
-				
 						// if it already contains them then we do not need to add them again (they will be processed anyway)
 						if ((stackEntries.get(k).get(j)==false)) {  //only add if not already there
 							// Add stack entry
@@ -338,18 +335,26 @@ public class ConstraintNetwork<E> {
 							Pair<Integer,Integer> updatePair =new Pair<Integer,Integer>(k,j); 
 							batchStack.add(updatePair);
 						}
-						if ((stackEntries.get(j).get(k)==false)) {  //only add if not already there
-						// Put inverse also on the stack
-						stackEntries.get(j).set(k, true);
-						Pair<Integer,Integer> updatePairInverse =new Pair<Integer,Integer>(j,k); 
-						batchStack.add(updatePairInverse);							
-						}
+//						if ((stackEntries.get(j).get(k)==false)) {  //only add if not already there
+//							// Put inverse also on the stack
+//							stackEntries.get(j).set(k, true);
+//							Pair<Integer,Integer> updatePairInverse =new Pair<Integer,Integer>(j,k); 
+//							batchStack.add(updatePairInverse);							
+//						}
 						// update constraint network
 						this.constraintnetwork.get(k).set(j, ckj);			
 						// we also update directly the inverse constraint between the nodes: ejk
 						short iCon = this.inverseConstraintsShort(ckj);
 						this.constraintnetwork.get(j).set(k, iCon);						
 					}
+			}
+			
+			// Yi: adapted according to the original paper (2 separate for loops...)
+			for (int k=0;k<this.constraintnetwork.size();k++) {
+				// Preliminaries get the constraints 
+				short cik = this.constraintnetwork.get(i).get(k);
+				short cjk = this.constraintnetwork.get(j).get(k);
+				short cij = this.constraintnetwork.get(i).get(j);
 				////////////////////////////////////////Second part
 				// get the constraints for i -> k
 				short cijjk = collectConstraintsShort(cij,cjk);
@@ -357,7 +362,6 @@ public class ConstraintNetwork<E> {
 				cik = (short) (cik & cijjk);
 				// if no valid constraint is possible this means the network is inconsistent
 				if (cik==0) {
-
 					return false;
 				}
 					// there seems to be a mistake in Allen's paper with respect to the algorithm
@@ -365,8 +369,8 @@ public class ConstraintNetwork<E> {
 					// Proposed Modification: cik subset of getConstraints(eik)
 					// Rationale: If the constraints have changed then we need to revisit them again
 					
-					short ciktemp = this.constraintnetwork.get(i).get(k);
-					if ((cik!=ciktemp && ((short)ciktemp&cik)==cik)) {
+				short ciktemp = this.constraintnetwork.get(i).get(k);
+				if ((cik!=ciktemp && ((short)ciktemp&cik)==cik)) {
 				
 						if ((stackEntries.get(i).get(k)==false)) {  //only add if not already there
 							// Add stack entry
@@ -374,19 +378,17 @@ public class ConstraintNetwork<E> {
 							Pair<Integer,Integer> updatePair =new Pair<Integer,Integer>(i,k); 
 							batchStack.add(updatePair);	
 						}
-						if ((stackEntries.get(k).get(i)==false)) {  //only add if not already there
-							// Put inverse also on the stack
-							stackEntries.get(k).set(i, true);
-							Pair<Integer,Integer> updatePairInverse =new Pair<Integer,Integer>(k,i); 
-							batchStack.add(updatePairInverse);	
-						}
+//						if ((stackEntries.get(k).get(i)==false)) {  //only add if not already there
+//							// Put inverse also on the stack
+//							stackEntries.get(k).set(i, true);
+//							Pair<Integer,Integer> updatePairInverse =new Pair<Integer,Integer>(k,i); 
+//							batchStack.add(updatePairInverse);	
+//						}
 						// update constraint network
 						this.constraintnetwork.get(i).set(k, cik);
 						// And also the inverse
 						Short iCon = this.inverseConstraintsShort(cik);
 						this.constraintnetwork.get(k).set(i, iCon);
-					
-
 				}				
 			
 			}
