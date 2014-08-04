@@ -1,12 +1,13 @@
 package edu.tmc.uth.teo.utils;
 
 public class TEOConstants {
-	
 	/**
 	 * Name Spaces
 	 */
 	public static final String TEO_NS = "http://informatics.mayo.edu/TEO.owl#";
 	
+
+/*----------------------------------------------------Temporal Reasoning-----------------------------------------------*/	
 	/**
 	 * Class Names
 	 */
@@ -18,12 +19,7 @@ public class TEOConstants {
 	public static final String TEO_TIMEPHASE_CLS_NAME = "TEO_0000024"; // TimePhase
 	public static final String TEO_DURATIONMEASUREMENT_CLS_NAME = "TEO_0000032"; // Duration Measurement
 	public static final String TEO_PERIODICTIMEINTERVAL_CLS_NAME = "TEO_0000034"; // Periodic Time Interval
-	public static final String TEO_TIMESEQUENCE_CLS_NAME = "TEO_0000044"; // TimeSequence
-	public static final String TEO_DAY_CLS_NAME = "TEO_0000095"; // Day
-	public static final String TEO_WEEK_CLS_NAME = "TEO_0000030"; // Week
-	public static final String TEO_MONTH_CLS_NAME = "TEO_0000050"; // Month
-	public static final String TEO_YEAR_CLS_NAME = "TEO_0000051"; // Year
-	
+	public static final String TEO_TIMESEQUENCE_CLS_NAME = "TEO_0000044"; // TimeSequence	
 	
 	/**
 	 * Object Property Names
@@ -69,12 +65,7 @@ public class TEOConstants {
 	public static final String TEO_TR_EES_PRP_NAME = "TEO_0000159"; // endEqualStart
 	public static final String TEO_TR_EEE_PRP_NAME = "TEO_0000160"; // endEqualEnd
 	
-	// occur
-	public static final String TEO_OCCUR_PRP_NAME = "TEO_0000085"; // domain: ConnectedTemporalRegion (Yi: + Event?)
-	public static final String TEO_OCCURYEAR_PRP_NAME = "TEO_0000132";
-	public static final String TEO_OCCURMONTH_PRP_NAME = "TEO_0000086";
-	public static final String TEO_OCCURWEEK_PRP_NAME = "TEO_0000090";
-	public static final String TEO_OCCURDAY_PRP_NAME = "TEO_0000087";
+
 	// time sequence
 	public static final String TEO_HASTIMESEQUENCE_PRP_NAME = "TEO_0000096";// domain: ConnectedTemporalRegion + ScatteredTemporalRegion
 
@@ -110,10 +101,7 @@ public class TEOConstants {
 	public static final String TEO_TIMEPHASE_CLS = getWithNS(TEO_TIMEPHASE_CLS_NAME);
 	public static final String TEO_DURATIONMEASUREMENT_CLS = getWithNS(TEO_DURATIONMEASUREMENT_CLS_NAME);
 	public static final String TEO_TIMESEQUENCE_CLS = getWithNS(TEO_TIMESEQUENCE_CLS_NAME);
-	public static final String TEO_DAY_CLS = getWithNS(TEO_DAY_CLS_NAME);
-	public static final String TEO_WEEK_CLS = getWithNS(TEO_WEEK_CLS_NAME);
-	public static final String TEO_MONTH_CLS = getWithNS(TEO_MONTH_CLS_NAME);
-	public static final String TEO_YEAR_CLS = getWithNS(TEO_YEAR_CLS_NAME);
+
 	
 	
 	/**
@@ -157,10 +145,6 @@ public class TEOConstants {
 	public static final String TEO_TR_EES_PRP = getWithNS(TEO_TR_EES_PRP_NAME);
 	public static final String TEO_TR_EEE_PRP = getWithNS(TEO_TR_EEE_PRP_NAME);
 	
-	public static final String TEO_OCCUR_PRP = getWithNS(TEO_OCCUR_PRP_NAME);
-	public static final String TEO_OCCURYEAR_PRP = getWithNS(TEO_OCCURYEAR_PRP_NAME);
-	public static final String TEO_OCCURMONTH_PRP = getWithNS(TEO_OCCURMONTH_PRP_NAME);
-	public static final String TEO_OCCURWEEK_PRP = getWithNS(TEO_OCCURWEEK_PRP_NAME);
 	public static final String TEO_HASTIMESEQUENCE_PRP = getWithNS(TEO_HASTIMESEQUENCE_PRP_NAME);
 	public static final String TEO_HASMODALITY_PRP = getWithNS(TEO_HASMODALITY_PRP_NAME);
 	public static final String TEO_HASNORMALIZEDTIME_PRP = getWithNS(TEO_HASNORMALIZEDTIME_PRP_NAME);

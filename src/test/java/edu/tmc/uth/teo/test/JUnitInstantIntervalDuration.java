@@ -37,7 +37,7 @@ public class JUnitInstantIntervalDuration {
 
 	}
 	
-	//@Test
+	@Test
 	public void testGetEventByIRIStr() {
 		System.out.println("######################## Testing GetEventByIRIStr #####################################");
 		Event event1 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_2.owl#Event1");
@@ -69,7 +69,7 @@ public class JUnitInstantIntervalDuration {
 		System.out.println("Event5 duration:" + querier.getDuration(event5) + "\n");
 	}
 	
-	//@Test
+	@Test
 	public void testGetDurationBetweenEvents() {
 		System.out.println("######################## Testing GetDurationBetweenEvents #####################################");
 		Event event1 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_2.owl#Event1");

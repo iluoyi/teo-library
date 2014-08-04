@@ -24,7 +24,7 @@
                                       dc:creator "Tao, Cui" ;
                                       
                                       owl:imports <http://130.88.198.11/co-ode-files/ontologies/list.owl> ,
-                                                  #obo:iao.owl , just a temp comment
+                                                  #obo:iao.owl ,
                                                   #obo:uo.owl ,
                                                   <http://www.ifomis.org/bfo/1.1> .
 
@@ -114,7 +114,7 @@ skos:example rdf:type owl:AnnotationProperty .
              
              skos:altLabel "\"prior to\"" ;
              
-             skos:definition "Source event happened before target event. Using the start time of an event when the associated time stamp is a time interval." ;
+             skos:definition "Interval relation. The source event ended before the start of the target event. It is the same as the point relation \"endBeforeStart\"." ;
              
              rdfs:subPropertyOf :TEO_0000150 ;
              
@@ -130,7 +130,7 @@ skos:example rdf:type owl:AnnotationProperty .
              
              rdfs:label "during" ;
              
-             skos:definition "The source event started after and ended before the target event" ;
+             skos:definition "Interval relation. The source event started after and ended before the target event" ;
              
              owl:inverseOf :TEO_0000010 ;
              
@@ -179,7 +179,7 @@ skos:example rdf:type owl:AnnotationProperty .
              
              rdfs:label "contain" ;
              
-             skos:definition "The source event happened before and ended after the target event" ;
+             skos:definition "Interval relation. The source event happened before and ended after the target event" ;
              
              rdfs:subPropertyOf :TEO_0000150 ,
                                 :TEO_0000151 ,
@@ -194,8 +194,7 @@ skos:example rdf:type owl:AnnotationProperty .
              
              rdfs:label "start" ;
              
-             skos:definition """Source Event S starts at time point t1 and ends at time point t2
-Target Event T starts at time point t1 and still holds at time point t2, then we declare that S starts T""" ;
+             skos:definition "Interval relation. Two events started at the same time and the source event ended before the end of the target event." ;
              
              rdfs:subPropertyOf :TEO_0000149 ,
                                 :TEO_0000151 ,
@@ -211,9 +210,9 @@ Target Event T starts at time point t1 and still holds at time point t2, then we
              
              rdfs:label "after" ;
              
-             skos:altLabel "\"post to\"" ;
+             skos:definition "Interval relation. The source event happened after target event. It is the same as the point relation \"startAfterEnd\". " ;
              
-             skos:definition "Source event happened after target event. Using the start time of an event when the associated time stamp is a time interval." ;
+             skos:altLabel "\"post to\"" ;
              
              owl:inverseOf :TEO_0000002 ;
              
@@ -233,7 +232,7 @@ Target Event T starts at time point t1 and still holds at time point t2, then we
              
              rdfs:label "equal" ;
              
-             skos:definition "Two events happened at the same time. It is true when both events are associated with either timeinstants or timeintervals. When both events are associated with time intervals, they must start at the same time and end at the same time." ;
+             skos:definition "Interval relation. Two events happened at the same time. It is true when both events are associated with either timeinstants or timeintervals. When both events are associated with time intervals, they must start at the same time and end at the same time." ;
              
              rdfs:subPropertyOf :TEO_0000149 ,
                                 :TEO_0000151 ,
@@ -248,8 +247,7 @@ Target Event T starts at time point t1 and still holds at time point t2, then we
              
              rdfs:label "meet" ;
              
-             skos:definition """Source Event S starts at time point t1 and ends at time point t2
-Target Event T starts at time point t2 , then we declare that S meets T""" ;
+             skos:definition "Interval relation. The source event ended at (the same time as) the start of the target event. It is the same as the point relation \"endEqualStart\"." ;
              
              owl:inverseOf :TEO_0000146 ;
              
@@ -305,8 +303,7 @@ Target Event T starts at time point t2 , then we declare that S meets T""" ;
              
              rdfs:label "finish" ;
              
-             skos:definition """Source Event S starts at time point t1 and ends at time point t2
-Target Event T starts before time point t1 and ends at time point t2, then we declare that S ebds T""" ;
+             skos:definition "Interval relation. Two events ended at the same time and the source event started after the start of the target event." ;
              
              rdfs:subPropertyOf :TEO_0000151 ,
                                 :TEO_0000152 ,
@@ -321,7 +318,7 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:label "overlap" ;
              
-             skos:definition "Two events overlap on the timeline" ;
+             skos:definition "Interval relation. Two events have overlap on the timeline. The source event starts before and  ends before the end of the target event and the source event ends after the start of the target event." ;
              
              owl:inverseOf :TEO_0000145 ;
              
@@ -344,17 +341,17 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:subPropertyOf owl:topObjectProperty ;
              
-             rdfs:range [ rdf:type owl:Class ;
-                          owl:unionOf ( :TEO_0000025
-                                        span:TemporalRegion
-                                      )
-                        ] ;
-             
              rdfs:domain [ rdf:type owl:Class ;
                            owl:unionOf ( :TEO_0000025
                                          span:TemporalRegion
                                        )
-                         ] .
+                         ] ;
+             
+             rdfs:range [ rdf:type owl:Class ;
+                          owl:unionOf ( :TEO_0000025
+                                        span:TemporalRegion
+                                      )
+                        ] .
 
 
 
@@ -520,6 +517,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:label "overlappedBy" ;
              
+             skos:definition "Interval relation. Two events have overlap on the timeline. The source event starts after and ends after the start of the target event and the source event starts before the end of the target event." ;
+             
              rdfs:subPropertyOf :TEO_0000151 ,
                                 :TEO_0000152 ,
                                 :TEO_0000156 ,
@@ -533,6 +532,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:label "metBy" ;
              
+             skos:definition "Interval relation. The source event started at (the same time as) the end of the target event. It is the same as the point relation \"startEqualEnd\"." ;
+             
              rdfs:subPropertyOf :TEO_0000152 ,
                                 :TEO_0000157 ;
              
@@ -545,6 +546,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
 :TEO_0000147 rdf:type owl:ObjectProperty ;
              
              rdfs:label "startedBy" ;
+             
+             skos:definition "Interval relation. Two events started at the same time and the source event ended after the end of the target event." ;
              
              owl:inverseOf :TEO_0000014 ;
              
@@ -560,6 +563,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
 :TEO_0000148 rdf:type owl:ObjectProperty ;
              
              rdfs:label "finishedBy" ;
+             
+             skos:definition "Interval relation. Two events ended at the same time and the source event started before the start of the target event." ;
              
              owl:inverseOf :TEO_0000037 ;
              
@@ -578,6 +583,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:label "startEqualStart" ;
              
+             skos:definition "Point relation. The source event started at (the same time as) the start of the target event." ;
+             
              rdfs:subPropertyOf :TEO_0000151 ,
                                 :TEO_0000156 .
 
@@ -590,6 +597,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:label "startBeforeStart" ;
              
+             skos:definition "Point relation. The source event started before the start of the target event." ;
+             
              rdfs:subPropertyOf :TEO_0000151 ;
              
              owl:inverseOf :TEO_0000152 .
@@ -601,6 +610,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
 :TEO_0000151 rdf:type owl:ObjectProperty ;
              
              rdfs:label "startBeforeEnd" ;
+             
+             skos:definition "Point relation. The source event started before the end of the target event." ;
              
              rdfs:subPropertyOf :TEO_0000039 ;
              
@@ -615,6 +626,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:label "startAfterStart" ;
              
+             skos:definition "Point relation. The source event started after the start of the target event." ;
+             
              rdfs:subPropertyOf :TEO_0000156 .
 
 
@@ -625,6 +638,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
                       owl:TransitiveProperty ;
              
              rdfs:label "startAfterEnd" ;
+             
+             skos:definition "Point relation. The source event starts after the end of the target event. It is the same as \"after\" in Allen's Interval Algebra." ;
              
              rdfs:subPropertyOf :TEO_0000152 ,
                                 :TEO_0000157 .
@@ -637,6 +652,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
                       owl:TransitiveProperty ;
              
              rdfs:label "endBeforeStart" ;
+             
+             skos:definition "Point relation. The source event ended beofre the start of the target event." ;
              
              rdfs:subPropertyOf :TEO_0000150 ;
              
@@ -653,6 +670,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:label "endBeforeEnd" ;
              
+             skos:definition "Point relation. The source event ended before the end of the target event." ;
+             
              rdfs:subPropertyOf :TEO_0000151 ;
              
              owl:inverseOf :TEO_0000157 .
@@ -665,6 +684,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:label "endAfterStart" ;
              
+             skos:definition "Point relation. The source event ended after the start of the target event." ;
+             
              rdfs:subPropertyOf :TEO_0000039 .
 
 
@@ -676,6 +697,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
              
              rdfs:label "endAfterEnd" ;
              
+             skos:definition "Point relation. The source event ends after the end of the target event." ;
+             
              rdfs:subPropertyOf :TEO_0000156 .
 
 
@@ -685,6 +708,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
 :TEO_0000158 rdf:type owl:ObjectProperty ;
              
              rdfs:label "startEqualEnd" ;
+             
+             skos:definition "Point relation. the source event started at (the same time as) the end of the target event. It is the same as the interval relation \"metBy\"." ;
              
              rdfs:subPropertyOf :TEO_0000152 ,
                                 :TEO_0000157 .
@@ -696,6 +721,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
 :TEO_0000159 rdf:type owl:ObjectProperty ;
              
              rdfs:label "endEqualStart" ;
+             
+             skos:definition "Point relation. The source event ended at (the same time as) the start of the target event." ;
              
              rdfs:subPropertyOf :TEO_0000150 ,
                                 :TEO_0000155 .
@@ -709,6 +736,8 @@ Target Event T starts before time point t1 and ends at time point t2, then we de
                       owl:TransitiveProperty ;
              
              rdfs:label "endEqualEnd" ;
+             
+             skos:definition "Point relation. The source event ended at (the same time as) the end of the target event." ;
              
              rdfs:subPropertyOf :TEO_0000151 ,
                                 :TEO_0000156 .
@@ -1037,8 +1066,8 @@ skos:editorialNote rdf:type owl:DatatypeProperty .
              
              skos:editorialNote "Could have a start time and an end time" .
 [ rdf:type owl:Axiom ;
-  owl:annotatedTarget " An interval of time that recurs periodically" ;
   rdfs:isDefinedBy "HL7" ;
+  owl:annotatedTarget " An interval of time that recurs periodically" ;
   owl:annotatedSource :TEO_0000034 ;
   owl:annotatedProperty skos:definition
 ] .

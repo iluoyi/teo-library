@@ -34,12 +34,24 @@
 	     	 <artifactId>junit</artifactId>
 	     	 <version>4.10</version>
 	     	 <scope>test</scope>
-	    </dependency>	
-    
-	    <dependency>
-			<groupId>com.hp.hpl.jena</groupId>
-			<artifactId>jena</artifactId>
-			<version>2.6.4</version>
+	    </dependency>
+
+
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>apache-jena-libs</artifactId>
+			<type>pom</type>
+			<version>2.11.2</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
     
 	    <!-- This swrl-bridge-temporal lib can be retrieved at - http://smi-protege.stanford.edu/svn/owl/tags/release-3.4.8/ -->

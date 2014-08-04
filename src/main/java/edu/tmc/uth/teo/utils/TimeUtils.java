@@ -1,8 +1,7 @@
 package edu.tmc.uth.teo.utils;
 
+import java.util.Calendar;
 import java.util.Date;
-
-import com.ibm.icu.util.Calendar;
 
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.DurationValue;
