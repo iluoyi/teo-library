@@ -1,0 +1,3020 @@
+@prefix : <http://informatics.mayo.edu/TEO.owl#> .
+@prefix UO: <http://purl.org/obo/owl/UO#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix list: <http://www.co-ode.org/ontologies/list.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix snap: <http://www.ifomis.org/bfo/1.1/snap#> .
+@prefix span: <http://www.ifomis.org/bfo/1.1/span#> .
+@base <http://informatics.mayo.edu/TEO.owl> .
+
+<http://informatics.mayo.edu/TEO.owl> rdf:type owl:Ontology ;
+                                      
+                                      dc:creator "He, Oliver" ;
+                                      
+                                      owl:versionInfo "1.0.8" ;
+                                      
+                                      dc:creator "Tao, Cui" ;
+                                      
+                                      owl:imports obo:iao.owl ,
+                                                  obo:uo.owl ,
+                                                  
+												  <http://130.88.198.11/co-ode-files/ontologies/list.owl> ,
+                                                  <http://www.ifomis.org/bfo/1.1> .
+
+
+#################################################################
+#
+#    Annotation properties
+#
+#################################################################
+
+
+###  http://informatics.mayo.edu/TEO.owl#hasTimeOffset
+
+:hasTimeOffset rdf:type owl:AnnotationProperty .
+
+
+
+###  http://purl.org/dc/elements/1.1/creator
+
+dc:creator rdf:type owl:AnnotationProperty .
+
+
+
+###  http://www.w3.org/2000/01/rdf-schema#comment
+
+rdfs:comment rdf:type owl:AnnotationProperty .
+
+
+
+###  http://www.w3.org/2000/01/rdf-schema#isDefinedBy
+
+rdfs:isDefinedBy rdf:type owl:AnnotationProperty .
+
+
+
+###  http://www.w3.org/2000/01/rdf-schema#label
+
+rdfs:label rdf:type owl:AnnotationProperty .
+
+
+
+###  http://www.w3.org/2002/07/owl#versionInfo
+
+owl:versionInfo rdf:type owl:AnnotationProperty .
+
+
+
+###  http://www.w3.org/2004/02/skos/core#altLabel
+
+skos:altLabel rdf:type owl:AnnotationProperty .
+
+
+
+###  http://www.w3.org/2004/02/skos/core#definition
+
+skos:definition rdf:type owl:AnnotationProperty .
+
+
+
+###  http://www.w3.org/2004/02/skos/core#editorialNote
+
+skos:editorialNote rdf:type owl:AnnotationProperty .
+
+
+
+###  http://www.w3.org/2004/02/skos/core#example
+
+skos:example rdf:type owl:AnnotationProperty .
+
+
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000002
+
+:TEO_0000002 rdf:type owl:ObjectProperty ,
+                      owl:TransitiveProperty ;
+             
+             rdfs:label "before" ;
+             
+             skos:altLabel "\"prior to\"" ;
+             
+             skos:definition "Source event happened before target event. Using the start time of an event when the associated time stamp is a time interval." ;
+             
+             rdfs:subPropertyOf :TEO_0000039 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000003
+
+:TEO_0000003 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "during" ;
+             
+             skos:definition "The source event started after and ended before the target event" ;
+             
+             owl:inverseOf :TEO_0000010 ;
+             
+             rdfs:subPropertyOf :TEO_0000038 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000006
+
+:TEO_0000006 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "hasEndTime" ;
+             
+             skos:definition "Describes the end time of an interval. The domain is a time interval. The range is a time instant." ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 ;
+             
+             rdfs:domain [ rdf:type owl:Class ;
+                           owl:unionOf ( :TEO_0000034
+                                         span:TemporalInterval
+                                       )
+                         ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000007
+
+:TEO_0000007 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "hasValidTime" ;
+             
+             skos:definition "To link an event with its specific timestamps" ;
+             
+             rdfs:domain :TEO_0000025 ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000010
+
+:TEO_0000010 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "contain" ;
+             
+             skos:definition "The source event happened before and ended after the target event" ;
+             
+             rdfs:subPropertyOf :TEO_0000038 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000014
+
+:TEO_0000014 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "start" ;
+             
+             skos:definition """Source Event S starts at time point t1 and ends at time point t2
+Target Event T starts at time point t1 and still holds at time point t2, then we declare that S starts T""" ;
+             
+             rdfs:subPropertyOf :TEO_0000038 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000016
+
+:TEO_0000016 rdf:type owl:ObjectProperty ,
+                      owl:TransitiveProperty ;
+             
+             rdfs:label "after" ;
+             
+             skos:altLabel "\"post to\"" ;
+             
+             skos:definition "Source event happened after target event. Using the start time of an event when the associated time stamp is a time interval." ;
+             
+             owl:inverseOf :TEO_0000002 ;
+             
+             rdfs:subPropertyOf :TEO_0000039 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000018
+
+:TEO_0000018 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "equal" ;
+             
+             skos:definition "Two events happened at the same time. It is true when both events are associated with either timeinstants or timeintervals. When both events are associated with time intervals, they must start at the same time and end at the same time." ;
+             
+             rdfs:subPropertyOf :TEO_0000038 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000020
+
+:TEO_0000020 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "meet" ;
+             
+             skos:definition """Source Event S starts at time point t1 and ends at time point t2
+Target Event T starts at time point t2 , then we declare that S meets T""" ;
+             
+             rdfs:subPropertyOf :TEO_0000002 ;
+             
+             owl:propertyDisjointWith :TEO_0000038 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000022
+
+:TEO_0000022 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "hasDuration" ;
+             
+             skos:definition "describe the duration of a time interval" ;
+             
+             rdfs:range :TEO_0000032 ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 ;
+             
+             rdfs:domain [ rdf:type owl:Class ;
+                           owl:unionOf ( :TEO_0000034
+                                         span:TemporalInterval
+                                       )
+                         ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000028
+
+:TEO_0000028 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "hasStartTime" ;
+             
+             skos:definition "Describes the start time of a time interval. The domain is a time interval and the range is a time instant." ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 ;
+             
+             rdfs:domain [ rdf:type owl:Class ;
+                           owl:unionOf ( :TEO_0000034
+                                         span:TemporalInterval
+                                       )
+                         ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000037
+
+:TEO_0000037 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "finish" ;
+             
+             skos:definition """Source Event S starts at time point t1 and ends at time point t2
+Target Event T starts before time point t1 and ends at time point t2, then we declare that S ebds T""" ;
+             
+             rdfs:subPropertyOf :TEO_0000038 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000038
+
+:TEO_0000038 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "overlap" ;
+             
+             skos:definition "Two events overlap on the timeline" ;
+             
+             rdfs:subPropertyOf :TEO_0000039 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000039
+
+:TEO_0000039 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "temporalRelation" ;
+             
+             skos:editorialNote "An example instant. Maybe deleted later." ;
+             
+             skos:definition "The super set of the temporal relations defined in the ontology. Akin to Allen's temporal operators, but are defined between events instead of time intervals" ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 ;
+             
+             rdfs:domain [ rdf:type owl:Class ;
+                           owl:unionOf ( :TEO_0000025
+                                         span:TemporalRegion
+                                       )
+                         ] ;
+             
+             rdfs:range [ rdf:type owl:Class ;
+                          owl:unionOf ( :TEO_0000025
+                                        span:TemporalRegion
+                                      )
+                        ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000040
+
+:TEO_0000040 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "hasDurationUnit" ;
+             
+             skos:definition "describe the unit of a duration" ;
+             
+             rdfs:domain :TEO_0000032 ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000076
+
+:TEO_0000076 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "denominator" ;
+             
+             skos:definition "identifies the time unit of a frequency" ;
+             
+             rdfs:domain :TEO_0000023 ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000077
+
+:TEO_0000077 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "hasPhase" ;
+             
+             skos:definition "to declare a time phase for a periodic interval of time" ;
+             
+             rdfs:range :TEO_0000024 ;
+             
+             rdfs:domain :TEO_0000034 ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000078
+
+:TEO_0000078 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "hasPeriod" ;
+             
+             skos:definition "to declare the time period of a periodic interval of time" ;
+             
+             rdfs:domain :TEO_0000034 ;
+             
+             rdfs:range :TEO_0000036 ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000079
+
+:TEO_0000079 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "hasFrequency" ;
+             
+             skos:definition "to declare the frequency " ;
+             
+             rdfs:range :TEO_0000023 ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000085
+
+:TEO_0000085 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "occur" ;
+             
+             skos:definition "defines how a connected_temporal_region or an event occurs on a specific  time region. For example, a particular occurs on Monday" ;
+             
+             rdfs:domain span:ConnectedTemporalRegion ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000086
+
+:TEO_0000086 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "occurMonth" ;
+             
+             rdfs:range :TEO_0000050 ;
+             
+             rdfs:subPropertyOf :TEO_0000085 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000087
+
+:TEO_0000087 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "occurDay" ;
+             
+             rdfs:subPropertyOf :TEO_0000085 ;
+             
+             rdfs:range :TEO_0000095 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000090
+
+:TEO_0000090 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "occurWeek" ;
+             
+             rdfs:range :TEO_0000030 ;
+             
+             rdfs:subPropertyOf :TEO_0000085 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000096
+
+:TEO_0000096 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "hasTimeSequence" ;
+             
+             skos:definition "defines the time sequnces of a time. for example, MWF" ;
+             
+             rdfs:range :TEO_0000044 ;
+             
+             rdfs:subPropertyOf owl:TEO_0000027 ;
+             
+             rdfs:domain [ rdf:type owl:Class ;
+                           owl:unionOf ( span:ConnectedTemporalRegion
+                                         span:ScatteredTemporalRegion
+                                       )
+                         ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000132
+
+:TEO_0000132 rdf:type owl:ObjectProperty ;
+             
+             rdfs:label "occurYear" ;
+             
+             rdfs:range :TEO_0000051 ;
+             
+             rdfs:subPropertyOf :TEO_0000085 .
+
+
+
+###  http://www.co-ode.org/ontologies/list.owl#hasContents
+
+list:hasContents rdf:type owl:ObjectProperty .
+
+
+
+###  http://www.co-ode.org/ontologies/list.owl#hasNext
+
+list:hasNext rdf:type owl:ObjectProperty .
+
+
+
+###  http://www.w3.org/2002/07/owl#TEO_0000027
+
+owl:TEO_0000027 rdf:type owl:ObjectProperty ;
+                
+                rdfs:label "topObjectProperty" ;
+                
+                skos:definition "Is to used to define a particular time pattern. For example, Christmas day occurs on December." .
+
+
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000004
+
+:TEO_0000004 rdf:type owl:DatatypeProperty ;
+             
+             rdfs:label "hasModality" ;
+             
+             skos:definition "covering expressions of how the world might be and should be. This includes expressions of necessity, permissibility and probability, and negations of these" ;
+             
+             rdfs:subPropertyOf owl:TEO_0000013 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000005
+
+:TEO_0000005 rdf:type owl:DatatypeProperty ;
+             
+             rdfs:label "hasNormalizedTime" ;
+             
+             skos:definition "use to represent the normalized view of the time expression of the given instant" ;
+             
+             rdfs:subPropertyOf owl:TEO_0000013 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000015
+
+:TEO_0000015 rdf:type owl:DatatypeProperty ;
+             
+             rdfs:label "hasOrigTime" ;
+             
+             skos:definition "use to represent the original  time expression of the instant" ;
+             
+             rdfs:subPropertyOf owl:TEO_0000013 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000041
+
+:TEO_0000041 rdf:type owl:DatatypeProperty ;
+             
+             rdfs:label "hasDurationValue" ;
+             
+             skos:definition "capture the value of a duration, e.g., in \"2 hours\", 2 is the duation value and hour is the duation unit" ;
+             
+             rdfs:domain :TEO_0000032 ;
+             
+             rdfs:range xsd:int ;
+             
+             rdfs:subPropertyOf owl:TEO_0000013 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000064
+
+:TEO_0000064 rdf:type owl:DatatypeProperty ;
+             
+             rdfs:label "hasCalendarPatternForm" ;
+             
+             rdfs:subPropertyOf owl:TEO_0000013 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000075
+
+:TEO_0000075 rdf:type owl:DatatypeProperty ;
+             
+             rdfs:label "numerator" ;
+             
+             skos:definition "Identifies the number of repetitions within a given time period" ;
+             
+             rdfs:domain :TEO_0000023 ;
+             
+             rdfs:range xsd:int ;
+             
+             rdfs:subPropertyOf owl:TEO_0000013 .
+
+
+
+###  http://www.w3.org/2002/07/owl#TEO_0000013
+
+owl:TEO_0000013 rdf:type owl:DatatypeProperty ;
+                
+                rdfs:label "topDataProperty" .
+
+
+
+###  http://www.w3.org/2004/02/skos/core#altLabel
+
+skos:altLabel rdf:type owl:DatatypeProperty .
+
+
+
+###  http://www.w3.org/2004/02/skos/core#definition
+
+skos:definition rdf:type owl:DatatypeProperty .
+
+
+
+###  http://www.w3.org/2004/02/skos/core#editorialNote
+
+skos:editorialNote rdf:type owl:DatatypeProperty .
+
+
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000011
+
+:TEO_0000011 rdf:type owl:Class ;
+             
+             rdfs:label "Holiday" ;
+             
+             rdfs:subClassOf :TEO_0000095 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000012
+
+:TEO_0000012 rdf:type owl:Class ;
+             
+             rdfs:label "Time Granularity" ;
+             
+             rdfs:subClassOf snap:Quality ;
+             
+             skos:example "We use grannularity ot define the extent to which the time expression is broken down into small parts, such as day, year, month, etc" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000013
+
+:TEO_0000013 rdf:type owl:Class ;
+             
+             rdfs:label "US Holiday" ;
+             
+             rdfs:subClassOf :TEO_0000011 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000017
+
+:TEO_0000017 rdf:type owl:Class ;
+             
+             rdfs:label "US Federal Holiday" ;
+             
+             rdfs:subClassOf :TEO_0000013 ;
+             
+             skos:editorialNote "Defined according to http://en.wikipedia.org/wiki/Public_holidays_in_the_United_States" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000019
+
+:TEO_0000019 rdf:type owl:Class ;
+             
+             rdfs:label "First week of a month" ;
+             
+             rdfs:subClassOf :TEO_0000030 ;
+             
+             owl:disjointWith :TEO_0000031 ,
+                              :TEO_0000035 ,
+                              :TEO_0000088 ,
+                              :TEO_0000089 ,
+                              :TEO_0000127 ;
+             
+             skos:definition "The first week of a particular month. " .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000021
+
+:TEO_0000021 rdf:type owl:Class ;
+             
+             rdfs:label "New Year's Day" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000052
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000098
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "DY1"
+                             ] ;
+             
+             skos:definition "Celebrates beginning of the Gregorian calendar year. Festivities include counting down to midnight (12:00 AM) on the preceding night, New Year's Eve. Traditional end of holiday season." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000023
+
+:TEO_0000023 rdf:type owl:Class ;
+             
+             rdfs:label "Frequency" ;
+             
+             rdfs:subClassOf obo:IAO_0000109 ;
+             
+             skos:definition "how frequently each occurrence repeats" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000024
+
+:TEO_0000024 rdf:type owl:Class ;
+             
+             rdfs:label "TimePhase" ;
+             
+             rdfs:subClassOf :TEO_0000032 ;
+             
+             skos:example "In \"Every eight hours for two minutes \", 2 minutes can be represented using timephase" ;
+             
+             skos:definition "A prototype of the repeating interval, specifying the duration of each occurrence and anchors the PeriodicTimeInterval sequence at a certain point in time." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000025
+
+:TEO_0000025 rdf:type owl:Class ;
+             
+             rdfs:label "Event" ;
+             
+             owl:equivalentClass span:ProcessualEntity .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000030
+
+:TEO_0000030 rdf:type owl:Class ;
+             
+             rdfs:label "Week" ;
+             
+             rdfs:subClassOf span:TemporalInterval ;
+             
+             skos:definition "Defines a particular week, where the sequence of the weekdays can be defined using TimeSequence. For example, one can define a week from Monday to Sunday, from Sunday to Sat, or from Tue to Mon." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000031
+
+:TEO_0000031 rdf:type owl:Class ;
+             
+             rdfs:label "Second week of a month" ;
+             
+             rdfs:subClassOf :TEO_0000030 ;
+             
+             owl:disjointWith :TEO_0000035 ,
+                              :TEO_0000088 ,
+                              :TEO_0000089 ,
+                              :TEO_0000127 ;
+             
+             skos:definition "The second week of a particular month. " .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000032
+
+:TEO_0000032 rdf:type owl:Class ;
+             
+             rdfs:label "Duration Measurement" ;
+             
+             owl:equivalentClass obo:IAO_0000416 ;
+             
+             rdfs:subClassOf obo:IAO_0000032 ,
+                             obo:IAO_0000416 ;
+             
+             skos:definition "The measure of continuance of any object or event within Time" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000034
+
+:TEO_0000034 rdf:type owl:Class ;
+             
+             rdfs:label "PeriodicTimeInterval" ;
+             
+             rdfs:subClassOf span:ScatteredTemporalRegion ;
+             
+             skos:definition " An interval of time that recurs periodically" ;
+             
+             skos:editorialNote "Could have a start time and an end time" .
+[ rdf:type owl:Axiom ;
+  owl:annotatedTarget " An interval of time that recurs periodically" ;
+  rdfs:isDefinedBy "HL7" ;
+  owl:annotatedSource :TEO_0000034 ;
+  owl:annotatedProperty skos:definition
+] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000035
+
+:TEO_0000035 rdf:type owl:Class ;
+             
+             rdfs:label "third week of a month" ;
+             
+             rdfs:subClassOf :TEO_0000030 ;
+             
+             owl:disjointWith :TEO_0000088 ,
+                              :TEO_0000089 ,
+                              :TEO_0000127 ;
+             
+             skos:definition "The third week of a particular month. " .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000036
+
+:TEO_0000036 rdf:type owl:Class ;
+             
+             rdfs:label "TimePeriod" ;
+             
+             rdfs:subClassOf :TEO_0000032 ;
+             
+             skos:definition "A time duration specifying as a reciprocal measure of the frequency at which the PeriodicTimeInterval repeats" ;
+             
+             skos:example "In \"take the drug every 3 hours\", 3 hours will be defined using TimePeriod" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000042
+
+:TEO_0000042 rdf:type owl:Class ;
+             
+             rdfs:label "Monday" ;
+             
+             rdfs:subClassOf :TEO_0000084 ;
+             
+             skos:definition "The first day of a calendar week starting from Monday. Monday is after Sunday and before Tuesday." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000043
+
+:TEO_0000043 rdf:type owl:Class ;
+             
+             rdfs:label "Tuesday" ;
+             
+             rdfs:subClassOf :TEO_0000084 ;
+             
+             skos:definition "The second day of a calendar week starting from Monday. Tuesday is after Monday and before Wednesday." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000044
+
+:TEO_0000044 rdf:type owl:Class ;
+             
+             rdfs:label "TimeSequence" ;
+             
+             owl:equivalentClass [ rdf:type owl:Restriction ;
+                                   owl:onProperty list:hasContents ;
+                                   owl:someValuesFrom :TEO_0000044
+                                 ] ;
+             
+             rdfs:subClassOf list:OWLList ,
+                             span:TemporalRegion ;
+             
+             skos:definition "A specific Sequence of Time conponents" ;
+             
+             skos:example "Week is a sequence of week days" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000045
+
+:TEO_0000045 rdf:type owl:Class ;
+             
+             rdfs:label "Wednesday" ;
+             
+             rdfs:subClassOf :TEO_0000084 ;
+             
+             skos:definition "The thrid day of a calendar week starting from Monday.  Wednesday is after Tuesday and before Thursday." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000046
+
+:TEO_0000046 rdf:type owl:Class ;
+             
+             rdfs:label "Thursday" ;
+             
+             rdfs:subClassOf :TEO_0000084 ;
+             
+             skos:definition "The fourth day of a calendar week starting from Monday. Thursday is after Wednesday and before Friday." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000047
+
+:TEO_0000047 rdf:type owl:Class ;
+             
+             rdfs:label "Friday" ;
+             
+             rdfs:subClassOf :TEO_0000084 ;
+             
+             skos:definition "The fifth day of a calendar week starting from Monday. Friday is after Thursday and before Saturday." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000048
+
+:TEO_0000048 rdf:type owl:Class ;
+             
+             rdfs:label "Saturday" ;
+             
+             rdfs:subClassOf :TEO_0000084 ;
+             
+             skos:definition "The sixth day of a calendar week starting from Monday. Saturday is after Friday and before Sunday." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000049
+
+:TEO_0000049 rdf:type owl:Class ;
+             
+             rdfs:label "Sunday" ;
+             
+             rdfs:subClassOf :TEO_0000084 ;
+             
+             skos:definition "The last day of a calendar week starting from Monday. Sunday is after Saturday and before the Monday next week." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000050
+
+:TEO_0000050 rdf:type owl:Class ;
+             
+             rdfs:label "Month" ;
+             
+             rdfs:subClassOf span:TemporalInterval ;
+             
+             skos:definition "Define a particular Month" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000051
+
+:TEO_0000051 rdf:type owl:Class ;
+             
+             rdfs:label "Year" ;
+             
+             rdfs:subClassOf span:TemporalInterval ;
+             
+             skos:definition "Define a particuar year" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000052
+
+:TEO_0000052 rdf:type owl:Class ;
+             
+             rdfs:label "January" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY1"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000053
+
+:TEO_0000053 rdf:type owl:Class ;
+             
+             rdfs:label "February" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY2"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000054
+
+:TEO_0000054 rdf:type owl:Class ;
+             
+             rdfs:label "March" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY3"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000055
+
+:TEO_0000055 rdf:type owl:Class ;
+             
+             rdfs:label "April" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY4"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000056
+
+:TEO_0000056 rdf:type owl:Class ;
+             
+             rdfs:label "May" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY5"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000057
+
+:TEO_0000057 rdf:type owl:Class ;
+             
+             rdfs:label "June" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY6"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000058
+
+:TEO_0000058 rdf:type owl:Class ;
+             
+             rdfs:label "July" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY7"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000059
+
+:TEO_0000059 rdf:type owl:Class ;
+             
+             rdfs:label "August" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY8"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000060
+
+:TEO_0000060 rdf:type owl:Class ;
+             
+             rdfs:label "September" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY9"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000061
+
+:TEO_0000061 rdf:type owl:Class ;
+             
+             rdfs:label "October" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY10"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000062
+
+:TEO_0000062 rdf:type owl:Class ;
+             
+             rdfs:label "November" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY11"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000063
+
+:TEO_0000063 rdf:type owl:Class ;
+             
+             rdfs:label "December" ;
+             
+             rdfs:subClassOf :TEO_0000094 ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :TEO_0000064 ;
+                               owl:hasValue "MY12"
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000065
+
+:TEO_0000065 rdf:type owl:Class ;
+             
+             rdfs:label "Birthday of Martin Luther King, Jr." ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000052
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000042
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000090 ;
+                                                          owl:someValuesFrom :TEO_0000035
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000016 ;
+                                                          owl:hasValue :TEO_0000136
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ;
+             
+             skos:definition "Third Monday in January" ,
+                             "Honors Martin Luther King, Jr., Civil Rights leader, who was actually born on January 15, 1929; combined with other holidays in several states. First occured 1986." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000066
+
+:TEO_0000066 rdf:type owl:Class ;
+             
+             rdfs:label "Inauguration Day" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Class ;
+                                                          owl:unionOf ( [ rdf:type owl:Class ;
+                                                                          owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                                                                 owl:onProperty :TEO_0000087 ;
+                                                                                                 owl:someValuesFrom :TEO_0000042
+                                                                                               ]
+                                                                                               [ rdf:type owl:Restriction ;
+                                                                                                 owl:onProperty :TEO_0000087 ;
+                                                                                                 owl:someValuesFrom :TEO_0000118
+                                                                                               ]
+                                                                                             )
+                                                                        ]
+                                                                        [ rdf:type owl:Class ;
+                                                                          owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                                                                 owl:onProperty :TEO_0000087 ;
+                                                                                                 owl:someValuesFrom :TEO_0000117
+                                                                                               ]
+                                                                                               [ rdf:type owl:Restriction ;
+                                                                                                 owl:onProperty :TEO_0000087 ;
+                                                                                                 owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                      owl:unionOf ( :TEO_0000042
+                                                                                                                                    :TEO_0000043
+                                                                                                                                    :TEO_0000045
+                                                                                                                                    :TEO_0000046
+                                                                                                                                    :TEO_0000047
+                                                                                                                                    :TEO_0000048
+                                                                                                                                  )
+                                                                                                                    ]
+                                                                                               ]
+                                                                                             )
+                                                                        ]
+                                                                      )
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000052
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000016 ;
+                                                          owl:hasValue :TEO_0000130
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000064 ;
+                                                          owl:hasValue "Y/4"
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ;
+             
+             skos:definition "First January 20th following a Presidential election" ,
+                             "Observed only by federal government employees in Washington, D.C., and the border counties of Maryland and Virginia, in order to relieve congestion that occurs with this major event. Swearing-in of President of the United States and Vice President of the United States. Celebrated every fourth year. Note: Takes place on January 21 if the 20th is a Sunday (although the President is still privately inaugurated on the 20th). If Inauguration Day falls on a Saturday, the preceding Friday is not a federal holiday." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000067
+
+:TEO_0000067 rdf:type owl:Class ;
+             
+             rdfs:label "Washington's Birthday" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000053
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000042
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000090 ;
+                                                          owl:someValuesFrom :TEO_0000035
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000016 ;
+                                                          owl:hasValue :TEO_0000143
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ,
+                             [ rdf:type owl:Class ;
+                               owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000087 ;
+                                                      owl:someValuesFrom :TEO_0000042
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000064 ;
+                                                      owl:hasValue "MY2"
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000064 ;
+                                                      owl:hasValue "WM3"
+                                                    ]
+                                                  )
+                             ] ;
+             
+             skos:definition "Third Monday in February" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000068
+
+:TEO_0000068 rdf:type owl:Class ;
+             
+             rdfs:label "Memorial Day" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000056
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000042
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000090 ;
+                                                          owl:someValuesFrom :TEO_0000127
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000016 ;
+                                                          owl:hasValue :TEO_0000141
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ,
+                             [ rdf:type owl:Class ;
+                               owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000087 ;
+                                                      owl:someValuesFrom :TEO_0000042
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000064 ;
+                                                      owl:hasValue "MY5"
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000064 ;
+                                                      owl:hasValue "WM-1"
+                                                    ]
+                                                  )
+                             ] ;
+             
+             skos:definition "Last Monday in May" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000069
+
+:TEO_0000069 rdf:type owl:Class ;
+             
+             rdfs:label "Independence Day" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000058
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000101
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000016 ;
+                                                          owl:hasValue :TEO_0000138
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ,
+                             [ rdf:type owl:Class ;
+                               owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000064 ;
+                                                      owl:hasValue "DM4"
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000064 ;
+                                                      owl:hasValue "MY7"
+                                                    ]
+                                                  )
+                             ] ;
+             
+             skos:definition "July 4" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000070
+
+:TEO_0000070 rdf:type owl:Class ;
+             
+             rdfs:label "Labor Day" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000060
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000042
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000090 ;
+                                                          owl:someValuesFrom :TEO_0000019
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000016 ;
+                                                          owl:hasValue :TEO_0000140
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ;
+             
+             skos:definition "First Monday in September. became a federal holiday in 1894" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000071
+
+:TEO_0000071 rdf:type owl:Class ;
+             
+             rdfs:label "Columbus Day" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000061
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000042
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000090 ;
+                                                          owl:someValuesFrom :TEO_0000031
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000016 ;
+                                                          owl:hasValue :TEO_0000137
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ;
+             
+             skos:definition "Second Monday in October. Start 1937" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000072
+
+:TEO_0000072 rdf:type owl:Class ;
+             
+             rdfs:label "Veterans Day" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000062
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000108
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000016 ;
+                                                          owl:hasValue :TEO_0000130
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ,
+                             [ rdf:type owl:Class ;
+                               owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000064 ;
+                                                      owl:hasValue "DM11"
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000064 ;
+                                                      owl:hasValue "MY11"
+                                                    ]
+                                                  )
+                             ] ;
+             
+             skos:definition "November 11" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000073
+
+:TEO_0000073 rdf:type owl:Class ;
+             
+             rdfs:label "Thanksgiving Day" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000062
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000046
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000090 ;
+                                                          owl:someValuesFrom :TEO_0000088
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000016 ;
+                                                          owl:hasValue :TEO_0000142
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ;
+             
+             skos:definition "Fourth Thursday in November" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000074
+
+:TEO_0000074 rdf:type owl:Class ;
+             
+             rdfs:label "Christmas" ;
+             
+             owl:equivalentClass [ rdf:type owl:Class ;
+                                   owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000086 ;
+                                                          owl:someValuesFrom :TEO_0000063
+                                                        ]
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :TEO_0000087 ;
+                                                          owl:someValuesFrom :TEO_0000122
+                                                        ]
+                                                      )
+                                 ] ;
+             
+             rdfs:subClassOf :TEO_0000017 ;
+             
+             skos:definition "December 25" ;
+             
+             skos:editorialNote """pattern: (hasCalendarPatternForm value \"DM25\")
+ and (hasCalendarPatternForm value \"MY12\")""" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000080
+
+:TEO_0000080 rdf:type owl:Class ;
+             
+             rdfs:label "Relative Time" ;
+             
+             rdfs:subClassOf span:TemporalInterval .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000081
+
+:TEO_0000081 rdf:type owl:Class ;
+             
+             rdfs:label "Today" ;
+             
+             rdfs:subClassOf :TEO_0000080 ,
+                             :TEO_0000095 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000082
+
+:TEO_0000082 rdf:type owl:Class ;
+             
+             rdfs:label "Tomorrow" ;
+             
+             rdfs:subClassOf :TEO_0000080 ,
+                             :TEO_0000095 ;
+             
+             skos:definition "One day after Today" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000083
+
+:TEO_0000083 rdf:type owl:Class ;
+             
+             rdfs:label "Yesterday" ;
+             
+             rdfs:subClassOf :TEO_0000080 ,
+                             :TEO_0000095 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000084
+
+:TEO_0000084 rdf:type owl:Class ;
+             
+             rdfs:label "Week Day" ;
+             
+             rdfs:subClassOf :TEO_0000095 ;
+             
+             skos:definition "The parent class of the 7 week days" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000088
+
+:TEO_0000088 rdf:type owl:Class ;
+             
+             rdfs:label "fourth week of a month" ;
+             
+             rdfs:subClassOf :TEO_0000030 ;
+             
+             owl:disjointWith :TEO_0000089 ;
+             
+             skos:definition "The fourth week of a particular month. " .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000089
+
+:TEO_0000089 rdf:type owl:Class ;
+             
+             rdfs:label "fifth week of a month" ;
+             
+             rdfs:subClassOf :TEO_0000030 ,
+                             :TEO_0000127 ;
+             
+             skos:definition "The fifth week of a particular month. " .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000091
+
+:TEO_0000091 rdf:type owl:Class ;
+             
+             rdfs:label "Month Day" ;
+             
+             rdfs:subClassOf :TEO_0000095 ;
+             
+             skos:definition "Define a paticular day that occurs on a month" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000092
+
+:TEO_0000092 rdf:type owl:Class ;
+             
+             rdfs:label "WeekDaySequenceMtoS" ;
+             
+             rdfs:subClassOf :TEO_0000044 ,
+                             [ rdf:type owl:Class ;
+                               owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                      owl:onProperty list:hasContents ;
+                                                      owl:someValuesFrom :TEO_0000042
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty list:hasNext ;
+                                                      owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                           owl:intersectionOf ( :TEO_0000044
+                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                  owl:onProperty list:hasContents ;
+                                                                                                  owl:someValuesFrom :TEO_0000043
+                                                                                                ]
+                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                  owl:onProperty list:hasNext ;
+                                                                                                  owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                       owl:intersectionOf ( :TEO_0000044
+                                                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                                                              owl:onProperty list:hasContents ;
+                                                                                                                                              owl:someValuesFrom :TEO_0000045
+                                                                                                                                            ]
+                                                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                                                              owl:onProperty list:hasNext ;
+                                                                                                                                              owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                   owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                        [ rdf:type owl:Restriction ;
+                                                                                                                                                                                          owl:onProperty list:hasContents ;
+                                                                                                                                                                                          owl:someValuesFrom :TEO_0000046
+                                                                                                                                                                                        ]
+                                                                                                                                                                                        [ rdf:type owl:Restriction ;
+                                                                                                                                                                                          owl:onProperty list:hasNext ;
+                                                                                                                                                                                          owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                               owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                      owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                      owl:someValuesFrom :TEO_0000047
+                                                                                                                                                                                                                                    ]
+                                                                                                                                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                      owl:onProperty list:hasNext ;
+                                                                                                                                                                                                                                      owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                                                                           owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                  owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                                                                  owl:someValuesFrom :TEO_0000048
+                                                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                  owl:onProperty list:hasNext ;
+                                                                                                                                                                                                                                                                                  owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                                                                                                                       owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                              owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                                                                                                              owl:someValuesFrom :TEO_0000049
+                                                                                                                                                                                                                                                                                                                            ]
+                                                                                                                                                                                                                                                                                                                          )
+                                                                                                                                                                                                                                                                                                     ]
+                                                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                                              )
+                                                                                                                                                                                                                                                         ]
+                                                                                                                                                                                                                                    ]
+                                                                                                                                                                                                                                  )
+                                                                                                                                                                                                             ]
+                                                                                                                                                                                        ]
+                                                                                                                                                                                      )
+                                                                                                                                                                 ]
+                                                                                                                                            ]
+                                                                                                                                          )
+                                                                                                                     ]
+                                                                                                ]
+                                                                                              )
+                                                                         ]
+                                                    ]
+                                                  )
+                             ] ;
+             
+             skos:definition "Week day sequence Starting from Monday ending at Sunday" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000093
+
+:TEO_0000093 rdf:type owl:Class ;
+             
+             rdfs:label "MonthSequenceJantoDec" ;
+             
+             rdfs:subClassOf :TEO_0000044 ,
+                             [ rdf:type owl:Class ;
+                               owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                      owl:onProperty list:hasContents ;
+                                                      owl:someValuesFrom :TEO_0000052
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty list:hasNext ;
+                                                      owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                           owl:intersectionOf ( :TEO_0000044
+                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                  owl:onProperty list:hasContents ;
+                                                                                                  owl:someValuesFrom :TEO_0000053
+                                                                                                ]
+                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                  owl:onProperty list:hasNext ;
+                                                                                                  owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                       owl:intersectionOf ( :TEO_0000044
+                                                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                                                              owl:onProperty list:hasContents ;
+                                                                                                                                              owl:someValuesFrom :TEO_0000054
+                                                                                                                                            ]
+                                                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                                                              owl:onProperty list:hasNext ;
+                                                                                                                                              owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                   owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                        [ rdf:type owl:Restriction ;
+                                                                                                                                                                                          owl:onProperty list:hasContents ;
+                                                                                                                                                                                          owl:someValuesFrom :TEO_0000055
+                                                                                                                                                                                        ]
+                                                                                                                                                                                        [ rdf:type owl:Restriction ;
+                                                                                                                                                                                          owl:onProperty list:hasNext ;
+                                                                                                                                                                                          owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                               owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                      owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                      owl:someValuesFrom :TEO_0000056
+                                                                                                                                                                                                                                    ]
+                                                                                                                                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                      owl:onProperty list:hasNext ;
+                                                                                                                                                                                                                                      owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                                                                           owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                  owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                                                                  owl:someValuesFrom :TEO_0000057
+                                                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                  owl:onProperty list:hasNext ;
+                                                                                                                                                                                                                                                                                  owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                                                                                                                       owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                              owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                                                                                                              owl:someValuesFrom :TEO_0000058
+                                                                                                                                                                                                                                                                                                                            ]
+                                                                                                                                                                                                                                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                              owl:onProperty list:hasNext ;
+                                                                                                                                                                                                                                                                                                                              owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                                                                                                                                                                   owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                                                                                                                                                        [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                                                                          owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                                                                                                                                                          owl:someValuesFrom :TEO_0000059
+                                                                                                                                                                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                                                                                                                                                                        [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                                                                          owl:onProperty list:hasNext ;
+                                                                                                                                                                                                                                                                                                                                                                          owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                                                                                                                                                                                                               owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                                                                                                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                                                                                                                      owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                                                                                                                                                                                                      owl:someValuesFrom :TEO_0000060
+                                                                                                                                                                                                                                                                                                                                                                                                                    ]
+                                                                                                                                                                                                                                                                                                                                                                                                                    [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                                                                                                                      owl:onProperty list:hasNext ;
+                                                                                                                                                                                                                                                                                                                                                                                                                      owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                           owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  owl:someValuesFrom :TEO_0000061
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  owl:onProperty list:hasNext ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              owl:someValuesFrom :TEO_0000062
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              owl:onProperty list:hasNext ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   owl:intersectionOf ( :TEO_0000044
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        [ rdf:type owl:Restriction ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          owl:onProperty list:hasContents ;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          owl:someValuesFrom :TEO_0000063
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      )
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          )
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                              )
+                                                                                                                                                                                                                                                                                                                                                                                                                                         ]
+                                                                                                                                                                                                                                                                                                                                                                                                                    ]
+                                                                                                                                                                                                                                                                                                                                                                                                                  )
+                                                                                                                                                                                                                                                                                                                                                                                             ]
+                                                                                                                                                                                                                                                                                                                                                                        ]
+                                                                                                                                                                                                                                                                                                                                                                      )
+                                                                                                                                                                                                                                                                                                                                                 ]
+                                                                                                                                                                                                                                                                                                                            ]
+                                                                                                                                                                                                                                                                                                                          )
+                                                                                                                                                                                                                                                                                                     ]
+                                                                                                                                                                                                                                                                                ]
+                                                                                                                                                                                                                                                                              )
+                                                                                                                                                                                                                                                         ]
+                                                                                                                                                                                                                                    ]
+                                                                                                                                                                                                                                  )
+                                                                                                                                                                                                             ]
+                                                                                                                                                                                        ]
+                                                                                                                                                                                      )
+                                                                                                                                                                 ]
+                                                                                                                                            ]
+                                                                                                                                          )
+                                                                                                                     ]
+                                                                                                ]
+                                                                                              )
+                                                                         ]
+                                                    ]
+                                                  )
+                             ] .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000094
+
+:TEO_0000094 rdf:type owl:Class ;
+             
+             rdfs:label "Calendar Month" ;
+             
+             rdfs:subClassOf :TEO_0000050 ;
+             
+             skos:definition "The parent class of the 12 calendar month" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000095
+
+:TEO_0000095 rdf:type owl:Class ;
+             
+             rdfs:label "Day" ;
+             
+             rdfs:subClassOf span:TemporalInterval ,
+                             [ rdf:type owl:Class ;
+                               owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000086 ;
+                                                      owl:onClass :TEO_0000094 ;
+                                                      owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000087 ;
+                                                      owl:onClass :TEO_0000084 ;
+                                                      owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000087 ;
+                                                      owl:onClass :TEO_0000091 ;
+                                                      owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :TEO_0000090 ;
+                                                      owl:onClass :TEO_0000030 ;
+                                                      owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                    ]
+                                                  )
+                             ] ;
+             
+             skos:definition "Define a particular day" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000098
+
+:TEO_0000098 rdf:type owl:Class ;
+             
+             rdfs:label "Day 1 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000099
+
+:TEO_0000099 rdf:type owl:Class ;
+             
+             rdfs:label "Day 2 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000100
+
+:TEO_0000100 rdf:type owl:Class ;
+             
+             rdfs:label "Day 3 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000101
+
+:TEO_0000101 rdf:type owl:Class ;
+             
+             rdfs:label "Day 4 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000102
+
+:TEO_0000102 rdf:type owl:Class ;
+             
+             rdfs:label "Day 5 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000103
+
+:TEO_0000103 rdf:type owl:Class ;
+             
+             rdfs:label "Day 6 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000104
+
+:TEO_0000104 rdf:type owl:Class ;
+             
+             rdfs:label "Day 7 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000105
+
+:TEO_0000105 rdf:type owl:Class ;
+             
+             rdfs:label "Day 8 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000106
+
+:TEO_0000106 rdf:type owl:Class ;
+             
+             rdfs:label "Day 9 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000107
+
+:TEO_0000107 rdf:type owl:Class ;
+             
+             rdfs:label "Day 10 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000108
+
+:TEO_0000108 rdf:type owl:Class ;
+             
+             rdfs:label "Day 11 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000109
+
+:TEO_0000109 rdf:type owl:Class ;
+             
+             rdfs:label "Day 12 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000110
+
+:TEO_0000110 rdf:type owl:Class ;
+             
+             rdfs:label "Day 13 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000111
+
+:TEO_0000111 rdf:type owl:Class ;
+             
+             rdfs:label "Day 14 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000112
+
+:TEO_0000112 rdf:type owl:Class ;
+             
+             rdfs:label "Day 15 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000113
+
+:TEO_0000113 rdf:type owl:Class ;
+             
+             rdfs:label "Day 16 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000114
+
+:TEO_0000114 rdf:type owl:Class ;
+             
+             rdfs:label "Day 17 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000115
+
+:TEO_0000115 rdf:type owl:Class ;
+             
+             rdfs:label "Day 18 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000116
+
+:TEO_0000116 rdf:type owl:Class ;
+             
+             rdfs:label "Day 19 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000117
+
+:TEO_0000117 rdf:type owl:Class ;
+             
+             rdfs:label "Day 20 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000118
+
+:TEO_0000118 rdf:type owl:Class ;
+             
+             rdfs:label "Day 21 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000119
+
+:TEO_0000119 rdf:type owl:Class ;
+             
+             rdfs:label "Day 22 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000120
+
+:TEO_0000120 rdf:type owl:Class ;
+             
+             rdfs:label "Day 23 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000121
+
+:TEO_0000121 rdf:type owl:Class ;
+             
+             rdfs:label "Day 24 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000122
+
+:TEO_0000122 rdf:type owl:Class ;
+             
+             rdfs:label "Day 25 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000123
+
+:TEO_0000123 rdf:type owl:Class ;
+             
+             rdfs:label "Day 28 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000124
+
+:TEO_0000124 rdf:type owl:Class ;
+             
+             rdfs:label "Day 29 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000125
+
+:TEO_0000125 rdf:type owl:Class ;
+             
+             rdfs:label "Day 30 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000126
+
+:TEO_0000126 rdf:type owl:Class ;
+             
+             rdfs:label "Day 31 of a month" ;
+             
+             rdfs:subClassOf :TEO_0000091 .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000127
+
+:TEO_0000127 rdf:type owl:Class ;
+             
+             rdfs:label "last week of a month" ;
+             
+             rdfs:subClassOf :TEO_0000030 .
+
+
+
+###  http://purl.obolibrary.org/obo/IAO_0000032
+
+obo:IAO_0000032 rdf:type owl:Class .
+
+
+
+###  http://purl.obolibrary.org/obo/IAO_0000109
+
+obo:IAO_0000109 rdf:type owl:Class .
+
+
+
+###  http://purl.obolibrary.org/obo/IAO_0000416
+
+obo:IAO_0000416 rdf:type owl:Class .
+
+
+
+###  http://purl.obolibrary.org/obo/MWFWeek
+
+obo:MWFWeek rdf:type owl:Class ;
+            
+            rdfs:label "Time frequency"@en ;
+            
+            rdfs:subClassOf :TEO_0000044 ,
+                            span:ScatteredTemporalRegion ,
+                            [ rdf:type owl:Class ;
+                              owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                     owl:onProperty list:hasContents ;
+                                                     owl:someValuesFrom :TEO_0000042
+                                                   ]
+                                                   [ rdf:type owl:Restriction ;
+                                                     owl:onProperty list:hasNext ;
+                                                     owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                          owl:intersectionOf ( :TEO_0000044
+                                                                                               [ rdf:type owl:Restriction ;
+                                                                                                 owl:onProperty list:hasContents ;
+                                                                                                 owl:someValuesFrom :TEO_0000045
+                                                                                               ]
+                                                                                               [ rdf:type owl:Restriction ;
+                                                                                                 owl:onProperty list:hasNext ;
+                                                                                                 owl:someValuesFrom [ rdf:type owl:Class ;
+                                                                                                                      owl:intersectionOf ( :TEO_0000044
+                                                                                                                                           [ rdf:type owl:Restriction ;
+                                                                                                                                             owl:onProperty list:hasContents ;
+                                                                                                                                             owl:someValuesFrom :TEO_0000047
+                                                                                                                                           ]
+                                                                                                                                         )
+                                                                                                                    ]
+                                                                                               ]
+                                                                                             )
+                                                                        ]
+                                                   ]
+                                                 )
+                            ] ;
+            
+            rdfs:comment "example, a drug is administrated at Monday, Wed, and Friday within a week." .
+
+
+
+###  http://purl.obolibrary.org/obo/UO_0000003
+
+obo:UO_0000003 rdf:type owl:Class ;
+               
+               rdfs:subClassOf UO:UO_0000003 .
+
+
+
+###  http://purl.obolibrary.org/obo/UO_0000149
+
+obo:UO_0000149 rdf:type owl:Class ;
+               
+               rdfs:subClassOf UO:UO_0000003 .
+
+
+
+###  http://purl.org/obo/owl/UO#UO_0000003
+
+UO:UO_0000003 rdf:type owl:Class .
+
+
+
+###  http://www.co-ode.org/ontologies/list.owl#OWLList
+
+list:OWLList rdf:type owl:Class .
+
+
+
+###  http://www.ifomis.org/bfo/1.1/snap#Quality
+
+snap:Quality rdf:type owl:Class .
+
+
+
+###  http://www.ifomis.org/bfo/1.1/span#ConnectedTemporalRegion
+
+span:ConnectedTemporalRegion rdf:type owl:Class .
+
+
+
+###  http://www.ifomis.org/bfo/1.1/span#ProcessualEntity
+
+span:ProcessualEntity rdf:type owl:Class .
+
+
+
+###  http://www.ifomis.org/bfo/1.1/span#ScatteredTemporalRegion
+
+span:ScatteredTemporalRegion rdf:type owl:Class .
+
+
+
+###  http://www.ifomis.org/bfo/1.1/span#TemporalInstant
+
+span:TemporalInstant rdf:type owl:Class ;
+                     
+                     skos:altLabel "TimeInstant" .
+
+
+
+###  http://www.ifomis.org/bfo/1.1/span#TemporalInterval
+
+span:TemporalInterval rdf:type owl:Class ;
+                      
+                      skos:altLabel "TimeInterval" .
+
+
+
+###  http://www.ifomis.org/bfo/1.1/span#TemporalRegion
+
+span:TemporalRegion rdf:type owl:Class .
+
+
+
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000002
+
+:TEO_0000002 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "before" ;
+             
+             skos:altLabel "\"prior to\"" ;
+             
+             skos:definition "Source event happened before target event. Using the start time of an event when the associated time stamp is a time interval." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000003
+
+:TEO_0000003 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "during" ;
+             
+             skos:definition "The source event started after and ended before the target event" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000004
+
+:TEO_0000004 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasModality" ;
+             
+             skos:definition "covering expressions of how the world might be and should be. This includes expressions of necessity, permissibility and probability, and negations of these" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000005
+
+:TEO_0000005 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasNormalizedTime" ;
+             
+             skos:definition "use to represent the normalized view of the time expression of the given instant" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000006
+
+:TEO_0000006 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasEndTime" ;
+             
+             skos:definition "Describes the end time of an interval. The domain is a time interval. The range is a time instant." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000007
+
+:TEO_0000007 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasValidTime" ;
+             
+             skos:definition "To link an event with its specific timestamps" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000010
+
+:TEO_0000010 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "contain" ;
+             
+             skos:definition "The source event happened before and ended after the target event" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000014
+
+:TEO_0000014 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "start" ;
+             
+             skos:definition """Source Event S starts at time point t1 and ends at time point t2
+Target Event T starts at time point t1 and still holds at time point t2, then we declare that S starts T""" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000015
+
+:TEO_0000015 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasOrigTime" ;
+             
+             skos:definition "use to represent the original  time expression of the instant" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000016
+
+:TEO_0000016 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "after" ;
+             
+             skos:altLabel "\"post to\"" ;
+             
+             skos:definition "Source event happened after target event. Using the start time of an event when the associated time stamp is a time interval." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000017
+
+:TEO_0000017 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000018
+
+:TEO_0000018 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "equal" ;
+             
+             skos:definition "Two events happened at the same time. It is true when both events are associated with either timeinstants or timeintervals. When both events are associated with time intervals, they must start at the same time and end at the same time." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000019
+
+:TEO_0000019 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000020
+
+:TEO_0000020 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "meet" ;
+             
+             skos:definition """Source Event S starts at time point t1 and ends at time point t2
+Target Event T starts at time point t2 , then we declare that S meets T""" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000021
+
+:TEO_0000021 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000022
+
+:TEO_0000022 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasDuration" ;
+             
+             skos:definition "describe the duration of a time interval" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000023
+
+:TEO_0000023 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000024
+
+:TEO_0000024 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000026
+
+:TEO_0000026 rdf:type :TEO_0000012 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "hour" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000027
+
+:TEO_0000027 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "Jan 1" ;
+             
+             skos:definition "First day of every year" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000028
+
+:TEO_0000028 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasStartTime" ;
+             
+             skos:definition "Describes the start time of a time interval. The domain is a time interval and the range is a time instant." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000029
+
+:TEO_0000029 rdf:type :TEO_0000012 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "year" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000030
+
+:TEO_0000030 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000031
+
+:TEO_0000031 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000032
+
+:TEO_0000032 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000033
+
+:TEO_0000033 rdf:type :TEO_0000012 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "month" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000034
+
+:TEO_0000034 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000035
+
+:TEO_0000035 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000036
+
+:TEO_0000036 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000037
+
+:TEO_0000037 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "finish" ;
+             
+             skos:definition """Source Event S starts at time point t1 and ends at time point t2
+Target Event T starts before time point t1 and ends at time point t2, then we declare that S ebds T""" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000038
+
+:TEO_0000038 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "overlap" ;
+             
+             skos:definition "Two events overlap on the timeline" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000039
+
+:TEO_0000039 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "temporalRelation" ;
+             
+             skos:editorialNote "An example instant. Maybe deleted later." ;
+             
+             skos:definition "The super set of the temporal relations defined in the ontology. Akin to Allen's temporal operators, but are defined between events instead of time intervals" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000040
+
+:TEO_0000040 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasDurationUnit" ;
+             
+             skos:definition "describe the unit of a duration" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000041
+
+:TEO_0000041 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasDurationValue" ;
+             
+             skos:definition "capture the value of a duration, e.g., in \"2 hours\", 2 is the duation value and hour is the duation unit" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000042
+
+:TEO_0000042 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000043
+
+:TEO_0000043 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000044
+
+:TEO_0000044 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000045
+
+:TEO_0000045 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000046
+
+:TEO_0000046 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000047
+
+:TEO_0000047 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000048
+
+:TEO_0000048 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000049
+
+:TEO_0000049 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000050
+
+:TEO_0000050 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000051
+
+:TEO_0000051 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000065
+
+:TEO_0000065 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000066
+
+:TEO_0000066 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000067
+
+:TEO_0000067 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000068
+
+:TEO_0000068 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000069
+
+:TEO_0000069 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000070
+
+:TEO_0000070 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000071
+
+:TEO_0000071 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000072
+
+:TEO_0000072 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000073
+
+:TEO_0000073 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000074
+
+:TEO_0000074 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000075
+
+:TEO_0000075 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "numerator" ;
+             
+             skos:definition "Identifies the number of repetitions within a given time period" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000076
+
+:TEO_0000076 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "denominator" ;
+             
+             skos:definition "identifies the time unit of a frequency" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000077
+
+:TEO_0000077 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasPhase" ;
+             
+             skos:definition "to declare a time phase for a periodic interval of time" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000078
+
+:TEO_0000078 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasPeriod" ;
+             
+             skos:definition "to declare the time period of a periodic interval of time" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000079
+
+:TEO_0000079 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasFrequency" ;
+             
+             skos:definition "to declare the frequency " .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000082
+
+:TEO_0000082 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000084
+
+:TEO_0000084 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000085
+
+:TEO_0000085 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "occur" ;
+             
+             skos:definition "defines how a connected_temporal_region or an event occurs on a specific  time region. For example, a particular occurs on Monday" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000088
+
+:TEO_0000088 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000089
+
+:TEO_0000089 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000091
+
+:TEO_0000091 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000092
+
+:TEO_0000092 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000094
+
+:TEO_0000094 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000095
+
+:TEO_0000095 rdf:type owl:NamedIndividual .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000096
+
+:TEO_0000096 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "hasTimeSequence" ;
+             
+             skos:definition "defines the time sequnces of a time. for example, MWF" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000130
+
+:TEO_0000130 rdf:type :TEO_0000051 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "1937" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000133
+
+:TEO_0000133 rdf:type :TEO_0000063 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "december" ;
+             
+             skos:editorialNote "An example instance." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000134
+
+:TEO_0000134 rdf:type :TEO_0000122 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "day 25" ;
+             
+             skos:editorialNote "An example instance." .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000135
+
+:TEO_0000135 rdf:type :TEO_0000051 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "1986" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000136
+
+:TEO_0000136 rdf:type :TEO_0000051 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "1985" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000137
+
+:TEO_0000137 rdf:type :TEO_0000051 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "1936" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000138
+
+:TEO_0000138 rdf:type :TEO_0000051 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "1775" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000140
+
+:TEO_0000140 rdf:type :TEO_0000051 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "1893" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000141
+
+:TEO_0000141 rdf:type :TEO_0000051 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "1970" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000142
+
+:TEO_0000142 rdf:type :TEO_0000051 ,
+                      owl:NamedIndividual ;
+             
+             rdfs:label "1862" .
+
+
+
+###  http://informatics.mayo.edu/TEO.owl#TEO_0000143
+
+:TEO_0000143 rdf:type owl:NamedIndividual ;
+             
+             rdfs:label "1967" .
+
+
+
+###  http://www.ifomis.org/bfo/1.1/span#TemporalInstant
+
+span:TemporalInstant rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.ifomis.org/bfo/1.1/span#TemporalInterval
+
+span:TemporalInterval rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.w3.org/2002/07/owl#TEO_0000027
+
+owl:TEO_0000027 rdf:type owl:NamedIndividual ;
+                
+                rdfs:label "topObjectProperty" ;
+                
+                skos:definition "Is to used to define a particular time pattern. For example, Christmas day occurs on December." .
+
+
+
+
+
+#################################################################
+#
+#    Annotations
+#
+#################################################################
+
+
+xsd:TEO_0000011 rdfs:label "int" .
+
+
+
+
+###  Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net
+
