@@ -49,7 +49,7 @@ public class JUnitTemporalRelation {
 
 	}
 	
-//	@Test
+//	@TestOWAAPI
 //	public void testGetEventByIRIStr() {
 //		System.out.println("######################## Testing GetEventByIRIStr #####################################");
 //		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");
@@ -69,7 +69,7 @@ public class JUnitTemporalRelation {
 //		System.out.println("\nEvent6:\n" + event6);
 //	}
 	
-//	@Test
+//	@TestOWAAPI
 //	public void testGetTemporalRelationsBetweenEvents() {
 //		System.out.println("######################## Testing GetRelations #####################################");
 //		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_4.owl#Event0");
@@ -83,7 +83,7 @@ public class JUnitTemporalRelation {
 //		System.out.println("event0 - event5:\n" + querier.getTemporalRelationType(event0, event5, null));
 //	}
 	
-	//@Test
+	//@TestOWAAPI
 	public void testGetEventByIRIStr() {
 		System.out.println("######################## Testing GetEventByIRIStr #####################################");
 		Event event0 = querier.getEventByIRIStr("http://www.cse.lehigh.edu/~yil712/TEO/annotation_6.owl#ER_Admission1");

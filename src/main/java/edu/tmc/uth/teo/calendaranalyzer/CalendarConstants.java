@@ -21,6 +21,9 @@ public class CalendarConstants {
 	public static final String WEEK_CLS_NAME = "TEO_0000030"; // Week
 	public static final String MONTH_CLS_NAME = "TEO_0000050"; // Month
 	public static final String YEAR_CLS_NAME = "TEO_0000051"; // Year
+	public static final String MONTHDAY_CLS_NAME = "TEO_0000091"; // MonthDay
+	public static final String WEEKDAY_CLS_NAME = "TEO_0000084"; // WeekDay
+	
 //	public static final String HOLIDAY_CLS_NAME = "TEO_0000011"; // Holiday
 	public static final String MONTH_JAN_CLS_NAME = "TEO_0000052";
 	public static final String MONTH_FEB_CLS_NAME = "TEO_0000053";
@@ -83,6 +86,9 @@ public class CalendarConstants {
 	public static final String WEEK_CLS = getWithNS(WEEK_CLS_NAME);
 	public static final String MONTH_CLS = getWithNS(MONTH_CLS_NAME);
 	public static final String YEAR_CLS = getWithNS(YEAR_CLS_NAME);
+	public static final String WEEKDAY_CLS = getWithNS(WEEKDAY_CLS_NAME);
+	public static final String MONTHDAY_CLS = getWithNS(MONTHDAY_CLS_NAME);
+	
 //	public static final String HOLIDAY_CLS = getWithNS(HOLIDAY_CLS_NAME);
 	public static final String MONTH_JAN_CLS = getWithNS(MONTH_JAN_CLS_NAME);
 	public static final String MONTH_FEB_CLS = getWithNS(MONTH_FEB_CLS_NAME);
@@ -154,5 +160,5 @@ public class CalendarConstants {
 	public static final String OCCURYEAR_PRP = getWithNS(OCCURYEAR_PRP_NAME);
 	public static final String OCCURMONTH_PRP = getWithNS(OCCURMONTH_PRP_NAME);
 	public static final String OCCURWEEK_PRP = getWithNS(OCCURWEEK_PRP_NAME);
-	public static final String OCCURDAY = getWithNS(OCCURDAY_PRP_NAME);
+	public static final String OCCURDAY_PRP = getWithNS(OCCURDAY_PRP_NAME);
 }

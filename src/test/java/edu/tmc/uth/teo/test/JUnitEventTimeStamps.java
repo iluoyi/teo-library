@@ -70,7 +70,7 @@ public class JUnitEventTimeStamps {
 	}
 	
 	
-	//@Test
+	//@TestOWAAPI
 	public void testGetEventsTimeline() {
 		System.out.println("######################## Testing GetEventsTimeline #####################################");
 		List<Event> timeline = querier.getEventsTimeline();

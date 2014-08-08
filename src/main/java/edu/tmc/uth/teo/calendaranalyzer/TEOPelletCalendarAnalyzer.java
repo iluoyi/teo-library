@@ -41,7 +41,7 @@ public class TEOPelletCalendarAnalyzer {
 		else 
 			return false;
 	}
-	
+		
 	public Set<OWLClass> getSpecialDateClasses(Date date) {
 		Set<OWLClass> dateClass = null;
 		
@@ -67,7 +67,7 @@ public class TEOPelletCalendarAnalyzer {
 		return dateClass;
 	}
 
-	public ArrayList<OWLAxiom> getInstanceAxioms(OWLNamedIndividual tempDate, SpecialDate spcDate) {
+	private ArrayList<OWLAxiom> getInstanceAxioms(OWLNamedIndividual tempDate, SpecialDate spcDate) {
 		ArrayList<OWLAxiom> axioms = new ArrayList<OWLAxiom>();
 		if (spcDate != null) {
 			OWLAxiom tempAxiom = null;
@@ -76,7 +76,7 @@ public class TEOPelletCalendarAnalyzer {
 			OWLNamedIndividual tempMonth = null;
 			OWLNamedIndividual tempMonthWeek = null;
 			OWLObjectProperty occurMonth = df.getOWLObjectProperty(IRI.create(CalendarConstants.OCCURMONTH_PRP));
-			OWLObjectProperty occurDay = df.getOWLObjectProperty(IRI.create(CalendarConstants.OCCURDAY));
+			OWLObjectProperty occurDay = df.getOWLObjectProperty(IRI.create(CalendarConstants.OCCURDAY_PRP));
 			OWLObjectProperty occurWeek = df.getOWLObjectProperty(IRI.create(CalendarConstants.OCCURWEEK_PRP));
 			OWLDataProperty occurYear = df.getOWLDataProperty(IRI.create(CalendarConstants.OCCURYEAR_PRP));
 			
@@ -131,12 +131,12 @@ public class TEOPelletCalendarAnalyzer {
 	}
 	
 	public static void main(String args[]) {
-		String fileName = "src/test/resources/TEO/TEO_1.1.1.owl";
+		String fileName = "src/test/resources/TEO/TEO_1.1.0.owl";
 		TEOPelletCalendarAnalyzer analyzer = new TEOPelletCalendarAnalyzer();
 		
 		Date testDate1 = DateUtils.parse("07-04-2014");
 		Date testDate2 = DateUtils.parse("12-25-2014");
-		Date testDate3 = DateUtils.parse("09-01-2014");
+		Date testDate3 = DateUtils.parse("11-22-2012");
 		
 		if (analyzer.loadOntology(fileName)) {
 			Set<OWLClass> dateClasses = null;
@@ -179,7 +179,7 @@ public class TEOPelletCalendarAnalyzer {
 	/*
 	 * TODO: what about the last week?
 	 */
-	public OWLClass getMonthWeekClass(int i) {
+	private OWLClass getMonthWeekClass(int i) {
 		switch (i) {
 			case 1: return df.getOWLClass(IRI.create(CalendarConstants.WEEK_1_CLS));
 			case 2: return df.getOWLClass(IRI.create(CalendarConstants.WEEK_2_CLS));
@@ -190,7 +190,7 @@ public class TEOPelletCalendarAnalyzer {
 		}
 	}
 	
-	public OWLClass getMonthClass(int i) {
+	private OWLClass getMonthClass(int i) {
 		switch (i) {
 			case 0: return df.getOWLClass(IRI.create(CalendarConstants.MONTH_JAN_CLS));
 			case 1: return df.getOWLClass(IRI.create(CalendarConstants.MONTH_FEB_CLS));
@@ -208,7 +208,7 @@ public class TEOPelletCalendarAnalyzer {
 		}
 	}
 	
-	public OWLClass getWeekDayClass(int i) {
+	private OWLClass getWeekDayClass(int i) {
 		switch (i) {
 			case 1: return df.getOWLClass(IRI.create(CalendarConstants.WEEKDAY_SUN_CLS));
 			case 2: return df.getOWLClass(IRI.create(CalendarConstants.WEEKDAY_MON_CLS));
@@ -221,7 +221,7 @@ public class TEOPelletCalendarAnalyzer {
 		}
 	}
 	
-	public OWLClass getMonthDayClass(int i) {
+	private OWLClass getMonthDayClass(int i) {
 		switch (i) {
 			case 1: return df.getOWLClass(IRI.create(CalendarConstants.MONTHDAY_1_CLS));
 			case 2: return df.getOWLClass(IRI.create(CalendarConstants.MONTHDAY_2_CLS));

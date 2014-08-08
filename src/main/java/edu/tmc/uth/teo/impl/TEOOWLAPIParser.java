@@ -307,7 +307,7 @@ public class TEOOWLAPIParser implements TEOParser {
 			} else {
 				relationType = relationPointRoaster.get(axiom.getProperty()); 
 			}
-			if (relationType != null) {
+			if (relationType != null && axiom.getObject().isNamed()) {
 				targetIRIStr = axiom.getObject().asOWLNamedIndividual().getIRI().toString();
 				
 				// may contain timeOffset info

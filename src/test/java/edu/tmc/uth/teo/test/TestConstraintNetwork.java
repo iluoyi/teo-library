@@ -53,7 +53,7 @@ public class TestConstraintNetwork {
 	}
 	
 	/*
-	 * Test by Yi: #1
+	 * TestOWAAPI by Yi: #1
 	 * 
 	 * A meet B
 	 * B startBeforeStart C
@@ -61,7 +61,7 @@ public class TestConstraintNetwork {
 	 * D finish B
 	 * 
 	 */
-//	@Test
+//	@TestOWAAPI
 //	public void testPathReasoning2() throws Exception {
 //		ConstraintNetwork<String> myConstraintNetwork = new ConstraintNetwork<String>();
 //		Node<String> nodeA = new Node<String>("A");
@@ -112,10 +112,10 @@ public class TestConstraintNetwork {
 		myConstraintNetwork.addNode(node3);
 		Node<String> node4 = new Node<String>("4");
 		myConstraintNetwork.addNode(node4);
-		Node<String> node5 = new Node<String>("5");
-		myConstraintNetwork.addNode(node5);
-		Node<String> node6 = new Node<String>("6");
-		myConstraintNetwork.addNode(node6);
+//		Node<String> node5 = new Node<String>("5");
+//		myConstraintNetwork.addNode(node5);
+//		Node<String> node6 = new Node<String>("6");
+//		myConstraintNetwork.addNode(node6);
 		
 		Constraint<String> constraint04 = new Constraint<String> (node0,node4,TEOConstants.bin_equals);
 		myConstraintNetwork.addConstraint(constraint04);
@@ -123,14 +123,14 @@ public class TestConstraintNetwork {
 		myConstraintNetwork.addConstraint(constraint21);	
 		Constraint<String> constraint34 = new Constraint<String> (node3,node4,TEOConstants.bin_before);
 		myConstraintNetwork.addConstraint(constraint34);
-		Constraint<String> constraint46 = new Constraint<String> (node4,node6,TEOConstants.bin_before);
-		myConstraintNetwork.addConstraint(constraint46);
+//		Constraint<String> constraint46 = new Constraint<String> (node4,node6,TEOConstants.bin_before);
+//		myConstraintNetwork.addConstraint(constraint46);
 		Constraint<String> constraint42 = new Constraint<String> (node4,node2,TEOConstants.bin_before);
 		myConstraintNetwork.addConstraint(constraint42);
-		Constraint<String> constraint62 = new Constraint<String> (node6,node2,TEOConstants.bin_before);
-		myConstraintNetwork.addConstraint(constraint62);
-		Constraint<String> constraint51 = new Constraint<String> (node5,node1,TEOConstants.bin_starts);
-		myConstraintNetwork.addConstraint(constraint51);
+//		Constraint<String> constraint62 = new Constraint<String> (node6,node2,TEOConstants.bin_before);
+//		myConstraintNetwork.addConstraint(constraint62);
+//		Constraint<String> constraint51 = new Constraint<String> (node5,node1,TEOConstants.bin_starts);
+//		myConstraintNetwork.addConstraint(constraint51);
 		
 		System.out.println(myConstraintNetwork.pathConsistency());		
 		
@@ -150,13 +150,13 @@ public class TestConstraintNetwork {
 	}
 	
 //	/*
-//	 * Test Example of Consistent network
+//	 * TestOWAAPI Example of Consistent network
 //	 * A STARTS B
 //	 * A CONTAINS C
 //	 *
 //	 */
 //	
-//	@Test
+//	@TestOWAAPI
 //	public void testPathConsistency1() throws Exception {
 //		ConstraintNetwork<String> myConstraintNetwork = new ConstraintNetwork<String>();
 //		Node<String> nodeA = new Node<String>("A");
@@ -173,7 +173,7 @@ public class TestConstraintNetwork {
 //	}
 //	
 //	/*
-//	 * Test Example inconsistent network
+//	 * TestOWAAPI Example inconsistent network
 //	 * A EQUALS B
 //	 * B EQUALS C
 //	 * C EQUALS D
@@ -181,7 +181,7 @@ public class TestConstraintNetwork {
 //	 * 
 //	 */
 //	
-//	@Test
+//	@TestOWAAPI
 //	public void testPathConsistency2() throws Exception {
 //		ConstraintNetwork<String> myConstraintNetwork = new ConstraintNetwork<String>();
 //		Node<String> nodeA = new Node<String>("A");
@@ -205,7 +205,7 @@ public class TestConstraintNetwork {
 //	}
 	
 //	/*
-//	 * Test by Yi: #1
+//	 * TestOWAAPI by Yi: #1
 //	 * 
 //	 * A overlappedBy B
 //	 * B before C
@@ -213,7 +213,7 @@ public class TestConstraintNetwork {
 //	 * 
 //	 */
 //	
-//	@Test
+//	@TestOWAAPI
 //	public void testPathReasoning1() throws Exception {
 //		ConstraintNetwork<String> myConstraintNetwork = new ConstraintNetwork<String>();
 //		Node<String> nodeA = new Node<String>("A");
