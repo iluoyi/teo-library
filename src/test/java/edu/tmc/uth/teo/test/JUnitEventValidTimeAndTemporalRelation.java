@@ -1,7 +1,5 @@
 package edu.tmc.uth.teo.test;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +23,7 @@ public class JUnitEventValidTimeAndTemporalRelation {
 	public void setUp() throws Exception {
 		System.out.println("\n\n>>>>>>>>>>>>>>>>Start Testing>>>>>>>>>>>>>>>>>>>");
 		System.out.println("%Loader: loading begins.");
-		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_8.owl");
+		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_8.ttl");
 		System.out.println("Status: " + loader.load());
 		System.out.println("%Loader: loading completes.");
 		

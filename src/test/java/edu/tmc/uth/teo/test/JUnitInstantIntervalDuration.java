@@ -22,7 +22,7 @@ public class JUnitInstantIntervalDuration {
 	@Before
 	public void setUp() throws Exception {
 		System.out.println("Loader: loading begins.");
-		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_2.owl");
+		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_2.ttl");
 		System.out.println("Status: " + loader.load());
 		System.out.println("Loader: loading completes.\n");
 		

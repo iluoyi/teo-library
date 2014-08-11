@@ -25,7 +25,7 @@ public class JUnitEventTimeStamps {
 	public void setUp() throws Exception {
 		System.out.println("\n\n>>>>>>>>>>>>>>>>Start Testing>>>>>>>>>>>>>>>>>>>");
 		System.out.println("%Loader: loading begins.");
-		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_8.owl");
+		loader = new TEOOWLAPILoader("src//test//resources//TEO//TEOAnnotation_8.ttl");
 		System.out.println("Status: " + loader.load());
 		System.out.println("%Loader: loading completes.");
 		

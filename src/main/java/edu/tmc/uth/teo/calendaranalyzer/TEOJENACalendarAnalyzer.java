@@ -2,7 +2,6 @@ package edu.tmc.uth.teo.calendaranalyzer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -29,6 +28,8 @@ import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 import com.hp.hpl.jena.vocabulary.XSD;
+
+import edu.tmc.uth.teo.exceptions.TEOException;
 
 public class TEOJENACalendarAnalyzer {
 	public HashMap<String, String> restrictionMap = new HashMap<String, String>(); // R? --> occurYear some (http://informatics.mayo.edu/TEO.owl#TEO_0000042)
@@ -237,10 +238,21 @@ public class TEOJENACalendarAnalyzer {
 		}
 	}
 	
-public ArrayList<String> getSpecialDateInstances(String classIRIStr, DateConstraint constraint){
+	/**
+	 * This method outputs a list of dates for a given special date class (e.g. holiday) from the TEO and an extra constraint (e.g. the year).
+	 * 
+	 * @param classIRIStr
+	 * @param extraConstraint
+	 * @return
+	 * @throws TEOException 
+	 */
+	public ArrayList<String> getSpecialDateInstances(String classIRIStr, DateConstraint extraConstraint) throws TEOException{
 		OntClass testClass = model.getOntClass(classIRIStr);
+		if (testClass == null) throw new TEOException("Exception: Cannot find class \"" + classIRIStr + "\" in the ontology.");
+		
 		ExtendedIterator<OntClass> eqClassItor = testClass.listEquivalentClasses(); // constraints
 		ArrayList<DateConstraint> dateClsConstraints = new ArrayList<DateConstraint>();
+		ArrayList<String> results = new ArrayList<String>();
 		
 		String logicExpression = null;
 		OntClass eqClass = null;
@@ -259,17 +271,20 @@ public ArrayList<String> getSpecialDateInstances(String classIRIStr, DateConstra
 			String[] disjSentences = transformed.toString().split("\\|");
 			for (int i = 0; i < disjSentences.length; i ++) {
 				dateClsConstraints.add(translateSimpleSentenceIntoRules(disjSentences[i].trim()));
+//				System.out.println(dateClsConstraints.get(dateClsConstraints.size() - 1));
 			}
 		}
 		
-		// testing only
-		DateConstraint dateConstraint = dateClsConstraints.get(0);
-		dateConstraint.setMaxYear(2014);
-		dateConstraint.setMinYear(2014);
-		System.out.println("Constraint: " + dateConstraint);
-		ArrayList<String> result = DateConstraint.enumerateDates(dateConstraint);
+		if (!dateClsConstraints.isEmpty()) {
+			DateConstraint mergedConstraint = null;
+			for (DateConstraint eachConstraint : dateClsConstraints) {
+				mergedConstraint = DateConstraint.intersectionDateConstraint(eachConstraint, extraConstraint);
+				System.out.println(mergedConstraint);
+				results.addAll(DateConstraint.enumerateDates(mergedConstraint));
+			}
+		}
 		
-		return result;
+		return results;
 	}
 	
 	public static void main(String args[]) {
@@ -277,15 +292,31 @@ public ArrayList<String> getSpecialDateInstances(String classIRIStr, DateConstra
 		String fileName = "src/test/resources/TEO/TEO_1.1.0.owl";
 		analyzer.load(fileName);
 		
-		String classStr = CalendarConstants.getWithNS("TEO_0000066");
+		// test case - all defined Federal Holidays
+		String classStr = CalendarConstants.getWithNS("TEO_0000017"); // federal holidays
+		OntClass rootClass = analyzer.getModel().getOntClass(classStr);
+		ExtendedIterator<OntClass> subClsItor = rootClass.listSubClasses(true);
+		
+		int testYear = 2014;
 		DateConstraint yearConstraint = new DateConstraint();
-		yearConstraint.setMaxYear(2014);
-		yearConstraint.setMinYear(2014); // year = 2014
+		yearConstraint.setMaxYear(testYear);
+		yearConstraint.setMinYear(testYear);
 		
-		ArrayList<String> dates = analyzer.getSpecialDateInstances(classStr, yearConstraint);
+		ArrayList<String> dates = null;
+		OntClass subCls = null;
 		
-		for (String date : dates) {
-			System.out.println("Possible date: " + date);
+		while (subClsItor.hasNext()) {
+			try {
+				subCls = subClsItor.next();
+				dates = analyzer.getSpecialDateInstances(subCls.toString(), yearConstraint);
+				for (String date : dates) {
+					System.out.println("Possible dates of \"" + subCls.getLabel(null) + "\" in year = " + testYear + " are: " + date);
+					System.out.println();
+				}
+			} catch (TEOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -430,7 +461,7 @@ public ArrayList<String> getSpecialDateInstances(String classIRIStr, DateConstra
 			return 3;
 		} else if (clsIRIStr.equals(CalendarConstants.WEEK_4_CLS)) {
 			return 4;
-		} else if (clsIRIStr.equals(CalendarConstants.WEEK_5_CLS)) {
+		} else if (clsIRIStr.equals(CalendarConstants.WEEK_5_CLS) || clsIRIStr.equals(CalendarConstants.WEEK_LAST_CLS)) {
 			return 5;
 		} else {
 			return -1;
