@@ -6,7 +6,6 @@ import java.util.List;
 import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
-import edu.tmc.uth.teo.model.TemporalRelationType;
 
 public interface TEOQuerier {
 	 // this API can be further optimized with Lucene upon fields: localname, comments, and label

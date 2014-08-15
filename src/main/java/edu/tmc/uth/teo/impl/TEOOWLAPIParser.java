@@ -344,7 +344,7 @@ public class TEOOWLAPIParser implements TEOParser {
  * Yi: consider to give up Pellet's reasoning here...
  * 	 	then we have to totally rely on the Allen's Interval Reasoning algorithm.
  * 
- * NB: Experiments on Annotation_6.owl shows that there are different results between integrating and Not integrating Pellet's results, we can merge 
+ * NB: Experiments on Annotation_6.owl showed that there are different results between integrating and Not integrating Pellet's results, we can merge 
  * their results later.
  * 
  */

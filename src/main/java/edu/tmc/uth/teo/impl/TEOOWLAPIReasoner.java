@@ -48,7 +48,7 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 		if (eventMap != null) {
 			Vector<Event> validTimeEvent = null; // events that contain validTime and can be used for inference
 			
-			// 1. pin all events which have valid time onto the time line (put them in a Set "validTimeEvent")
+			// 1. pin all events which have valid time onto the timeline (put them in a Set "validTimeEvent")
 			Iterator<Entry<String, Event>> it = eventMap.entrySet().iterator();
 			if (it != null && it.hasNext()) validTimeEvent = new Vector<Event>();
 			while (it.hasNext()) {
@@ -222,6 +222,7 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 			return false;
 		}
 		
+		// instants[0] - startTime; instants[1] - endTime
 		private TimeInstant[] inferStartEndTimeForTargetEvent(HashMap<String, ArrayList<TemporalRelationInShortCode>> relations, TimeInstant startTime, TimeInstant endTime, String targetIRIStr) {
 			 TimeInstant[] instants = new TimeInstant[2];
 			 ArrayList<TemporalRelationInShortCode> relationList = relations.get(targetIRIStr);

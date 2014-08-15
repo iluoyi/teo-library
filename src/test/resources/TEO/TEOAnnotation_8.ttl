@@ -116,13 +116,14 @@
                                                                 rdfs:comment "event 3" ;
                                                                 
                                                                 <http://informatics.mayo.edu/TEO.owl#TEO_0000150> <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event2> ,
-                                                    
+                                                                                                                  [ ] .
 [ rdf:type owl:Axiom ;
   owl:annotatedProperty <http://informatics.mayo.edu/TEO.owl#TEO_0000150> ;
   <http://informatics.mayo.edu/TEO.owl#hasTimeOffset> <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Duration2> ;
   owl:annotatedTarget <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event2> ;
   owl:annotatedSource <http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event3>
 ] .
+
 
 
 ###  http://www.cse.lehigh.edu/~yil712/TEO/annotation_8.owl#Event4

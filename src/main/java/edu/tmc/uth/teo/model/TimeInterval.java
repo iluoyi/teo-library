@@ -129,7 +129,10 @@ public class TimeInterval extends ConnectedTemporalRegion {
 				DurationValue givenDurValue = DurationUtils.changeToUnit(duration.getDurationValue(), maxUnit);
 				
 				if (computedDur.getDurationValue().compareTo(givenDurValue, Unit.YEAR) == 0) { // duration = end - start.?? 
-																							   // TODO: Simply choose Unit.Year here, to be updated.
+				// TODO: Simply choose Unit.Year here, to be updated. Because in current implementation, we don't know any granularity information.
+				// The correct way should be:
+					
+				// if (computedDur.getDurationValue().compareTo(givenDurValue, maxUnit) == 0) { 
 					return true;
 				}
 			}
