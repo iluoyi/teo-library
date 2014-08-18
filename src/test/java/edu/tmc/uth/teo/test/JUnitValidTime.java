@@ -13,7 +13,7 @@ import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
 import edu.tmc.uth.teo.model.Unit;
 
-public class JUnitInstantIntervalDuration {
+public class JUnitValidTime {
 
 	private TEOLoader loader = null;
 	private TEOParser parser = null;

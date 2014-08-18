@@ -170,19 +170,19 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 				ArrayList<ArrayList<Short>> matrix = constraintNetwork.getConstraintNetwork();
 				
 //				//---------------------------
-				ArrayList<Node<String>> nodeList = constraintNetwork.getModeledNodes();
-				for (Node<String> node : nodeList) {
-					System.out.print(node.getIdentifier() + "(" + node.getAllenId() + "), ");
-				}
-				System.out.println();
-				
-				ArrayList<ArrayList<Short>> network = constraintNetwork.getConstraintNetwork();
-				for (ArrayList<Short> list : network) {
-					for (Short relation : list) {
-						System.out.print(TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(relation) + ", ");
-					}
-					System.out.println();
-				}
+//				ArrayList<Node<String>> nodeList = constraintNetwork.getModeledNodes();
+//				for (Node<String> node : nodeList) {
+//					System.out.print(node.getIdentifier() + "(" + node.getAllenId() + "), ");
+//				}
+//				System.out.println();
+//				
+//				ArrayList<ArrayList<Short>> network = constraintNetwork.getConstraintNetwork();
+//				for (ArrayList<Short> list : network) {
+//					for (Short relation : list) {
+//						System.out.print(TemporalRelationUtils.getTemporalRelationTypeListFromConstraintShort(relation) + ", ");
+//					}
+//					System.out.println();
+//				}
 //				//---------------------------
 				
 				for (int i = 0; i < matrixNodes.size(); i ++) {

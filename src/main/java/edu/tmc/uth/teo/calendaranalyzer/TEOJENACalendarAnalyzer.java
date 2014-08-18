@@ -297,7 +297,7 @@ public class TEOJENACalendarAnalyzer {
 		OntClass rootClass = analyzer.getModel().getOntClass(classStr);
 		ExtendedIterator<OntClass> subClsItor = rootClass.listSubClasses(true);
 		
-		int testYear = 2014;
+		int testYear = 2019;
 		DateConstraint yearConstraint = new DateConstraint();
 		yearConstraint.setMaxYear(testYear);
 		yearConstraint.setMinYear(testYear);
