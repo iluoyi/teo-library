@@ -54,6 +54,10 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 		this.durValue = getDurValueFromStr(durStr, durUnit);
 	}
 	
+	public void setUnit(Unit durUnit) {
+		this.durUnit = durUnit;
+	}
+	
 	public Unit getUnit() {
 		return this.durUnit;
 	}
@@ -77,8 +81,8 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 	public String toString() {
 //		return "{[durUnit:" + this.durUnit + "]" + "[durStr:" + this.durStr + "]" + 
 //				"[durValue:" + this.durValue + "]" + "[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
-		return "{[durStr:" + this.durStr + "]" + 
-				"[durValue:" + this.durValue + "]" + "[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
+		return "{[durStr:" + this.durStr + "]" +  "[durValue:" + this.durValue + "]" + 
+				"[AssemblyMethod:" + this.assemblyMethod + "]" + "[DurationUnit:" + this.getUnit() + "]" + "}";
 	}
 	
 //	public String toString(Unit unit) {

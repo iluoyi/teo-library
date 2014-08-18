@@ -264,19 +264,19 @@ public class TEOOWLAPIReasoner implements TEOReasoner {
 								break;
 							case START_EQUAL_START:
 								if (instants[0] == null && startTime != null)
-									instants[0] = new TimeInstant(startTime.getNormalizedTime());
+									instants[0] = new TimeInstant(startTime.getNormalizedTime(), startTime.getGranularity());
 								break;
 							case START_EQUAL_END:
 								if (instants[1] == null && startTime != null)
-									instants[1] = new TimeInstant(startTime.getNormalizedTime());
+									instants[1] = new TimeInstant(startTime.getNormalizedTime(), startTime.getGranularity());
 								break;
 							case END_EQUAL_START:
 								if (instants[0] == null && endTime != null)
-									instants[0] = new TimeInstant(endTime.getNormalizedTime());
+									instants[0] = new TimeInstant(endTime.getNormalizedTime(), endTime.getGranularity());
 								break;
 							case END_EQUAL_END:
 								if (instants[1] == null && endTime != null)
-									instants[1] = new TimeInstant(endTime.getNormalizedTime());
+									instants[1] = new TimeInstant(endTime.getNormalizedTime(), endTime.getGranularity());
 								break;
 							default:
 								break;

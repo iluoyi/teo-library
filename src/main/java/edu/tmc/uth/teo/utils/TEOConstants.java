@@ -31,6 +31,7 @@ public class TEOConstants {
 	public static final String TEO_HASENDTIME_PRP_NAME = "TEO_0000006"; // hasEndTime [domain: TimeInterval + Periodic TimeInterval]
 	public static final String TEO_HASDURATION_PRP_NAME = "TEO_0000022"; // hasDuration [domain: TimeInterval + Periodic TimeInterval, range: Duration Measurement]
 	public static final String TEO_HASDURATIONUNIT_PRP_NAME = "TEO_0000040"; // domain: Duration Measurement
+	public static final String TEO_HASGRANULARITY_PRP_NAME = "TEO_0000029"; // domain: temporal_region
 	public static final String TEO_HASPHASE_PRP_NAME = "TEO_0000077"; // domain: Periodic TimeInterval, range: TimePhase
 	public static final String TEO_HASPERIOD_PRP_NAME = "TEO_0000078"; // domain: Periodic TimeInterval, range: TimePeriod
 	// frequency
@@ -112,6 +113,7 @@ public class TEOConstants {
 	public static final String TEO_HASENDTIME_PRP = getWithNS(TEO_HASENDTIME_PRP_NAME);
 	public static final String TEO_HASDURATION_PRP = getWithNS(TEO_HASDURATION_PRP_NAME);
 	public static final String TEO_HASDURATIONUNIT_PRP = getWithNS(TEO_HASDURATIONUNIT_PRP_NAME);
+	public static final String TEO_HASGRANULARITY_PRP = getWithNS(TEO_HASGRANULARITY_PRP_NAME);
 	public static final String TEO_HASPHASE_PRP = getWithNS(TEO_HASPHASE_PRP_NAME);
 	public static final String TEO_HASPERIOD_PRP = getWithNS(TEO_HASPERIOD_PRP_NAME);
 	public static final String TEO_DENOMINATOR_PRP = getWithNS(TEO_DENOMINATOR_PRP_NAME);

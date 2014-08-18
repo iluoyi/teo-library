@@ -39,6 +39,7 @@ import edu.tmc.uth.teo.utils.StringUtils;
 import edu.tmc.uth.teo.utils.TEOConstants;
 import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 import edu.tmc.uth.teo.utils.TemporalTypeUtils;
+import edu.tmc.uth.teo.utils.TimeUtils;
 
 /**
  * 
@@ -96,8 +97,10 @@ public class TEOOWLAPIParser implements TEOParser {
 	private OWLObjectProperty EAE = null; // end after end
 	private OWLObjectProperty EEE = null; // end equal end
 	
-	private OWLDataProperty hasDurationPattern= null;
-
+	private OWLDataProperty hasDurationPattern = null;
+	private OWLDataProperty hasDurationUnit = null;
+	private OWLDataProperty hasGranularity = null;
+	
 	public int getEventCount() {
 		return eventMap.size();
 	}
@@ -196,6 +199,8 @@ public class TEOOWLAPIParser implements TEOParser {
 		if (EEE != null) relationPointRoaster.put(EEE, TemporalRelationType.END_EQUAL_END);
 		
 		hasDurationPattern = df.getOWLDataProperty(IRI.create(TEOConstants.TEO_HASDURATIONPATTERN_PRP));
+		hasDurationUnit = df.getOWLDataProperty(IRI.create(TEOConstants.TEO_HASDURATIONUNIT_PRP));
+		hasGranularity = df.getOWLDataProperty(IRI.create(TEOConstants.TEO_HASGRANULARITY_PRP));
 	}
 	
 	/**
@@ -293,7 +298,6 @@ public class TEOOWLAPIParser implements TEOParser {
 		}
 		
 		// auxiliary variables prepared for parsing Temporal Relations
-		// TODO: granularity?	
 		TemporalRelationType relationType = null;
 		String targetIRIStr = null;
 		TemporalRelationInShortCode relation = null;
@@ -311,7 +315,7 @@ public class TEOOWLAPIParser implements TEOParser {
 				targetIRIStr = axiom.getObject().asOWLNamedIndividual().getIRI().toString();
 				
 				// may contain timeOffset info
-				// Note: both timeInstant and timeInterval can have start/end relations, will be determined in the reasoning process
+				// Note: both timeInstant and timeInterval can have start/end time points, will be determined in the reasoning process
 				if (TemporalRelation.TemporalPointRelationSet.contains(relationType)) {
 					if (getConversePointRelation(relationType) != null) { // means it is possible to have timeOffset
 						String key1 = getRelationMapKey(sourceIRIStr, relationType, targetIRIStr); // Asserted
@@ -341,7 +345,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		}
 				
 /**
- * Yi: consider to give up Pellet's reasoning here...
+ * Yi: consider to give rid of Pellet's reasoning here?
  * 	 	then we have to totally rely on the Allen's Interval Reasoning algorithm.
  * 
  * NB: Experiments on Annotation_6.owl showed that there are different results between integrating and Not integrating Pellet's results, we can merge 
@@ -426,7 +430,16 @@ public class TEOOWLAPIParser implements TEOParser {
 		
 		String labelAsTime = getAnnotationPropertyValue(timeIndividual, rdfLabel);
 		if (labelAsTime != null) {
-			Granularity gran = new Granularity(Unit.SECOND); // TODO: granularity should be parsed from the string
+			Granularity gran = new Granularity(Unit.SECOND); // Note: granularity should be parsed from the property "hasGranularity"
+			
+			Set<OWLLiteral> valueList = getDataPropertyValue(timeIndividual, hasGranularity);
+			if (valueList != null) {
+				for (OWLLiteral granValue : valueList) {
+					if (granValue != null) {
+						gran = new Granularity(TimeUtils.getUnitFromString(granValue.getLiteral()));
+					}
+				}
+			}
 			
 			timeInstant = new TimeInstant(labelAsTime, gran);
 		}
@@ -502,7 +515,16 @@ public class TEOOWLAPIParser implements TEOParser {
 		for (OWLLiteral durValue : valueList) {
 			if (durValue != null) {
 				String durValueStr = durValue.getLiteral();
-				Unit unit = Unit.SECOND; // TODO: granularity should be parsed from the string
+				Unit unit = Unit.SECOND; // Note: granularity should be parsed from the property "hasDurationUnit"
+				
+				Set<OWLLiteral> unitList = getDataPropertyValue(durIndividual, hasDurationUnit);
+				if (unitList != null) {
+					for (OWLLiteral unitValue : unitList) {
+						if (unitValue != null) {
+							unit = TimeUtils.getUnitFromString(unitValue.getLiteral());
+						}
+					}
+				}
 				
 				duration = new Duration(durValueStr, unit);
 			}

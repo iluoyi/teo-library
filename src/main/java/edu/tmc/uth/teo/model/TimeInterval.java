@@ -111,7 +111,7 @@ public class TimeInterval extends ConnectedTemporalRegion {
 	 * 
 	 * 3. always trust the two w/ finer granularities.
 	 *     e.g.
-	 *         startTime = Sept 2nd 2008, endTime = July 2012, duration = 4Y;
+	 *         startTime = Sept 2nd 2008, endTime = Oct 2012, duration = 4Y;
      *         we select startTime and endTime to calculate new duration.
 	 * 
 	 * @param startTime
@@ -127,12 +127,8 @@ public class TimeInterval extends ConnectedTemporalRegion {
 				
 				Duration computedDur = TimeUtils.getDurationFrom(startTime, endTime, new Granularity(maxUnit));// would be as accurate as possible
 				DurationValue givenDurValue = DurationUtils.changeToUnit(duration.getDurationValue(), maxUnit);
-				
-				if (computedDur.getDurationValue().compareTo(givenDurValue, Unit.YEAR) == 0) { // duration = end - start.?? 
-				// TODO: Simply choose Unit.Year here, to be updated. Because in current implementation, we don't know any granularity information.
-				// The correct way should be:
 					
-				// if (computedDur.getDurationValue().compareTo(givenDurValue, maxUnit) == 0) { 
+			    if (computedDur.getDurationValue().compareTo(givenDurValue, maxUnit) == 0) { // duration = end - start.?? 
 					return true;
 				}
 			}

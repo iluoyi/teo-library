@@ -47,6 +47,13 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 		this.assemblyMethod = AssemblyMethod.INFERRED;
 	}
 	
+	public TimeInstant(long normalizedTime, Granularity gran) {
+		this.origTime = null;
+		this.setGranularity(gran);
+		this.normalizedTime = normalizedTime;
+		this.assemblyMethod = AssemblyMethod.INFERRED;
+	}
+	
 	public void reset(String origTime, Granularity gran) {
 		this.origTime = origTime;
 		this.setGranularity(gran);
@@ -73,7 +80,7 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 //		return "{[granularity:" + this.getGranularity().getUnit() + "]" + "[Orig:" + this.origTime + "]"  + "[Norm:" + this.getNormalizedDate() + "]" + 
 //				"[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
 		return "{[Orig:" + this.origTime + "]"  + "[Norm:" + this.getNormalizedDate() + "]" + 
-				"[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
+				"[AssemblyMethod:" + this.assemblyMethod + "]" + "[Granularity:" + this.getGranularity().getUnit() + "]" + "}";
 	}
 	
 		

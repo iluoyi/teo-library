@@ -7,6 +7,7 @@ import edu.tmc.uth.teo.model.Duration;
 import edu.tmc.uth.teo.model.DurationValue;
 import edu.tmc.uth.teo.model.Granularity;
 import edu.tmc.uth.teo.model.TimeInstant;
+import edu.tmc.uth.teo.model.TimeInterval;
 import edu.tmc.uth.teo.model.Unit;
 
 public class TimeUtils {
@@ -31,6 +32,18 @@ public class TimeUtils {
 		return (t.getGranularity().getUnit().compareTo(dur.getUnit()) < 0) ? t.getGranularity().getUnit() : dur.getUnit();
 	}
 	
+	
+	public static Unit getUnitFromString(String str) {
+		if (str.equals("year")) return Unit.YEAR;
+		if (str.equals("month")) return Unit.MONTH;
+		if (str.equals("week")) return Unit.WEEK;
+		if (str.equals("day")) return Unit.DAY;
+		if (str.equals("hour")) return Unit.HOUR;
+		if (str.equals("minute")) return Unit.MINUTE;
+		if (str.equals("second")) return Unit.SECOND;
+		return Unit.UNKNOWN;
+	}
+	
 	/**
 	 * Given start time, end time and the desired granularity, this method calculates the duration.
 	 * 
@@ -47,6 +60,7 @@ public class TimeUtils {
 			Granularity coarserGran = getCoarserGranularity(startTimeInstant, endTimeInstant);
 				
 			if (gran == null || gran.getUnit().compareTo(Unit.UNKNOWN) == 0) {
+//				System.out.println("----------->Desired Unit: " + coarserGran);
 				gran = coarserGran;
 			} // if the desired granularity is null or unknown
 			
@@ -87,6 +101,8 @@ public class TimeUtils {
 			}
 			
 			Duration duration = new Duration(durValue); // an inferred duration (no source string)
+			duration.setUnit(gran.getUnit());
+			
 			return duration;
 		}
 		return null;
@@ -110,6 +126,7 @@ public class TimeUtils {
 			Unit finerUnit = getFinerUnit(startTimeInstant, duration);
 			
 			if (gran == null || gran.getUnit().compareTo(Unit.UNKNOWN) == 0) {
+//				System.out.println("----------->Desired Unit: " + finerUnit);
 				gran = new Granularity(finerUnit);
 			} // if the desired granularity is null or unknown
 			
@@ -133,6 +150,7 @@ public class TimeUtils {
 			Date endDate = DateUtils.setGranularity(endCal.getTime(), gran.getUnit());
 		
 			TimeInstant endTimeInstant = new TimeInstant(endDate.getTime()); // an inferred time instant (no source string)
+			endTimeInstant.setGranularity(gran);
 			
 			return endTimeInstant;
 		}
@@ -157,6 +175,7 @@ public class TimeUtils {
 			Unit finerUnit = getFinerUnit(endTimeInstant, duration);
 			
 			if (gran == null || gran.getUnit().compareTo(Unit.UNKNOWN) == 0) {
+//				System.out.println("----------->Desired Unit: " + finerUnit);
 				gran = new Granularity(finerUnit);
 			} // if the desired granularity is null or unknown
 			
@@ -180,6 +199,7 @@ public class TimeUtils {
 			Date endDate = DateUtils.setGranularity(startCal.getTime(), gran.getUnit());
 		
 			TimeInstant startTimeInstant = new TimeInstant(endDate.getTime()); // an inferred time instant (no source string)
+			startTimeInstant.setGranularity(gran);
 			
 			return startTimeInstant;
 		}
@@ -187,10 +207,13 @@ public class TimeUtils {
 	}
 		
 	public static void main(String args[]) {
-		TimeInstant t1 = new TimeInstant("2013-05-05", new Granularity(Unit.DAY));
-		TimeInstant t2 = new TimeInstant("18:30:20 2014-02-12", new Granularity(Unit.SECOND));
-		System.out.println(getDeltaMilliseconds(t1, t2));
+//		TimeInstant t1 = new TimeInstant("10:30:45 5/15/2009", new Granularity(Unit.SECOND));
+//		Duration d1 = new Duration("2Y", Unit.YEAR);
+//		System.out.println(getEndTimeInstantFrom(t1, d1, null));
 		
-		
+		TimeInstant t1 = new TimeInstant("Sept 1 2008", new Granularity(Unit.DAY));
+		TimeInstant t2 = new TimeInstant("July 2012", new Granularity(Unit.MONTH));
+		Duration d1 = new Duration("3Y", Unit.YEAR);
+		System.out.println(TimeInterval.isValidTimeInterval(t1, t2, d1));
 	}
 }
