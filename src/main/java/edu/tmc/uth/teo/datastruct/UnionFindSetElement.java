@@ -1,5 +1,8 @@
 package edu.tmc.uth.teo.datastruct;
 
+/**
+ * A helper function for the UnionFindSet.java
+ */
 public class UnionFindSetElement<T> {
 	UnionFindSetElement<T> parent = null;
 	T value; // the key/index of the element

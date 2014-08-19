@@ -1,5 +1,11 @@
 package edu.tmc.uth.teo.utils;
 
+/**
+ * Utilities for String processing
+ * 
+ * @author yluo
+ *
+ */
 public class StringUtils {
 	public static boolean isNull(String str) {
 		if ((str == null)||("null".equalsIgnoreCase(str.trim()))||("".equalsIgnoreCase(str.trim())))

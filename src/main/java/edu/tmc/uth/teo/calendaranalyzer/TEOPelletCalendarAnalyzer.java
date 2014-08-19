@@ -22,6 +22,17 @@ import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 import edu.tmc.uth.teo.impl.TEOOWLAPILoader;
 import edu.tmc.uth.teo.utils.DateUtils;
 
+/**
+ * This class helps to classify a date into a special date it belongs to.
+ * 
+ * For example, if given a date "07-04-2014", this analyzer will annotate the 
+ * date as "Independence Day" according to the definition in TEO.
+ * 
+ * This class can be merged with TEOJENAClalendarAnalyzer.java.
+ * 
+ * @author yluo
+ *
+ */
 public class TEOPelletCalendarAnalyzer {
 	private OWLOntology ontology = null;
 	private OWLOntologyManager manager = null;

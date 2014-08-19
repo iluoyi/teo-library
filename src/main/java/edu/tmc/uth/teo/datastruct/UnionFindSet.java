@@ -5,6 +5,8 @@ import java.util.HashMap;
 /**
  * UnionFindSet is also known as Disjoint Set.
  * 
+ * It is used to find "equivalent" nodes.
+ * 
  * @author yluo
  *
  * @param <T>
@@ -30,6 +32,12 @@ public class UnionFindSet<T> {
 		return elements.size();
 	}
 	 
+	/**
+	 * "Path Compression" is used to optimize the find() method.
+	 * 
+	 * @param e
+	 * @return
+	 */
 	public UnionFindSetElement<T> find(UnionFindSetElement<T> e) {
 		UnionFindSetElement<T> root = e;
 		while (!root.equals(e.parent)) {
@@ -45,6 +53,12 @@ public class UnionFindSet<T> {
 		return root;
 	}
 	
+	/**
+	 * "Union by rank" is used to optimize the union() method.
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void union(UnionFindSetElement<T> x, UnionFindSetElement<T> y) {
 		if (x != y) {
 			UnionFindSetElement<T> xRoot = find(x);

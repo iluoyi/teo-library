@@ -26,6 +26,9 @@ import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
 /**
+ * This is the implementation of the TEOReasoner which consist of two major processes:
+ * 1. reasonValidTime()
+ * 2. reasonTemporalRelations()
  * 
  * @author yluo
  *

@@ -31,6 +31,15 @@ import com.hp.hpl.jena.vocabulary.XSD;
 
 import edu.tmc.uth.teo.exceptions.TEOException;
 
+/**
+ * This class helps enumerate possible date for a given speical date.
+ * For example, if given "Independence Day" and constraint the year = 2014,
+ * it is able to answer the date "07/04/2014".
+ * 
+ * 
+ * @author yluo
+ *
+ */
 public class TEOJENACalendarAnalyzer {
 	public HashMap<String, String> restrictionMap = new HashMap<String, String>(); // R? --> occurYear some (http://informatics.mayo.edu/TEO.owl#TEO_0000042)
 

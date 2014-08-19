@@ -1,5 +1,12 @@
-package edu.tmc.uth.teo.model;
+package edu.tmc.uth.teo.datastruct;
 
+/**
+ * A helper class for the DAG class: DirectedAcyclicGraph.java
+ * 
+ * 
+ * @author yluo
+ *
+ */
 public class Edge {
 	private int u; // source
 	private int v; // target

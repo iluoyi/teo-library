@@ -1,5 +1,11 @@
 package edu.tmc.uth.teo.calendaranalyzer;
 
+/**
+ * This class defines all constants used in the calendar elements analysis. 
+ * 
+ * @author yluo
+ *
+ */
 public class CalendarConstants {
 	/**
 	 * Name Spaces

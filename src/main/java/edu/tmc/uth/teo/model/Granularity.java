@@ -1,6 +1,15 @@
 package edu.tmc.uth.teo.model;
 
-
+/**
+ * Granularity is the attribute of a temporal_region, such as the event, the time_instant...
+ * Unit is the attribute of a duration.
+ * 
+ * Event though "granularity" and "unit" have the same value in string: year, month, week, day, hour, minute and second, they
+ * are just different meanings and are associated with different classes.
+ * 
+ * @author yluo
+ *
+ */
 public class Granularity implements Comparable<Granularity> {
 	private Unit unit;
 	

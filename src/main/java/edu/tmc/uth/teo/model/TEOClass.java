@@ -1,5 +1,11 @@
 package edu.tmc.uth.teo.model;
 
+/**
+ * The top TEOClass
+ * 
+ * @author yluo
+ *
+ */
 public abstract class TEOClass {
 	private String iriStr = null;
 	private String label = null; // as unique id

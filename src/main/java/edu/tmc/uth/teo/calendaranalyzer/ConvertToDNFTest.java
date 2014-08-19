@@ -5,6 +5,8 @@ import aima.core.logic.propositional.parsing.ast.Sentence;
 import aima.core.logic.propositional.visitors.ConvertToDNF;
 
 /**
+ * To convert a common logic expression into the Disjunctive Normal Form.
+ * 
  * @author Yi Luo
  * 
  */

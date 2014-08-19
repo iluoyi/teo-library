@@ -42,24 +42,33 @@ import edu.tmc.uth.teo.utils.TemporalTypeUtils;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
 /**
+ * This is the implementation of TEOParser with OWL API.
+ * 
+ * This implementation parses the loaded OWLOntology into an event HashMap which can be regarded as a
+ * graph with events as the nodes and temporal relations between events as the directed edges.
+ *  
+ * Note: in this version of implementation, we did Pellet reasoning and Timeoffset reasoning as the 
+ * pre-reasoning step in the parser (as the last step of parsing). 
  * 
  * @author yluo
  *
  */
 public class TEOOWLAPIParser implements TEOParser {
+	/**
+	 * the HashMap representing the ontology as a graph
+	 */
+	private HashMap<String, Event> eventMap = null;
 
 	private OWLOntology ontology = null;
 	private OWLDataFactory df = null;
 	private PelletReasoner reasoner = null;
 	
 	// inner helper data structures
-	private HashMap<String, Event> eventMap = null;
 	private HashMap<String, TemporalRelationInShortCode> relationMap = null;
 	private HashMap<OWLObjectProperty, TemporalRelationType> relationIntervalRoaster = null;
 	private HashMap<OWLObjectProperty, TemporalRelationType> relationPointRoaster = null;
-	
-	private Vector<String> iriList = null;
 	private HashMap<String, String> timeOffsetMap = null;
+	private Vector<String> iriList = null; // used to compress the space for processing IRI strings, see getRelationMapKey()
 
 	// Properties
 	private OWLAnnotationProperty rdfLabel = null;
@@ -212,7 +221,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		Set<OWLNamedIndividual> individuals = null;
 		
 		/*
-		 * Yi: To find out all individuals of "Event" class after Pellet reasoning.
+		 * To find out all individuals of "Event" class
 		 */
 		c = df.getOWLClass(IRI.create(TEOConstants.TEO_EVENT_CLS));
 		individuals = reasoner.getInstances(c, false).getFlattened(); // from the reasoner
@@ -220,7 +229,7 @@ public class TEOOWLAPIParser implements TEOParser {
 		for (OWLNamedIndividual eventIndividual : individuals) {
 			if (eventIndividual != null) {
 //				System.out.println("[####################################]Processing Events....--> " + eventIndividual.getIRI().toString());
-				Event event = parseEvent(eventIndividual);
+				Event event = parseEvent(eventIndividual); // call the parseEvent() method - 1.parseValidTime; 2.parseTemporalRelations
 				eventMap.put(eventIndividual.getIRI().toString(), event);
 			}
 		}
@@ -281,7 +290,7 @@ public class TEOOWLAPIParser implements TEOParser {
 
 		Set<OWLNamedIndividual> valueList = null;		
 		
-		// parse the valid time
+		// 1. parse the valid time
 		valueList = getObjectPropertyValue(eventIndividual, hasValidTime); // hasValidTime (decides the event type with first priority)
 		for (OWLNamedIndividual validTime : valueList) {
 			TemporalType parsedType = getTemporalType(validTime);
@@ -297,13 +306,15 @@ public class TEOOWLAPIParser implements TEOParser {
 			}
 		}
 		
+		// 2. parse the temporal relations
+		
 		// auxiliary variables prepared for parsing Temporal Relations
 		TemporalRelationType relationType = null;
 		String targetIRIStr = null;
 		TemporalRelationInShortCode relation = null;
 		String relationMapKey = null;
 		
-		// 1. collect all "asserted" relations (for later relation merge) first and record timeOffsets for point relations
+		// 1). collect all "asserted" relations (for later relation merge) first and record timeOffsets for point relations
 		Set<OWLObjectPropertyAssertionAxiom> axiomSet = ontology.getObjectPropertyAssertionAxioms(eventIndividual);
 		for (OWLObjectPropertyAssertionAxiom axiom : axiomSet) {
 			if (relationIntervalRoaster.containsKey(axiom.getProperty())) {
@@ -345,17 +356,16 @@ public class TEOOWLAPIParser implements TEOParser {
 		}
 				
 /**
- * Yi: consider to give rid of Pellet's reasoning here?
+ * Yi: consider to give rid of Pellet's reasoning here????
  * 	 	then we have to totally rely on the Allen's Interval Reasoning algorithm.
  * 
- * NB: Experiments on Annotation_6.owl showed that there are different results between integrating and Not integrating Pellet's results, we can merge 
- * their results later.
- * 
+ * Experiments on Annotation_6.owl showed that there are different results between integrating and Not integrating Pellet's results, we can merge 
+ * their results later??
  */
-		// 2. collect all "inferred" relation (by Pellet only)
+		// 2). collect all "inferred" relation (by Pellet only)
 		Iterator<Entry<OWLObjectProperty, TemporalRelationType>> it = null;
 		OWLObjectProperty relationPro = null;
-		// 2-1. parse inferred Interval temporal relations
+		// 2-1). parse inferred Interval temporal relations
 		it = relationIntervalRoaster.entrySet().iterator();	
 		while (it.hasNext()) {
 			Entry<OWLObjectProperty, TemporalRelationType> pair = it.next();
@@ -375,7 +385,7 @@ public class TEOOWLAPIParser implements TEOParser {
 				}
 			}
 		}
-		// 2-2. parse inferred Point temporal relations
+		// 2-2). parse inferred Point temporal relations
 		it = relationPointRoaster.entrySet().iterator();	
 		while (it.hasNext()) {
 			Entry<OWLObjectProperty, TemporalRelationType> pair = it.next();
@@ -614,6 +624,9 @@ public class TEOOWLAPIParser implements TEOParser {
 		}
 	}
 	
+	/**
+	 * Compress the String into things like "1- 2".
+	 */
 	public String getRelationMapKey(String sourceStr, TemporalRelationType relation, String targetStr) {
 		return this.getIRIIndex(sourceStr) + "-" + relation + "-" + this.getIRIIndex(targetStr);
 	}

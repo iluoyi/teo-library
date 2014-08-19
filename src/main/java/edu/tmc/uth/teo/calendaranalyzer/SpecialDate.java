@@ -3,6 +3,12 @@ package edu.tmc.uth.teo.calendaranalyzer;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * This class represents a special date.
+ * 
+ * @author yluo
+ *
+ */
 public class SpecialDate {
 	int monthDay;
 	int weekDay;

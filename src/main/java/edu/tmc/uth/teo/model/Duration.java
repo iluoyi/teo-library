@@ -4,8 +4,8 @@ import edu.tmc.uth.teo.utils.DurationParser;
 import edu.tmc.uth.teo.utils.DurationUtils;
 
 /**
- * 1. We put constraints on the Constructor so that we can only have valid instances of Duration.
- * 
+ * This is the class of Duration corresponding to the Duration class in TEO.
+ *  
  * @author yluo
  *
  */
@@ -82,7 +82,7 @@ public class Duration extends TEOClass implements Comparable<Duration> {
 //		return "{[durUnit:" + this.durUnit + "]" + "[durStr:" + this.durStr + "]" + 
 //				"[durValue:" + this.durValue + "]" + "[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
 		return "{[durStr:" + this.durStr + "]" +  "[durValue:" + this.durValue + "]" + 
-				"[AssemblyMethod:" + this.assemblyMethod + "]" + "[DurationUnit:" + this.getUnit() + "]" + "}";
+				"[Granularity:" + this.getUnit() + "]" + "[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
 	}
 	
 //	public String toString(Unit unit) {

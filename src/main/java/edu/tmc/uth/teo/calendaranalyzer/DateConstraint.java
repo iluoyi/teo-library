@@ -6,6 +6,12 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class represents a rule/constraint of a special date.
+ * 
+ * @author yluo
+ *
+ */
 public class DateConstraint {
 	public static final int MAX_YEAR = 2020;
 	public static final int MIN_YEAR = 1970;

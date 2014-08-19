@@ -4,7 +4,15 @@ import java.util.ArrayList;
 
 import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 
-
+/**
+ * Here is a trick!
+ * 
+ * To simplify the computation, we encoded temporal relations into short codes. For example (not real), before = 00001 and meets = 00010.
+ * Then if eventA "before or meets" eventB can be represented as eventA "00011" eventB, which speeds up the calculation.
+ * 
+ * @author yluo
+ *
+ */
 public class TemporalRelationInShortCode {
 
 	private short relationCode; // this is a relation combination, we use its short code to represent e.g. "pmoFD"

@@ -11,14 +11,27 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import edu.tmc.uth.teo.interfaces.TEOLoader;
 
+/**
+ * The implementation of the TEOLoader with OWL API. 
+ * 
+ * @author yluo
+ *
+ */
 public class TEOOWLAPILoader implements TEOLoader {
 	private Object ontology = null;
 	private IRI iri = null;
 	
+	/**
+	 * Constructor
+	 */
 	public TEOOWLAPILoader(IRI iri) {
 		this.iri = iri;
 	}
 	
+	/**
+	 * Constructor
+	 * @param localName
+	 */
 	public TEOOWLAPILoader(String localName) {
 		File file = new File(localName);
 		try {
@@ -30,6 +43,9 @@ public class TEOOWLAPILoader implements TEOLoader {
 		}
 	}
 	 
+	/**
+	 * To load the ontolgoy with OWL API.
+	 */
 	public boolean load() {
 		try {
 			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -43,13 +59,8 @@ public class TEOOWLAPILoader implements TEOLoader {
 		}
 		return false;
 	}
-	
-	public IRI getOntoIRI() {
-		return this.iri;
-	}
 
 	public Object getOntology() {
 		return this.ontology;
 	}
-
 }

@@ -3,8 +3,6 @@ package edu.tmc.uth.teo.datastruct;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.tmc.uth.teo.model.Edge;
-
 /**
  * Implemented a DAG for the reasoning of the timeline feature
  * @author Yi

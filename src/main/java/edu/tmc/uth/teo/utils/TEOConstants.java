@@ -1,5 +1,11 @@
 package edu.tmc.uth.teo.utils;
 
+/**
+ * This class defines all constants used in the teo-library.
+ * 
+ * @author yluo
+ *
+ */
 public class TEOConstants {
 	/**
 	 * Name Spaces

@@ -2,14 +2,21 @@ package edu.tmc.uth.teo.model;
 
 import java.util.EnumSet;
 
+/**
+ * This class handles temporal relations in TEO.
+ * 
+ * @author yluo
+ *
+ */
 public class TemporalRelation {
 
+	// interval relations
 	public static EnumSet<TemporalRelationType> TemporalIntervalRelationSet = EnumSet.of(TemporalRelationType.BEFORE, TemporalRelationType.FINISH, TemporalRelationType.FINISHEDBY,
 																					TemporalRelationType.AFTER, TemporalRelationType.START, TemporalRelationType.STARTEDBY,
 																					TemporalRelationType.CONTAIN, TemporalRelationType.DURING, TemporalRelationType.MEET,
 																					TemporalRelationType.METBY, TemporalRelationType.EQUAL, TemporalRelationType.OVERLAP,
 																					TemporalRelationType.OVERLAPPEDBY);
-	
+	// point relations
 	public static EnumSet<TemporalRelationType> TemporalPointRelationSet = EnumSet.of(TemporalRelationType.START_BEFORE_START, TemporalRelationType.START_AFTER_START,
 																					TemporalRelationType.START_BEFORE_END, TemporalRelationType.START_AFTER_END,
 																					TemporalRelationType.END_BEFORE_START, TemporalRelationType.END_AFTER_START,

@@ -3,7 +3,7 @@ package edu.tmc.uth.teo.utils;
 import edu.tmc.uth.teo.model.DurationValue;
 
 /**
- * This class can be replaced by the Duration class in Java 8.
+ * This class might be replaced by the Duration class in Java 8.
  * 
  * @author yluo
  * 

@@ -5,6 +5,7 @@ import java.util.Date;
 import edu.tmc.uth.teo.utils.DateUtils;
 
 /**
+ * TimeIntstant class.
  * 
  * @author yluo
  *
@@ -80,7 +81,7 @@ public class TimeInstant extends ConnectedTemporalRegion implements Comparable<T
 //		return "{[granularity:" + this.getGranularity().getUnit() + "]" + "[Orig:" + this.origTime + "]"  + "[Norm:" + this.getNormalizedDate() + "]" + 
 //				"[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
 		return "{[Orig:" + this.origTime + "]"  + "[Norm:" + this.getNormalizedDate() + "]" + 
-				"[AssemblyMethod:" + this.assemblyMethod + "]" + "[Granularity:" + this.getGranularity().getUnit() + "]" + "}";
+				"[Granularity:" + this.getGranularity().getUnit() + "]" + "[AssemblyMethod:" + this.assemblyMethod + "]" + "}";
 	}
 	
 		

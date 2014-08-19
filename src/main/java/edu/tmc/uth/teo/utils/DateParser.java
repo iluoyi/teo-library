@@ -566,7 +566,6 @@ public class DateParser
 		try {
 			date = formatter.parse(formatter.format(d));
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return date;

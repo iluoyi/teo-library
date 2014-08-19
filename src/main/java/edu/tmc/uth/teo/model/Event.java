@@ -7,10 +7,10 @@ import java.util.Map.Entry;
 
 
 /**
+ * The is the class of Event. 
+ * It has 3 fields: 1. event type; 2. valid time; 3. relationMap.
  * 
- * Note:
- * 1. Future improvement, an Event can have multiple validTime (from different sentences, we have to check the validation in advance);
- * 
+ * The relationMap is a hash map with the target event IRI as the key and the temporal relation as the value.
  * 
  * @author yluo
  *

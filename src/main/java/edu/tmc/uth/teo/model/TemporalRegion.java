@@ -1,6 +1,11 @@
 package edu.tmc.uth.teo.model;
 
-
+/**
+ * This class is the temporal_region in TEO 
+ * 
+ * @author yluo
+ *
+ */
 public abstract class TemporalRegion extends TEOClass{
 	protected Granularity timeGranularity;
 	

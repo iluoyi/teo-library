@@ -10,10 +10,10 @@ import java.util.Set;
 import org.semanticweb.owlapi.util.MultiMap;
 
 import edu.tmc.uth.teo.datastruct.DirectedAcyclicGraph;
+import edu.tmc.uth.teo.datastruct.Edge;
 import edu.tmc.uth.teo.datastruct.UnionFindSet;
 import edu.tmc.uth.teo.interfaces.TEOQuerier;
 import edu.tmc.uth.teo.model.Duration;
-import edu.tmc.uth.teo.model.Edge;
 import edu.tmc.uth.teo.model.Event;
 import edu.tmc.uth.teo.model.Granularity;
 import edu.tmc.uth.teo.model.TemporalRelationInShortCode;
@@ -25,6 +25,7 @@ import edu.tmc.uth.teo.utils.TemporalRelationUtils;
 import edu.tmc.uth.teo.utils.TimeUtils;
 
 /**
+ * This is the implementation of the TEOQuerier component which realizes APIs that can be called by users.
  * 
  * @author yluo
  *
@@ -36,6 +37,9 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		this.eventMap = eventMap;
 	}
 	
+	/**
+	 * To retrieve an event by its IRI String
+	 */
 	public Event getEventByIRIStr(String IRIStr) {
 		if (IRIStr != null && this.eventMap != null) {
 			return this.eventMap.get(IRIStr);
@@ -43,6 +47,11 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		return null;
 	}
 
+	/**
+	 * To get the duration of a TimeInterval event
+	 * 
+	 * If the given event is a TimeInstant event, the program should report error messages.
+	 */
 	public Duration getDuration(Event intervalEvent) {
 		if (intervalEvent != null) {
 			if (intervalEvent.getEventType().compareTo(TemporalType.TIMEINTERVAL) == 0) {
@@ -57,6 +66,9 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 		return null;
 	}
 
+	/**
+	 * To get the duration between two events
+	 */
 	public Duration getDurationBetweenEvents(Event event1, Event event2, Granularity gran) {
 		if (event1 != null && event2 != null) {
 			TimeInstant begin = null;
@@ -88,8 +100,7 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 	/**
 	 * Here we return the temporalRelationCode list due to possible relation combinations (e.g. "[before, contain]" as a relation), need to be interpreted further.
 	 * 
-	 * Note: should compare their validTimes first.
-	 * 
+	 * Note: need to consider the granularity for temporal relations (TODO)
 	 */
 	public ArrayList<Short> getTemporalRelationType(Event event1, Event event2, Granularity granularity) {
 		ArrayList<Short> relations= new ArrayList<Short>();
@@ -98,17 +109,18 @@ public class TEOOWLAPIQuerier implements TEOQuerier {
 			HashMap<String, ArrayList<TemporalRelationInShortCode>> relationMap = event1.getTemporalRelations();
 			ArrayList<TemporalRelationInShortCode> relationList = relationMap.get(targetIRIStr);
 			for (TemporalRelationInShortCode relation : relationList) {	
-				// TODO: need to consider the granularity
 				relations.add(relation.getRelationCode());
 			}
 		} else {
-			relations.add(TEOConstants.bin_full); // as the unknown relation
+			relations.add(TEOConstants.bin_full); // use FULL as the unknown relation
 		}
 		return relations;
 	}
 
 	/**
 	 * The default configuration is to compare the startTime between a pair of events
+	 * 
+	 * To generate the timeline, we try to find the topology order of a DAG.
 	 */
 	public List<Event> getEventsTimeline() {
 		Set<String> strSet = eventMap.keySet();
